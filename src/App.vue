@@ -13,10 +13,8 @@
               >
               <v-card-text>
                 <h3>1. Approve staking contract to use your tokens</h3>
-                <h3>
-                  2. Stake at least 1000 tokens on MuonNodesStaking contract
-                </h3>
-                <h3>3. Add the node on MuonNodesStaking contract</h3>
+                <h3>2. Add the node on MuonNodesStaking contract</h3>
+                <h3>Note: You need 1000 Muon test token</h3>
               </v-card-text>
               <v-divider class="mx-4"></v-divider>
               <v-card-title class="myFont">Go through the steps. </v-card-title>
@@ -33,13 +31,9 @@
 
                     <v-divider></v-divider>
 
-                    <v-stepper-step :complete="e1 > 2" step="2">
-                      Stake
-                    </v-stepper-step>
-
                     <v-divider></v-divider>
 
-                    <v-stepper-step step="3"> Add Muon node </v-stepper-step>
+                    <v-stepper-step step="2"> Add Muon node </v-stepper-step>
                   </v-stepper-header>
 
                   <v-stepper-items class="old_Muon_Blue">
@@ -60,45 +54,17 @@
                     </v-stepper-content>
 
                     <v-stepper-content step="2">
-                      <div v-if="totalStake < 1000">
-                        <v-row class="mt-5 ml-2">
-                          You have to invest another
-                          {{ 1000 - totalStake }} tokens.
-                        </v-row>
-                        <v-row class="my-5">
-                          <v-text-field
-                            class="px-5"
-                            label="(mount)"
-                            v-model="stakeAmount"
-                            type="number"
-                            :rules="minStakeAmount"
-                            hide-details="auto"
-                          ></v-text-field
-                        ></v-row>
-
-                        <v-btn
-                          :disabled="stakeAmount < 1000 - totalStake"
-                          class="btn_warning"
-                          @click="stake"
-                        >
-                          stake
-                        </v-btn>
-                      </div>
-                      <div v-else>
-                        <v-row class="my-5" justify="cetner">
-                          <v-col cols="10" class="text-center">
-                            <v-icon class="text-h1" color="green"
-                              >mdi-check-decagram</v-icon
-                            >
-                          </v-col>
-                        </v-row>
-                      </div>
-                    </v-stepper-content>
-
-                    <v-stepper-content step="3">
                       <div v-if="!haveNode">
+                        <h5
+                          v-if="!haveEnoughTokenTEst"
+                          class="text-center px-3"
+                        >
+                          You have't enough token. You need another
+                          {{ 1000 - tokenTestBalance }}.
+                        </h5>
                         <v-row class="mt-5"
                           ><v-text-field
+                            :disabled="!haveEnoughTokenTEst"
                             class="px-5"
                             label="Node Address"
                             v-model="nodeAddress"
@@ -108,13 +74,19 @@
                         ></v-row>
                         <v-row class="mb-5"
                           ><v-text-field
+                            :disabled="!haveEnoughTokenTEst"
                             class="px-5"
                             label="Peer Id"
                             v-model="peerId"
                             hide-details="auto"
                           ></v-text-field
                         ></v-row>
-                        <v-btn class="btn_warning" @click="addNode">
+
+                        <v-btn
+                          :disabled="!haveEnoughTokenTEst"
+                          class="btn_warning"
+                          @click="addNode"
+                        >
                           Add node
                         </v-btn>
                       </div>
@@ -182,7 +154,9 @@ import {
   ckeckApproved,
   stake,
   addMuonNode,
-  howMuchStake,
+  haveNode,
+  newAddNode,
+  getBalanceaOfTokenTest,
 } from "./utils/transactions";
 const mainChainId = 0x13881;
 export default {
@@ -206,6 +180,9 @@ export default {
     nodeAddress: "",
     totalStake: 0,
     haveNode: false,
+    tokenTestBalance: 0,
+    haveEnoughTokenTEst: false,
+    haveNode: false,
     minStakeAmount: [
       (value) => !!value || "Required.",
       (value) =>
@@ -217,6 +194,13 @@ export default {
     ],
   }),
   watch: {
+    tokenTestBalance(newBalance, oldBalance) {
+      if (newBalance > 1000) {
+        this.haveEnoughTokenTEst = true;
+      } else {
+        this.haveEnoughTokenTEst = false;
+      }
+    },
     isApproved() {
       if (this.isApproved) {
         this.e1 = 2;
@@ -241,42 +225,35 @@ export default {
     //     this.connectToMetamask();
     //   }
     // },
-    async e1() {
+    e1() {
       if (this.e1 === 2) {
-        const res = await howMuchStake(this.account, this.web3);
-        this.totalStake = res;
-        this.stakeAmount = 1000 - res;
-      }
-      if (this.e1 === 3) {
-        await this.checkHaveNode();
-      }
-    },
-    totalStake() {
-      if (this.totalStake >= 1000) {
-        this.e1 = 3;
+        this.checkHaveNode();
+        this.getTokenTestBalance();
       }
     },
   },
   methods: {
-    async checkHaveNode() {
-      this.haveNode = await haveNode();
+    getTokenTestBalance() {
+      getBalanceaOfTokenTest(this.account, this.web3).then((res) => {
+        this.tokenTestBalance = res;
+      });
     },
-    async checkStake() {
-      const res = await howMuchStake(this.account, this.web3);
-      this.totalStake = res;
-      if (res > 1000) {
-        this.e1 = 3;
-      }
+    checkHaveNode() {
+      haveNode(this.account, this.web3).then((res) => {
+        this.haveNode = res;
+      });
     },
     addNode() {
-      addMuonNode(this.account, this.web3, this.nodeAddress, this.peerId);
+      // addMuonNode(this.account, this.web3, this.nodeAddress, this.peerId);
+      newAddNode(this.account, this.web3, this.nodeAddress, this.peerId);
     },
-    async stake() {
+    stake() {
       stake(this.account, this.web3, this.stakeAmount);
     },
-    async ckeckApproved() {
-      const res = await ckeckApproved(this.account, this.web3);
-      this.isApproved = res;
+    ckeckApproved() {
+      ckeckApproved(this.account, this.web3).then((res) => {
+        this.isApproved = res;
+      });
     },
     checkNetwork() {
       if (this.currntIdChain != 0x13881) {
@@ -293,7 +270,7 @@ export default {
             params: [{ chainId: this.web3.utils.toHex(mainChainId) }],
           })
           .then(async () => {
-            await this.ckeckApproved();
+            this.ckeckApproved();
           });
       } catch (err) {
         // This error code indicates that the chain has not been added to MetaMask
@@ -319,24 +296,28 @@ export default {
     approve() {
       return approve(this.account, this.web3);
     },
-    async connectToMetamask() {
-      const accounts = await ethereum.request({
-        method: "eth_requestAccounts",
-      });
-      const account = accounts[0];
-      this.account = account;
-      await this.ckeckApproved();
+    connectToMetamask() {
+      ethereum
+        .request({
+          method: "eth_requestAccounts",
+        })
+        .then((res) => {
+          const account = res[0];
+          this.account = account;
+          this.ckeckApproved();
+        });
     },
     async getChainId() {
-      const chainId = await ethereum.request({ method: "eth_chainId" });
-      this.currntIdChain = chainId;
+      ethereum.request({ method: "eth_chainId" }).then((res) => {
+        this.currntIdChain = res;
+      });
     },
   },
   async beforeCreate() {},
   async created() {
     document.title = "Muon add node";
     this.web3 = new Web3(window.ethereum);
-    await this.getChainId();
+    this.getChainId();
   },
   computed: {
     getHeightSize() {
@@ -348,14 +329,14 @@ export default {
       const address = accounts[0];
       this.account = address;
       console.log(this.account);
-      await this.ckeckApproved();
+      this.ckeckApproved();
+      this.getTokenTestBalance();
     });
     ethereum.on("chainChanged", (chainId) => {
       this.currntIdChain = chainId;
     });
 
     this.checkNetwork();
-    await this.checkStake();
   },
   updated() {},
 };
