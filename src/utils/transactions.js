@@ -21,17 +21,19 @@ const newAddNodeAbi = JSON.parse(
 const MAXUINT256 = myWeb3.utils.toBN(
   "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
 );
+
 const approve = (account, web3) => {
   const contract = new web3.eth.Contract(
     muonTestnetTokenABI,
     muonTestnetTokenAddress
   );
-  contract.methods
+  const res = contract.methods
     .approve(stakingContractAdress, MAXUINT256)
     .send({ from: account });
+  return res;
 };
 
-const ckeckApproved = async (account, web3) => {
+const checkApproved = async (account, web3) => {
   const contract = new web3.eth.Contract(
     muonTestnetTokenABI,
     muonTestnetTokenAddress
@@ -98,13 +100,26 @@ const getBalanceaOfTokenTest = async (account, web3) => {
   return balance;
 };
 
+const mint = async (account, web3, amount) => {
+  const contract = new web3.eth.Contract(
+    muonTestnetTokenABI,
+    muonTestnetTokenAddress
+  );
+  const amountForTrx = myWeb3.utils.toWei(String(amount), "ether");
+  const res = await contract.methods
+    .mint(account, amountForTrx)
+    .send({ from: account });
+  return res;
+};
+
 export {
   approve,
-  ckeckApproved,
+  checkApproved,
   stake,
   addMuonNode,
   howMuchStake,
   haveNode,
   newAddNode,
   getBalanceaOfTokenTest,
+  mint,
 };

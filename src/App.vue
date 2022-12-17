@@ -9,12 +9,15 @@
           <v-col md="6" cols="12" offset-md="3">
             <v-card class="px-5 backgorundpic" elevation="15" dark>
               <v-card-title class="myFont font-weight-bold text--white"
-                >Setup a Muon Testnet node</v-card-title
+                >Adding a node to the Alice network</v-card-title
               >
               <v-card-text>
-                <h3>1. Approve staking contract to use your tokens</h3>
-                <h3>2. Add the node on MuonNodesStaking contract</h3>
-                <h3>Note: You need 1000 Muon test token</h3>
+                <h3>1. Mint 1000 Alice token</h3>
+                <h3>2. Approve staking contract to use your tokens</h3>
+                <h3>3. Add the node to the network</h3>
+                <h3>
+                  Note: By adding a node, 1000 tokens are automatically staked.
+                </h3>
               </v-card-text>
               <v-divider class="mx-4"></v-divider>
               <v-card-title class="myFont">Go through the steps. </v-card-title>
@@ -25,35 +28,72 @@
                   class="full-width my-2"
                 >
                   <v-stepper-header class="Muon_Dark_blue">
-                    <v-stepper-step :complete="e1 > 1" step="1">
+                    <v-stepper-step
+                      :complete="e1 > steps.mint"
+                      :step="steps.mint"
+                    >
+                      Mint
+                    </v-stepper-step>
+                    <v-divider></v-divider>
+                    <v-stepper-step
+                      :complete="e1 > steps.approve"
+                      :step="steps.approve"
+                    >
                       Approve
                     </v-stepper-step>
 
                     <v-divider></v-divider>
 
-                    <v-divider></v-divider>
-
-                    <v-stepper-step step="2"> Add Muon node </v-stepper-step>
+                    <v-stepper-step :step="steps.addNode">
+                      Add Muon node
+                    </v-stepper-step>
                   </v-stepper-header>
 
                   <v-stepper-items class="old_Muon_Blue">
-                    <v-stepper-content step="1">
+                    <v-stepper-content :step="steps.mint">
+                      <v-row class="mt-5 px-5" justify="center">
+                        Your Muon test token balance ≈
+                        {{ muonTestTokenShow }}
+                        <v-btn
+                          @click="getTokenTestBalance"
+                          class="mt-n1 mx-3"
+                          icon
+                          ><v-icon>mdi-refresh-circle</v-icon></v-btn
+                        >
+                      </v-row>
+                      <v-row class="px-5">
+                        <v-text-field
+                          label="Mint amount"
+                          v-model="mintAmount"
+                          type="number"
+                          step="100"
+                        ></v-text-field>
+                      </v-row>
+                      <v-row justify="center">
+                        <v-btn @click="mint" color="success" class="mb-5 mx-2"
+                          >Mint</v-btn
+                        >
+                        <v-btn
+                          @click="e1 = steps.approve"
+                          color="info"
+                          class="mx-2"
+                          :disabled="!haveEnoughTokenTEst"
+                          >next step</v-btn
+                        >
+                      </v-row>
+                    </v-stepper-content>
+                    <v-stepper-content :step="steps.approve">
                       <v-row justify="center" class="my-5">
                         <v-btn @click="approve" class="btn_warning"
                           >approve</v-btn
                         >
                       </v-row>
-
-                      <v-btn color="primary" @click="ckeckApproved">
+                      <v-btn color="primary" @click="checkApproved">
                         Check
                       </v-btn>
-
-                      <!-- <v-btn @click="ckeckApproved" text class="gradiant_two">
-                        ckeckApproved
-                      </v-btn> -->
                     </v-stepper-content>
 
-                    <v-stepper-content step="2">
+                    <v-stepper-content :step="steps.addNode">
                       <div v-if="!haveNode">
                         <h5
                           v-if="!haveEnoughTokenTEst"
@@ -81,14 +121,22 @@
                             hide-details="auto"
                           ></v-text-field
                         ></v-row>
-
-                        <v-btn
-                          :disabled="!haveEnoughTokenTEst"
-                          class="btn_warning"
-                          @click="addNode"
-                        >
-                          Add node
-                        </v-btn>
+                        <v-row class="mb-5" justify="space-between">
+                          <v-col>
+                            <v-btn @click="e1 = 1" color="info"
+                              >back to mint</v-btn
+                            >
+                          </v-col>
+                          <v-col class="text-right">
+                            <v-btn
+                              :disabled="!haveEnoughTokenTEst"
+                              class="btn_warning"
+                              @click="addNode"
+                            >
+                              Add node
+                            </v-btn>
+                          </v-col>
+                        </v-row>
                       </div>
                       <div v-else>
                         <v-row class="my-5" justify="cetner">
@@ -99,8 +147,6 @@
                           </v-col>
                         </v-row>
                       </div>
-
-                      <!-- <v-btn @click="e1 = 2" text> back to stake </v-btn> -->
                     </v-stepper-content>
                   </v-stepper-items>
                 </v-stepper>
@@ -151,21 +197,26 @@
 import Web3 from "web3";
 import {
   approve,
-  ckeckApproved,
+  checkApproved,
   stake,
-  addMuonNode,
+  mint,
   haveNode,
   newAddNode,
   getBalanceaOfTokenTest,
 } from "./utils/transactions";
 const mainChainId = 0x13881;
+const STEPS = {
+  mint: 1,
+  approve: 2,
+  addNode: 3,
+};
 export default {
   name: "App",
 
   components: {},
 
   data: () => ({
-    //
+    steps: STEPS,
     heightSize: Number,
     account: "",
     addressShow: "connect Wallet",
@@ -183,6 +234,7 @@ export default {
     tokenTestBalance: 0,
     haveEnoughTokenTEst: false,
     haveNode: false,
+    mintAmount: 1000,
     minStakeAmount: [
       (value) => !!value || "Required.",
       (value) =>
@@ -194,6 +246,11 @@ export default {
     ],
   }),
   watch: {
+    isConnected(newState, oldState) {
+      if (newState) {
+        this.getTokenTestBalance();
+      }
+    },
     tokenTestBalance(newBalance, oldBalance) {
       if (newBalance > 1000) {
         this.haveEnoughTokenTEst = true;
@@ -202,10 +259,8 @@ export default {
       }
     },
     isApproved() {
-      if (this.isApproved) {
-        this.e1 = 2;
-      } else {
-        this.e1 = 1;
+      if (this.isApproved && this.e1 === this.steps.approve) {
+        this.e1 = this.steps.addNode;
       }
     },
     currntIdChain() {
@@ -225,14 +280,23 @@ export default {
     //     this.connectToMetamask();
     //   }
     // },
-    e1() {
-      if (this.e1 === 2) {
+    e1(newE1, oldE1) {
+      if (newE1 === this.steps.addNode) {
         this.checkHaveNode();
         this.getTokenTestBalance();
+      }
+      if (newE1 === this.steps.approve && this.isApproved) {
+        this.e1 = this.steps.addNode;
       }
     },
   },
   methods: {
+    mint() {
+      mint(this.account, this.web3, this.mintAmount).then((res) => {
+        console.log(res);
+        this.getTokenTestBalance();
+      });
+    },
     getTokenTestBalance() {
       getBalanceaOfTokenTest(this.account, this.web3).then((res) => {
         this.tokenTestBalance = res;
@@ -250,8 +314,8 @@ export default {
     stake() {
       stake(this.account, this.web3, this.stakeAmount);
     },
-    ckeckApproved() {
-      ckeckApproved(this.account, this.web3).then((res) => {
+    checkApproved() {
+      checkApproved(this.account, this.web3).then((res) => {
         this.isApproved = res;
       });
     },
@@ -270,7 +334,7 @@ export default {
             params: [{ chainId: this.web3.utils.toHex(mainChainId) }],
           })
           .then(async () => {
-            this.ckeckApproved();
+            this.checkApproved();
           });
       } catch (err) {
         // This error code indicates that the chain has not been added to MetaMask
@@ -294,7 +358,10 @@ export default {
       }
     },
     approve() {
-      return approve(this.account, this.web3);
+      approve(this.account, this.web3).then((res) => {
+        console.log(res);
+        this.checkApproved();
+      });
     },
     connectToMetamask() {
       ethereum
@@ -304,7 +371,7 @@ export default {
         .then((res) => {
           const account = res[0];
           this.account = account;
-          this.ckeckApproved();
+          this.checkApproved();
         });
     },
     async getChainId() {
@@ -313,7 +380,6 @@ export default {
       });
     },
   },
-  async beforeCreate() {},
   async created() {
     document.title = "Muon add node";
     this.web3 = new Web3(window.ethereum);
@@ -323,13 +389,21 @@ export default {
     getHeightSize() {
       return window.innerHeight;
     },
+    muonTestTokenShow() {
+      if (this.tokenTestBalance) {
+        const amount = Number(this.tokenTestBalance);
+        return amount.toFixed(2);
+      } else {
+        return 0;
+      }
+    },
   },
   async mounted() {
     ethereum.on("accountsChanged", async (accounts) => {
       const address = accounts[0];
       this.account = address;
       console.log(this.account);
-      this.ckeckApproved();
+      this.checkApproved();
       this.getTokenTestBalance();
     });
     ethereum.on("chainChanged", (chainId) => {
