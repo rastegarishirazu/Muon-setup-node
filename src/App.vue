@@ -1,21 +1,39 @@
 <template>
-  <v-app class="backgorundpic">
+  <v-app
+    :class="[
+      $vuetify.theme.dark ? 'backgorundpic_dark' : 'backgorundpic_light',
+    ]"
+  >
     <v-main>
       <v-responsive width="100%" overflow-hidden class="overflow-hidden px-5">
         <v-row
-          class="mt-5"
+          class="mt-5 full_height"
           :justify="$vuetify.breakpoint.smAndDown ? 'center' : ''"
         >
-          <v-col md="6" cols="12" offset-md="3">
-            <v-card class="px-5 backgorundpic" elevation="15" dark>
-              <v-card-title class="myFont font-weight-bold text--white"
+          <v-col align-self="center" md="6" cols="12" offset-md="3">
+            <v-card
+              :class="[
+                'px-5',
+                $vuetify.theme.dark
+                  ? 'backgorundpic_dark'
+                  : 'backgorundpic_light',
+              ]"
+              elevation="15"
+            >
+              <v-card-title class="myFont font-weight-bold"
                 >Adding a node to the Alice network</v-card-title
               >
-              <v-card-text>
-                <h3>1. Mint 1000 Alice token</h3>
-                <h3>2. Approve staking contract to use your tokens</h3>
-                <h3>3. Add the node to the network</h3>
-                <h3>
+              <v-card-text :class="{ 'black--text': !themeIsDark }">
+                <h3 :class="{ 'black--text': !themeIsDark }">
+                  1. Mint 1000 Alice tokens.
+                </h3>
+                <h3 :class="{ 'black--text': !themeIsDark }">
+                  2. Approve staking contract to use your tokens.
+                </h3>
+                <h3 :class="{ 'black--text': !themeIsDark }">
+                  3. Add the node to the network.
+                </h3>
+                <h3 :class="{ 'black--text': !themeIsDark }">
                   Note: By adding a node, 1000 tokens are automatically staked.
                 </h3>
               </v-card-text>
@@ -27,7 +45,7 @@
                   v-model="e1"
                   class="full-width my-2"
                 >
-                  <v-stepper-header class="Muon_Dark_blue">
+                  <v-stepper-header class="">
                     <v-stepper-step
                       :complete="e1 > steps.mint"
                       :step="steps.mint"
@@ -45,22 +63,34 @@
                     <v-divider></v-divider>
 
                     <v-stepper-step :step="steps.addNode">
-                      Add Muon node
+                      Add node
                     </v-stepper-step>
                   </v-stepper-header>
 
-                  <v-stepper-items class="old_Muon_Blue">
+                  <v-stepper-items class="">
                     <v-stepper-content :step="steps.mint">
                       <v-row class="mt-5 px-5" justify="center">
-                        Your Muon test token balance ≈
-                        {{ muonTestTokenShow }}
-                        <v-btn
-                          @click="getTokenTestBalance"
-                          class="mt-n1 mx-3"
-                          icon
-                          ><v-icon>mdi-refresh-circle</v-icon></v-btn
+                        <h5
+                          v-if="!haveEnoughTokenTEst"
+                          class="text-center text-h6 px-3"
                         >
+                          You don't have enough tokens.<br />
+                          You need another {{ 1000 - tokenTestBalance }}.
+                        </h5>
                       </v-row>
+                      <v-row justify="center">
+                        <p>
+                          Your Alice token balance ≈
+                          {{ muonTestTokenShow }}
+                          <v-btn
+                            @click="getTokenTestBalance"
+                            class="mt-n1 mx-1"
+                            icon
+                            ><v-icon>mdi-refresh-circle</v-icon></v-btn
+                          >
+                        </p>
+                      </v-row>
+
                       <v-row class="px-5">
                         <v-text-field
                           label="Mint amount"
@@ -84,13 +114,12 @@
                     </v-stepper-content>
                     <v-stepper-content :step="steps.approve">
                       <v-row justify="center" class="my-5">
-                        <v-btn @click="approve" class="btn_warning"
-                          >approve</v-btn
+                        <v-btn @click="approve" class="">approve</v-btn>
+
+                        <v-btn @click="checkApproved" class="mx-1" icon
+                          ><v-icon>mdi-refresh-circle</v-icon></v-btn
                         >
                       </v-row>
-                      <v-btn color="primary" @click="checkApproved">
-                        Check
-                      </v-btn>
                     </v-stepper-content>
 
                     <v-stepper-content :step="steps.addNode">
@@ -152,10 +181,10 @@
                 </v-stepper>
                 <v-col v-if="!isCorrectChain">
                   <v-row class="my-5" justify="center">
-                    Switch your network to Mumbai
+                    Switch your network to BSC testnet
                   </v-row>
                   <v-row class="my-5" justify="center">
-                    <v-btn @click="switchToCorrectChain" class="btn_error">
+                    <v-btn @click="switchToCorrectChain" class="">
                       switch newtork
                     </v-btn>
                   </v-row>
@@ -165,7 +194,7 @@
                     Connect your wallet
                   </v-row>
                   <v-row class="my-5" justify="center">
-                    <v-btn @click="connectToMetamask" class="btn-gradiant">
+                    <v-btn @click="connectToMetamask">
                       <v-icon class="mr-1">mdi-wallet</v-icon>
                       connect Wallet
                     </v-btn>
@@ -176,15 +205,49 @@
             </v-card>
           </v-col>
           <v-col
-            md="2"
+            md="3"
             cols="4"
             :order="$vuetify.breakpoint.smAndDown ? 'first' : 'last'"
           >
-            <v-btn @click="connectToMetamask" class="btn-gradiant" block
+            <v-btn @click="connectToMetamask" class=""
               ><v-icon class="mr-1">mdi-wallet</v-icon>{{ addressShow }}</v-btn
             >
+            <v-btn @click="changeTheme" class="mx-2" icon>
+              <v-icon>mdi-white-balance-sunny</v-icon>
+            </v-btn>
           </v-col>
         </v-row>
+        <v-dialog dark v-model="dialog" width="500">
+          <v-card>
+            <v-card-title dark class="text-h5">Attention </v-card-title>
+
+            <v-card-text>
+              <v-row class="mt-5 px-5" justify="center">
+                <h5 class="text-center text-h6 px-3">
+                  You need gas tokens to use the dashboard. Use the following
+                  faucet to get some.
+                </h5>
+                <v-row justify="center" class="my-3">
+                  <a
+                    class="yellow--text"
+                    href="https://testnet.bnbchain.org/faucet-smart"
+                    >BNB Smart Chain Faucet</a
+                  >
+                  <v-btn @click="getNativeBalance" class="mt-n1 mx-1" icon
+                    ><v-icon color="yellow">mdi-refresh-circle</v-icon></v-btn
+                  >
+                </v-row>
+              </v-row>
+            </v-card-text>
+
+            <v-divider></v-divider>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="primary" text @click="dialog = false"> OK! </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-responsive>
     </v-main>
     <v-footer padless class="footer_gradiant" dark
@@ -204,7 +267,7 @@ import {
   newAddNode,
   getBalanceaOfTokenTest,
 } from "./utils/transactions";
-const mainChainId = 0x13881;
+const mainChainId = 0x61;
 const STEPS = {
   mint: 1,
   approve: 2,
@@ -216,6 +279,8 @@ export default {
   components: {},
 
   data: () => ({
+    themeIsDark: false,
+    dialog: false,
     steps: STEPS,
     heightSize: Number,
     account: "",
@@ -235,6 +300,7 @@ export default {
     haveEnoughTokenTEst: false,
     haveNode: false,
     mintAmount: 1000,
+    nativeTokenBalance: 0,
     minStakeAmount: [
       (value) => !!value || "Required.",
       (value) =>
@@ -246,13 +312,16 @@ export default {
     ],
   }),
   watch: {
+    themeIsDark(newState, oldState) {
+      this.$vuetify.theme.dark = newState;
+    },
     isConnected(newState, oldState) {
       if (newState) {
         this.getTokenTestBalance();
       }
     },
     tokenTestBalance(newBalance, oldBalance) {
-      if (newBalance > 1000) {
+      if (newBalance >= 1000) {
         this.haveEnoughTokenTEst = true;
       } else {
         this.haveEnoughTokenTEst = false;
@@ -291,6 +360,18 @@ export default {
     },
   },
   methods: {
+    changeTheme() {
+      this.themeIsDark = !this.themeIsDark;
+    },
+    getNativeBalance() {
+      this.web3.eth.getBalance(this.account).then((res) => {
+        const balance = this.web3.utils.fromWei(res);
+        this.nativeTokenBalance = Number(balance);
+        if (res === "0") {
+          this.dialog = true;
+        }
+      });
+    },
     mint() {
       mint(this.account, this.web3, this.mintAmount).then((res) => {
         console.log(res);
@@ -320,7 +401,7 @@ export default {
       });
     },
     checkNetwork() {
-      if (this.currntIdChain != 0x13881) {
+      if (this.currntIdChain != mainChainId) {
         this.isCorrectChain = false;
       } else {
         this.isCorrectChain = true;
@@ -331,9 +412,10 @@ export default {
         await window.ethereum
           .request({
             method: "wallet_switchEthereumChain",
+            // params: [{ chainId: this.web3.utils.toHex(mainChainId) }],
             params: [{ chainId: this.web3.utils.toHex(mainChainId) }],
           })
-          .then(async () => {
+          .then(() => {
             this.checkApproved();
           });
       } catch (err) {
@@ -343,14 +425,15 @@ export default {
             method: "wallet_addEthereumChain",
             params: [
               {
-                chainName: "Polygon Mainnet",
+                chainName: "BNB Smart Chain Testnet",
                 chainId: this.web3.utils.toHex(mainChainId),
                 nativeCurrency: {
-                  name: "MATIC",
+                  name: "tBNB",
                   decimals: 18,
-                  symbol: "MATIC",
+                  symbol: "tBNB",
                 },
-                rpcUrls: ["https://polygon-rpc.com/"],
+                rpcUrls: ["https://data-seed-prebsc-1-s3.binance.org:8545/"],
+                blockExplorerUrls: ["https://testnet.bscscan.com/"],
               },
             ],
           });
@@ -372,11 +455,13 @@ export default {
           const account = res[0];
           this.account = account;
           this.checkApproved();
+          this.getNativeBalance();
         });
     },
     async getChainId() {
       ethereum.request({ method: "eth_chainId" }).then((res) => {
         this.currntIdChain = res;
+        console.log(res);
       });
     },
   },
@@ -386,6 +471,11 @@ export default {
     this.getChainId();
   },
   computed: {
+    haveNativeToken() {
+      const balance = Number(this.nativeTokenBalance);
+      if (balance) return true;
+      else return false;
+    },
     getHeightSize() {
       return window.innerHeight;
     },
@@ -405,6 +495,7 @@ export default {
       console.log(this.account);
       this.checkApproved();
       this.getTokenTestBalance();
+      this.getNativeBalance();
     });
     ethereum.on("chainChanged", (chainId) => {
       this.currntIdChain = chainId;
@@ -427,8 +518,11 @@ h3 {
   font-weight: 300 !important;
   color: white;
 }
-.backgorundpic {
+.backgorundpic_dark {
   background-color: #313144 !important;
+}
+.backgorundpic_light {
+  background-color: #f2f2f2 !important;
 }
 .full-width {
   width: 100% !important;
@@ -476,5 +570,8 @@ h3 {
     #4b4ac4 83.46%,
     #4a39be 99.27%
   );
+}
+.full_height {
+  height: 90vh !important;
 }
 </style>
