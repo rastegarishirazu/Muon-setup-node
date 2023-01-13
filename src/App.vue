@@ -4,10 +4,14 @@
       $vuetify.theme.dark ? 'backgorundpic_dark' : 'backgorundpic_light',
     ]"
   >
+    <particles />
     <v-main>
       <v-responsive width="100%" overflow-hidden class="overflow-hidden px-5">
         <v-row
-          class="mt-5 full_height"
+          :class="[
+            'mt-5 pb-6',
+            $vuetify.breakpoint.smAndDown ? '' : 'full_height',
+          ]"
           :justify="$vuetify.breakpoint.smAndDown ? 'center' : ''"
         >
           <v-col align-self="center" md="6" cols="12" offset-md="3">
@@ -20,7 +24,7 @@
               ]"
               elevation="15"
             >
-              <v-card-title class="myFont font-weight-bold"
+              <v-card-title class="myFont font-weight-bold primary--text"
                 >Adding a node to the Alice network</v-card-title
               >
               <v-card-text :class="{ 'black--text': !themeIsDark }">
@@ -100,12 +104,17 @@
                         ></v-text-field>
                       </v-row>
                       <v-row justify="center">
-                        <v-btn @click="mint" color="success" class="mb-5 mx-2"
+                        <v-btn
+                          @click="mint"
+                          outlined
+                          color="primary"
+                          class="mb-5 mx-2"
                           >Mint</v-btn
                         >
                         <v-btn
                           @click="e1 = steps.approve"
-                          color="info"
+                          color="secondary"
+                          outlined
                           class="mx-2"
                           :disabled="!haveEnoughTokenTEst"
                           >next step</v-btn
@@ -152,14 +161,15 @@
                         ></v-row>
                         <v-row class="mb-5" justify="space-between">
                           <v-col>
-                            <v-btn @click="e1 = 1" color="info"
+                            <v-btn @click="e1 = 1" outlined color="primary"
                               >back to mint</v-btn
                             >
                           </v-col>
                           <v-col class="text-right">
                             <v-btn
                               :disabled="!haveEnoughTokenTEst"
-                              class="btn_warning"
+                              color="secondary"
+                              outlined
                               @click="addNode"
                             >
                               Add node
@@ -194,7 +204,7 @@
                     Connect your wallet
                   </v-row>
                   <v-row class="my-5" justify="center">
-                    <v-btn @click="connectToMetamask">
+                    <v-btn outlined color="primary" @click="connectToMetamask">
                       <v-icon class="mr-1">mdi-wallet</v-icon>
                       connect Wallet
                     </v-btn>
@@ -206,13 +216,14 @@
           </v-col>
           <v-col
             md="3"
-            cols="4"
+            cols="12"
+            class="text-center"
             :order="$vuetify.breakpoint.smAndDown ? 'first' : 'last'"
           >
-            <v-btn @click="connectToMetamask" class=""
+            <v-btn outlined color="primary" @click="connectToMetamask" class=""
               ><v-icon class="mr-1">mdi-wallet</v-icon>{{ addressShow }}</v-btn
             >
-            <v-btn @click="changeTheme" class="mx-2" icon>
+            <v-btn @click="changeTheme" class="mx-2" icon color="primary">
               <v-icon>mdi-white-balance-sunny</v-icon>
             </v-btn>
           </v-col>
@@ -250,8 +261,8 @@
         </v-dialog>
       </v-responsive>
     </v-main>
-    <v-footer padless class="footer_gradiant" dark
-      ><v-col cols="12" class="text-center">©Muon 2022</v-col>
+    <v-footer padless
+      ><v-col cols="12" class="text-center">©Muon 2023</v-col>
     </v-footer>
   </v-app>
 </template>
@@ -267,6 +278,7 @@ import {
   newAddNode,
   getBalanceaOfTokenTest,
 } from "./utils/transactions";
+import particles from "./components/Particles";
 const mainChainId = 0x61;
 const STEPS = {
   mint: 1,
@@ -276,7 +288,7 @@ const STEPS = {
 export default {
   name: "App",
 
-  components: {},
+  components: { particles },
 
   data: () => ({
     themeIsDark: false,
@@ -314,6 +326,7 @@ export default {
   watch: {
     themeIsDark(newState, oldState) {
       this.$vuetify.theme.dark = newState;
+      localStorage.themeIsDark = newState;
     },
     isConnected(newState, oldState) {
       if (newState) {
@@ -465,8 +478,8 @@ export default {
       });
     },
   },
-  async created() {
-    document.title = "Muon add node";
+  created() {
+    document.title = "Join Alice network";
     this.web3 = new Web3(window.ethereum);
     this.getChainId();
   },
@@ -488,7 +501,7 @@ export default {
       }
     },
   },
-  async mounted() {
+  mounted() {
     ethereum.on("accountsChanged", async (accounts) => {
       const address = accounts[0];
       this.account = address;
@@ -502,6 +515,11 @@ export default {
     });
 
     this.checkNetwork();
+
+    if (localStorage.themeIsDark === "true") {
+      console.log(localStorage.themeIsDark === "false");
+      this.themeIsDark = true;
+    }
   },
   updated() {},
 };
@@ -522,7 +540,7 @@ h3 {
   background-color: #313144 !important;
 }
 .backgorundpic_light {
-  background-color: #f2f2f2 !important;
+  background-color: #d7ebf1 !important;
 }
 .full-width {
   width: 100% !important;
@@ -561,7 +579,7 @@ h3 {
 .old_Muon_Blue {
   background: #5158f6;
 }
-.footer_gradiant {
+.footer_gradiant_light {
   background: linear-gradient(
     236.98deg,
     #55eaf7 -13.66%,
@@ -571,7 +589,10 @@ h3 {
     #4a39be 99.27%
   );
 }
+.footer_gradiant_dark {
+  background: linear-gradient(90deg, #fac739 -2.48%, #fb0d6a 102.48%);
+}
 .full_height {
-  height: 90vh !important;
+  min-height: 90vh !important;
 }
 </style>
