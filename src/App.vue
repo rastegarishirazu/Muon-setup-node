@@ -4,53 +4,66 @@
       $vuetify.theme.dark ? 'backgorundpic_dark' : 'backgorundpic_light',
     ]"
   >
-    <particles />
+    <particles></particles>
+    <Header
+      :addressShow="addressShow"
+      :aliceBalance="muonTestTokenShow"
+      :connectWallet="connectToMetamask"
+      :switchNetwork="switchToCorrectChain"
+      :isCorrectChain="isCorrectChain"
+      :isConnected="isConnected"
+    ></Header>
+
     <v-main>
-      <v-responsive width="100%" overflow-hidden class="overflow-hidden px-5">
+      <v-responsive
+        width="100%"
+        overflow-hidden
+        class="overflow-hidden px-5 mt-4"
+      >
+        <!-- <v-row justify="center" class="my-2">
+          <v-col> <h1 class="main_title">ALICE testnet</h1></v-col>
+        </v-row> -->
         <v-row
           :class="[
-            'mt-5 pb-6',
+            ' pb-15',
             $vuetify.breakpoint.smAndDown ? '' : 'full_height',
           ]"
-          :justify="$vuetify.breakpoint.smAndDown ? 'center' : ''"
         >
-          <v-col align-self="center" md="6" cols="12" offset-md="3">
+          <v-col
+            class="mt-15"
+            align-self="center"
+            md="6"
+            cols="12"
+            offset-md="3"
+          >
             <v-card
-              :class="[
-                'px-5',
-                $vuetify.theme.dark
-                  ? 'backgorundpic_dark'
-                  : 'backgorundpic_light',
-              ]"
-              elevation="15"
+              :class="['px-5', $vuetify.theme.dark ? 'backgorundpic_dark' : '']"
+              elevation="2"
             >
-              <v-card-title class="myFont font-weight-bold primary--text"
-                >Adding a node to the Alice network</v-card-title
-              >
-              <v-card-text :class="{ 'black--text': !themeIsDark }">
-                <h3 :class="{ 'black--text': !themeIsDark }">
-                  1. Mint 1000 Alice tokens.
-                </h3>
-                <h3 :class="{ 'black--text': !themeIsDark }">
-                  2. Approve staking contract to use your tokens.
-                </h3>
-                <h3 :class="{ 'black--text': !themeIsDark }">
-                  3. Add the node to the network.
-                </h3>
-                <h3 :class="{ 'black--text': !themeIsDark }">
-                  Note: By adding a node, 1000 tokens are automatically staked.
-                </h3>
-              </v-card-text>
-              <v-divider class="mx-4"></v-divider>
-              <v-card-title class="myFont">Go through the steps. </v-card-title>
-              <v-row class="my-5">
+              <div class="d-flex justify-center" width="100%">
+                <div class="title_card_box text-center py-5">
+                  <h2 class="title_card_box_font text-h4">Adding a Node</h2>
+                  <h3 class="subtitle_card_box_font text-h6">
+                    To the ALICE Network
+                  </h3>
+                </div>
+              </div>
+              <v-row class="my-10 py-10" justify="center" v-if="cardLoading">
+                <v-progress-circular
+                  indeterminate
+                  color="primary"
+                ></v-progress-circular>
+              </v-row>
+              <v-row class="my-5" v-else-if="!haveNode">
                 <v-stepper
                   v-if="isCorrectChain && isConnected"
                   v-model="e1"
                   class="full-width my-2"
+                  elevation="0"
                 >
-                  <v-stepper-header class="">
+                  <v-stepper-header class="px-8 stepper_header_text">
                     <v-stepper-step
+                      color="primaryOrange"
                       :complete="e1 > steps.mint"
                       :step="steps.mint"
                     >
@@ -58,6 +71,7 @@
                     </v-stepper-step>
                     <v-divider></v-divider>
                     <v-stepper-step
+                      color="primaryOrange"
                       :complete="e1 > steps.approve"
                       :step="steps.approve"
                     >
@@ -66,25 +80,25 @@
 
                     <v-divider></v-divider>
 
-                    <v-stepper-step :step="steps.addNode">
+                    <v-stepper-step color="primaryOrange" :step="steps.addNode">
                       Add node
                     </v-stepper-step>
                   </v-stepper-header>
 
-                  <v-stepper-items class="">
+                  <v-stepper-items class="finger_print_background">
                     <v-stepper-content :step="steps.mint">
                       <v-row class="mt-5 px-5" justify="center">
                         <h5
                           v-if="!haveEnoughTokenTEst"
-                          class="text-center text-h6 px-3"
+                          class="text-center px-3 enough_tokens_message py-3"
                         >
                           You don't have enough tokens.<br />
-                          You need another {{ 1000 - tokenTestBalance }}.
+                          You need at least 1000 ALICE..
                         </h5>
                       </v-row>
                       <v-row justify="center">
-                        <p>
-                          Your Alice token balance ≈
+                        <p class="myFont font-weight-medium">
+                          Your ALICE token balance ≈
                           {{ muonTestTokenShow }}
                           <v-btn
                             @click="getTokenTestBalance"
@@ -95,35 +109,48 @@
                         </p>
                       </v-row>
 
-                      <v-row class="px-5">
-                        <v-text-field
-                          label="Mint amount"
-                          v-model="mintAmount"
-                          type="number"
-                          step="100"
-                        ></v-text-field>
+                      <v-row class="" justify="center">
+                        <v-col md="8">
+                          <span class="text-caption myFont pb-3">Mint:</span>
+                          <v-text-field
+                            label="Mint amount"
+                            solo
+                            v-model="mintAmount"
+                            :rules="minMint"
+                            type="number"
+                            step="100"
+                            background-color="#e9eff6bf"
+                          ></v-text-field>
+                        </v-col>
                       </v-row>
                       <v-row justify="center">
-                        <v-btn
-                          @click="mint"
-                          outlined
-                          color="primary"
-                          class="mb-5 mx-2"
-                          >Mint</v-btn
-                        >
-                        <v-btn
-                          @click="e1 = steps.approve"
-                          color="secondary"
-                          outlined
-                          class="mx-2"
-                          :disabled="!haveEnoughTokenTEst"
-                          >next step</v-btn
-                        >
+                        <v-col md="4">
+                          <v-btn
+                            @click="mint"
+                            block
+                            :disabled="mintAmount > 1000 || mintAmount < 1"
+                            color="primary"
+                            class="mb-5 mx-2 text-capitalize"
+                            >Mint</v-btn
+                          >
+                        </v-col>
+                        <v-col md="4">
+                          <v-btn
+                            @click="e1 = steps.approve"
+                            color="primary"
+                            block
+                            class="mx-2 text-capitalize"
+                            :disabled="!haveEnoughTokenTEst"
+                            >Next Step</v-btn
+                          >
+                        </v-col>
                       </v-row>
                     </v-stepper-content>
                     <v-stepper-content :step="steps.approve">
                       <v-row justify="center" class="my-5">
-                        <v-btn @click="approve" class="">approve</v-btn>
+                        <v-btn @click="approve" color="primary" class=""
+                          >approve</v-btn
+                        >
 
                         <v-btn @click="checkApproved" class="mx-1" icon
                           ><v-icon>mdi-refresh-circle</v-icon></v-btn
@@ -140,6 +167,12 @@
                           You have't enough token. You need another
                           {{ 1000 - tokenTestBalance }}.
                         </h5>
+                        <div class="full-width text-center px-8 mt-5">
+                          <p class="myFont font-weight-bold">
+                            Note: While adding your node, you will automatically
+                            stake 1000 ALICE tokens.
+                          </p>
+                        </div>
                         <v-row class="mt-5"
                           ><v-text-field
                             :disabled="!haveEnoughTokenTEst"
@@ -161,15 +194,14 @@
                         ></v-row>
                         <v-row class="mb-5" justify="space-between">
                           <v-col>
-                            <v-btn @click="e1 = 1" outlined color="primary"
+                            <v-btn @click="e1 = 1" color="primary"
                               >back to mint</v-btn
                             >
                           </v-col>
                           <v-col class="text-right">
                             <v-btn
                               :disabled="!haveEnoughTokenTEst"
-                              color="secondary"
-                              outlined
+                              color="primary"
                               @click="addNode"
                             >
                               Add node
@@ -189,65 +221,152 @@
                     </v-stepper-content>
                   </v-stepper-items>
                 </v-stepper>
-                <v-col v-if="!isCorrectChain">
-                  <v-row class="my-5" justify="center">
-                    Switch your network to BSC testnet
-                  </v-row>
-                  <v-row class="my-5" justify="center">
-                    <v-btn @click="switchToCorrectChain" class="">
-                      switch newtork
-                    </v-btn>
-                  </v-row>
+
+                <v-col
+                  offset=""
+                  cols="4"
+                  v-if="!isCorrectChain || !isConnected"
+                  class="text-center"
+                >
+                  <div
+                    class="setp_box text-center primaryOrange white--text rounded-lg py-3"
+                    width="100%"
+                  >
+                    Step 1
+                  </div>
+                  <div class="d-flex justify-center">
+                    <div class="divider_step_box height-80"></div>
+                  </div>
+                  <div
+                    class="setp_box text-center gray rounded-lg py-3"
+                    width="100%"
+                  >
+                    Step 2
+                  </div>
+                  <div class="d-flex justify-center">
+                    <div class="border-dashed height-80"></div>
+                  </div>
+                  <div
+                    class="setp_box text-center gray rounded-lg py-3"
+                    width="100%"
+                  >
+                    Step 3
+                  </div>
                 </v-col>
-                <v-col v-if="isCorrectChain && !isConnected">
-                  <v-row class="my-5" justify="center">
-                    Connect your wallet
-                  </v-row>
-                  <v-row class="my-5" justify="center">
-                    <v-btn outlined color="primary" @click="connectToMetamask">
-                      <v-icon class="mr-1">mdi-wallet</v-icon>
-                      connect Wallet
-                    </v-btn>
-                  </v-row>
+                <v-col
+                  offset=""
+                  cols="8"
+                  v-if="!isCorrectChain || !isConnected"
+                >
+                  <div class="setp_box">
+                    <h5 class="myFont font-weight-light text-h6">
+                      Mint 1000 ALICE Tokens
+                    </h5>
+                    <h6 class="myFont text-caption">
+                      to your wallet, using the button below.
+                    </h6>
+                  </div>
+                  <div class="height-80"></div>
+                  <div class="step_box">
+                    <h5 class="myFont font-weight-light text-h6">
+                      Approve the Staking Contract
+                    </h5>
+                    <h6 class="myFont text-caption">
+                      to be able to deposit your tokens.
+                    </h6>
+                  </div>
+                  <div class="height-80"></div>
+                  <div class="step_box">
+                    <h5 class="myFont font-weight-light text-h6">
+                      Add your Node to the Network
+                    </h5>
+                    <h6 class="myFont text-caption">
+                      and start securing the network!
+                    </h6>
+                  </div>
                 </v-col>
+
                 <!-- <v-btn @click="approve" color="success"> approve </v-btn> -->
               </v-row>
+              <div v-else>
+                <v-row justify="center">
+                  <h3 class="myFont py-10 mt-10 black--text text-h5">
+                    Your node has been added to the network.
+                  </h3>
+                </v-row>
+                <v-row>
+                  <v-col>
+                    <ul>
+                      <li>Node ID: {{ nodeInfo.id }}</li>
+                      <li>Node address: {{ nodeInfo.nodeAddress }}</li>
+                      <li>Reward: {{ rewardAmount }}</li>
+                    </ul>
+                  </v-col>
+                  <v-col>
+                    <ul>
+                      <li>Peer ID: {{ nodeInfo.peerId }}</li>
+                      <li>Status: {{ nodeInfo.active ? "ACTIVE" : "OFF" }}</li>
+                    </ul>
+                  </v-col>
+                </v-row>
+              </div>
+              <div
+                v-if="!isCorrectChain || !isConnected"
+                class="d-flex justify-center"
+              >
+                <div class="footer_card px-10 pt-8">
+                  <v-btn
+                    v-if="isCorrectChain && !isConnected"
+                    block
+                    color="primary"
+                    @click="connectToMetamask"
+                    >connect Wallet</v-btn
+                  >
+                  <v-btn
+                    v-if="!isCorrectChain"
+                    block
+                    color="primary"
+                    @click="switchToCorrectChain"
+                  >
+                    switch network
+                  </v-btn>
+                </div>
+              </div>
             </v-card>
-          </v-col>
-          <v-col
-            md="3"
-            cols="12"
-            class="text-center"
-            :order="$vuetify.breakpoint.smAndDown ? 'first' : 'last'"
-          >
-            <v-btn outlined color="primary" @click="connectToMetamask" class=""
-              ><v-icon class="mr-1">mdi-wallet</v-icon>{{ addressShow }}</v-btn
-            >
-            <v-btn @click="changeTheme" class="mx-2" icon color="primary">
-              <v-icon>mdi-white-balance-sunny</v-icon>
-            </v-btn>
           </v-col>
         </v-row>
         <v-dialog dark v-model="dialog" width="500">
-          <v-card>
-            <v-card-title dark class="text-h5">Attention </v-card-title>
-
-            <v-card-text>
+          <v-card color="#fff">
+            <v-card-text v-if="reapetedNodeAdressDialog">
               <v-row class="mt-5 px-5" justify="center">
-                <h5 class="text-center text-h6 px-3">
-                  You need gas tokens to use the dashboard. Use the following
-                  faucet to get some.
-                </h5>
-                <v-row justify="center" class="my-3">
-                  <a
-                    class="yellow--text"
-                    href="https://testnet.bnbchain.org/faucet-smart"
-                    >BNB Smart Chain Faucet</a
-                  >
-                  <v-btn @click="getNativeBalance" class="mt-n1 mx-1" icon
-                    ><v-icon color="yellow">mdi-refresh-circle</v-icon></v-btn
-                  >
-                </v-row>
+                <h4
+                  class="myFont blackText--text text-h6 mt-10 underlite_dialog"
+                >
+                  wrong!
+                </h4>
+                <p class="myFont blackText--text text-center mt-5">
+                  This node address has already been added.
+                </p>
+              </v-row>
+            </v-card-text>
+            <v-card-text v-else>
+              <v-row class="mt-5 px-5" justify="center">
+                <h4
+                  class="myFont blackText--text text-h6 mt-10 underlite_dialog"
+                >
+                  Not enough gas...
+                </h4>
+                <p class="myFont blackText--text text-center mt-5">
+                  You need more TEST BNB as gas tokens to use the dashboard.<br />
+                  Use the following faucet to get some.
+                </p>
+
+                <a
+                  class="primaryOrange--text"
+                  target="_blank"
+                  href="https://testnet.bnbchain.org/faucet-smart"
+                  >BNB Smart Chain Faucet</a
+                >
               </v-row>
             </v-card-text>
 
@@ -261,8 +380,13 @@
         </v-dialog>
       </v-responsive>
     </v-main>
-    <v-footer padless
-      ><v-col cols="12" class="text-center">©Muon 2023</v-col>
+    <v-footer padless>
+      <v-col cols="12" class="text-center myFont">
+        <div class="d-flex align-center text-center justify-center">
+          <span class="mx-2 myFont">Powered by</span>
+          <img src="@/assets/muon-logo1.svg" alt="" />
+        </div>
+      </v-col>
     </v-footer>
   </v-app>
 </template>
@@ -277,8 +401,11 @@ import {
   haveNode,
   newAddNode,
   getBalanceaOfTokenTest,
-} from "./utils/transactions";
-import particles from "./components/Particles";
+  nodeAdressIsValid,
+  rewardChecker,
+} from "@/utils/transactions";
+import particles from "@/components/Particles";
+import Header from "@/components/Header.vue";
 const mainChainId = 0x61;
 const STEPS = {
   mint: 1,
@@ -288,9 +415,11 @@ const STEPS = {
 export default {
   name: "App",
 
-  components: { particles },
+  components: { Header, particles },
 
   data: () => ({
+    cardLoading: false,
+    TR: true,
     themeIsDark: false,
     dialog: false,
     steps: STEPS,
@@ -313,6 +442,13 @@ export default {
     haveNode: false,
     mintAmount: 1000,
     nativeTokenBalance: 0,
+    nodeInfo: Object,
+    reapetedNodeAdressDialog: false,
+    rewardAmount: 0,
+    minMint: [
+      (value) => !!value || "Required.",
+      (value) => (value && value <= 1000 && value > 0) || "min:1 , max:1000",
+    ],
     minStakeAmount: [
       (value) => !!value || "Required.",
       (value) =>
@@ -396,14 +532,41 @@ export default {
         this.tokenTestBalance = res;
       });
     },
-    checkHaveNode() {
-      haveNode(this.account, this.web3).then((res) => {
-        this.haveNode = res;
+    rewardCheck() {
+      rewardChecker(this.account, this.web3).then((res) => {
+        this.rewardAmount = res;
       });
     },
+    checkHaveNode() {
+      if (this.account) {
+        this.cardLoading = true;
+        haveNode(this.account, this.web3)
+          .then((res) => {
+            if (Number(res[0])) {
+              this.rewardCheck();
+              this.haveNode = true;
+              this.nodeInfo["id"] = res[0];
+              this.nodeInfo["nodeAddress"] = res[1];
+              this.nodeInfo["peerId"] = res[3];
+              this.nodeInfo["active"] = res[4];
+            } else {
+              this.haveNode = false;
+            }
+          })
+          .finally(() => {
+            this.cardLoading = false;
+          });
+      }
+    },
     addNode() {
-      // addMuonNode(this.account, this.web3, this.nodeAddress, this.peerId);
-      newAddNode(this.account, this.web3, this.nodeAddress, this.peerId);
+      nodeAdressIsValid(this.nodeAddress, this.web3).then((res) => {
+        if (res > 0) {
+          this.dialog = true;
+          this.reapetedNodeAdressDialog = true;
+        } else {
+          newAddNode(this.account, this.web3, this.nodeAddress, this.peerId);
+        }
+      });
     },
     stake() {
       stake(this.account, this.web3, this.stakeAmount);
@@ -418,6 +581,7 @@ export default {
         this.isCorrectChain = false;
       } else {
         this.isCorrectChain = true;
+        this.checkHaveNode();
       }
     },
     async switchToCorrectChain() {
@@ -465,21 +629,22 @@ export default {
           method: "eth_requestAccounts",
         })
         .then((res) => {
+          // this.cardLoading = true;
           const account = res[0];
           this.account = account;
           this.checkApproved();
           this.getNativeBalance();
+          this.checkHaveNode();
         });
     },
     async getChainId() {
       ethereum.request({ method: "eth_chainId" }).then((res) => {
         this.currntIdChain = res;
-        console.log(res);
       });
     },
   },
   created() {
-    document.title = "Join Alice network";
+    document.title = "Join ALICE network";
     this.web3 = new Web3(window.ethereum);
     this.getChainId();
   },
@@ -497,7 +662,7 @@ export default {
         const amount = Number(this.tokenTestBalance);
         return amount.toFixed(2);
       } else {
-        return 0;
+        return "0";
       }
     },
   },
@@ -509,6 +674,7 @@ export default {
       this.checkApproved();
       this.getTokenTestBalance();
       this.getNativeBalance();
+      this.checkHaveNode();
     });
     ethereum.on("chainChanged", (chainId) => {
       this.currntIdChain = chainId;
@@ -517,7 +683,6 @@ export default {
     this.checkNetwork();
 
     if (localStorage.themeIsDark === "true") {
-      console.log(localStorage.themeIsDark === "false");
       this.themeIsDark = true;
     }
   },
@@ -528,6 +693,9 @@ export default {
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap");
 
+#particles-js {
+  max-height: 98%;
+}
 .myFont {
   font-family: "Montserrat", sans-serif !important;
 }
@@ -540,7 +708,7 @@ h3 {
   background-color: #313144 !important;
 }
 .backgorundpic_light {
-  background-color: #d7ebf1 !important;
+  background-color: #f5f5f5 !important;
 }
 .full-width {
   width: 100% !important;
@@ -593,6 +761,122 @@ h3 {
   background: linear-gradient(90deg, #fac739 -2.48%, #fb0d6a 102.48%);
 }
 .full_height {
-  min-height: 90vh !important;
+  /* min-height: 90vh !important; */
+}
+.main_title {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  line-height: 44px;
+  /* identical to box height */
+
+  text-align: center;
+  text-transform: capitalize;
+
+  /* Primary Gradient */
+
+  background: linear-gradient(135deg, #5158f6 0%, #822df5 33.12%, #f3a761 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.title_card_box {
+  width: 80%;
+  height: 100px;
+  margin-top: -50px;
+  border-radius: 18px;
+  border: 2px solid #5158f6;
+  background-color: #ffffff;
+  background-image: url("@/assets/presale-header.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.title_card_box_font {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  line-height: 44px;
+  text-align: center;
+
+  /* Black */
+
+  color: #323245;
+}
+.subtitle_card_box_font {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 29px;
+  text-align: center;
+
+  /* Primary */
+
+  color: #5158f6;
+}
+.v-stepper__header {
+  box-shadow: none !important;
+}
+.stepper_header_text {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+  text-align: center;
+
+  /* Black */
+
+  color: #323245;
+}
+.enough_tokens_message {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 44px;
+  text-align: center;
+
+  /* Black */
+
+  color: #323245;
+}
+.input_fild {
+  background: rgba(233, 239, 246, 0.75);
+}
+.underlite_dialog {
+  text-decoration-line: underline;
+  text-decoration-color: #5158f6;
+  text-decoration-thickness: 9px;
+}
+.footer_card {
+  width: 80%;
+  height: 100px;
+  margin-bottom: -50px;
+  border-radius: 18px;
+  border: 2px solid #5158f6;
+  background-color: #ffffff;
+  background-image: url("@/assets/presale-header.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+.divider_step_box {
+  border-left: 3px solid #f59569;
+}
+.border-dashed {
+  border-left: 3px dashed #e9eff6;
+}
+.height-80 {
+  height: 40px;
+}
+.setp_box {
+  height: 50px;
+  max-height: 50px;
+}
+.text-small {
+  font-size: 10px;
+}
+.full-width {
+  width: 100%;
 }
 </style>
