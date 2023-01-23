@@ -7,7 +7,6 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
-    "particles.js": "^2.0.0",
     "particles.vue": "^3.7.1",
     "register-service-worker": "^1.7.2",
     "tsparticles": "^2.7.1",
