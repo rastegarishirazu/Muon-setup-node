@@ -7,6 +7,11 @@ Vue.use(VueRouter);
 
 const routes = [
   {
+    path: "/",
+    name: "home",
+    component: HomeView,
+  },
+  {
     path: "/join",
     name: "home",
     component: HomeView,
