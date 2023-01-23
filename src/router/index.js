@@ -12,7 +12,7 @@ const routes = [
   },
   {
     path: "/join",
-    name: "home",
+    name: "home2",
     component: HomeView,
   },
 ];
