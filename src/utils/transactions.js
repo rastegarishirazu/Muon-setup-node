@@ -4,6 +4,9 @@ const myWeb3 = new Web3();
 const muonTestnetTokenAddress = Contract.address.BSC.MuonTestToken;
 const muonTestnetTokenABI = Contract.ABI.BSC.MuonTestToken;
 
+const minterAddress = Contract.address.BSC.Minter;
+const minterABI = Contract.ABI.BSC.Minter;
+
 const stakingContractAdress = Contract.address.BSC.MuonNodeStaking;
 const stakingCOntractABI = Contract.ABI.BSC.MuonNodeStaking;
 
@@ -34,7 +37,6 @@ const checkApproved = async (account, web3) => {
   const value = await contract.methods
     .allowance(account, stakingContractAdress)
     .call();
-  console.log(typeof value);
   if (value >= 1000 * DECIMAL) {
     return true;
   }
@@ -69,12 +71,10 @@ const howMuchStake = async (account, web3) => {
 };
 
 const haveNode = async (account, web3) => {
-  const contract = new web3.eth.Contract(nodeManagerAddress, nodeManagerABI);
-  const res = await contract.methods.addMuonNode(account).call();
-  if (res > 0) {
-    return res;
-  }
-  return false;
+  const contract = new web3.eth.Contract(nodeManagerABI, nodeManagerAddress);
+  const res = await contract.methods.stakerAddressInfo(account).call();
+  console.log(res);
+  return res;
 };
 
 const newAddNode = async (account, web3, nodeAddress, peerId) => {
@@ -87,26 +87,52 @@ const newAddNode = async (account, web3, nodeAddress, peerId) => {
     .send({ from: account });
 };
 
-const getBalanceaOfTokenTest = async (account, web3) => {
+const getBalanceaOfTokenTest = async (address, web3) => {
   const contract = new web3.eth.Contract(
     muonTestnetTokenABI,
     muonTestnetTokenAddress
   );
-  const res = await contract.methods.balanceOf(account).call();
+  const res = await contract.methods.balanceOf(address).call();
   const balance = myWeb3.utils.fromWei(res, "ether");
   return balance;
 };
 
+// const mint = async (account, web3, amount) => {
+//   const contract = new web3.eth.Contract(
+//     muonTestnetTokenABI,
+//     muonTestnetTokenAddress
+//   );
+//   const amountForTrx = myWeb3.utils.toWei(String(amount), "ether");
+//   const res = await contract.methods
+//     .mint(account, amountForTrx)
+//     .send({ from: account });
+//   return res;
+// };
 const mint = async (account, web3, amount) => {
-  const contract = new web3.eth.Contract(
-    muonTestnetTokenABI,
-    muonTestnetTokenAddress
-  );
+  const contract = new web3.eth.Contract(minterABI, minterAddress);
   const amountForTrx = myWeb3.utils.toWei(String(amount), "ether");
   const res = await contract.methods
-    .mint(account, amountForTrx)
+    .mintMuonTestToken(account, amountForTrx)
     .send({ from: account });
   return res;
+};
+
+const nodeAdressIsValid = async (account, web3) => {
+  console.log("start");
+  const contract = new web3.eth.Contract(nodeManagerABI, nodeManagerAddress);
+  const res = await contract.methods.nodeAddressInfo(account).call();
+  console.log(res);
+  return res;
+};
+const rewardChecker = async (account, web3) => {
+  const contract = new web3.eth.Contract(
+    stakingCOntractABI,
+    stakingContractAdress
+  );
+  const res = await contract.methods.earned(account).call();
+  const balance = myWeb3.utils.fromWei(res, "ether");
+
+  return balance;
 };
 
 export {
@@ -119,4 +145,6 @@ export {
   newAddNode,
   getBalanceaOfTokenTest,
   mint,
+  nodeAdressIsValid,
+  rewardChecker,
 };
