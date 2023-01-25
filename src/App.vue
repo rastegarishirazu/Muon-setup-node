@@ -534,7 +534,7 @@ export default {
     },
     rewardCheck() {
       rewardChecker(this.account, this.web3).then((res) => {
-        this.rewardAmount = res;
+        this.rewardAmount = Number(res).toFixed(2);
       });
     },
     checkHaveNode() {
@@ -564,7 +564,14 @@ export default {
           this.dialog = true;
           this.reapetedNodeAdressDialog = true;
         } else {
-          newAddNode(this.account, this.web3, this.nodeAddress, this.peerId);
+          newAddNode(
+            this.account,
+            this.web3,
+            this.nodeAddress,
+            this.peerId
+          ).then(() => {
+            this.checkHaveNode();
+          });
         }
       });
     },
@@ -644,6 +651,15 @@ export default {
     },
   },
   created() {
+    ethereum
+      .request({ method: "eth_accounts" })
+      .then((res) => {
+        if (res.length) {
+          console.log(res.length);
+          this.connectToMetamask();
+        }
+      })
+      .catch(console.error);
     document.title = "Join ALICE network";
     this.web3 = new Web3(window.ethereum);
     this.getChainId();
