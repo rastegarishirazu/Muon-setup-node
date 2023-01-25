@@ -43,7 +43,7 @@
           elevation="0"
           @click="switchNetwork"
         >
-          switch newtork
+          switch network
         </v-btn>
         <v-btn
           v-else
