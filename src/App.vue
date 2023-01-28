@@ -54,7 +54,10 @@
                   color="primary"
                 ></v-progress-circular>
               </v-row>
-              <v-row class="my-5" v-else-if="!haveNode">
+              <v-row
+                class="my-5"
+                v-else-if="!haveNode || !isConnected || !isCorrectChain"
+              >
                 <v-stepper
                   v-if="isCorrectChain && isConnected"
                   v-model="e1"
@@ -472,6 +475,8 @@ export default {
     isConnected(newState, oldState) {
       if (newState) {
         this.getTokenTestBalance();
+      } else {
+        this.addressShow = "connect Wallet";
       }
     },
     tokenTestBalance(newBalance, oldBalance) {
@@ -697,10 +702,13 @@ export default {
       this.getNativeBalance();
       this.checkHaveNode();
     });
+    ethereum.on("disconnect", () => {
+      this.isConnected = ethereum.isConnected();
+    });
     ethereum.on("chainChanged", (chainId) => {
       this.currntIdChain = chainId;
     });
-
+    this.getTokenTestBalance();
     this.checkNetwork();
 
     if (localStorage.themeIsDark === "true") {
