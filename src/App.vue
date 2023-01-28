@@ -335,7 +335,12 @@
             </v-card>
           </v-col>
         </v-row>
-        <v-dialog dark v-model="dialog" width="500">
+        <v-dialog
+          v-if="isCorrectChain && isConnected"
+          dark
+          v-model="dialog"
+          width="500"
+        >
           <v-card color="#fff">
             <v-card-text v-if="reapetedNodeAdressDialog">
               <v-row class="mt-5 px-5" justify="center">
@@ -571,6 +576,7 @@ export default {
             this.peerId
           ).then(() => {
             this.checkHaveNode();
+            this.getTokenTestBalance();
           });
         }
       });
@@ -588,7 +594,15 @@ export default {
         this.isCorrectChain = false;
       } else {
         this.isCorrectChain = true;
-        this.checkHaveNode();
+        ethereum
+          .request({ method: "eth_accounts" })
+          .then((res) => {
+            if (res.length && this.isCorrectChain) {
+              console.log(res.length);
+              this.connectToMetamask();
+            }
+          })
+          .catch(console.error);
       }
     },
     async switchToCorrectChain() {
@@ -651,15 +665,6 @@ export default {
     },
   },
   created() {
-    ethereum
-      .request({ method: "eth_accounts" })
-      .then((res) => {
-        if (res.length) {
-          console.log(res.length);
-          this.connectToMetamask();
-        }
-      })
-      .catch(console.error);
     document.title = "Join ALICE network";
     this.web3 = new Web3(window.ethereum);
     this.getChainId();
