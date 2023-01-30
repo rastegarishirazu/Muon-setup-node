@@ -82,9 +82,10 @@ const newAddNode = async (account, web3, nodeAddress, peerId) => {
     stakingCOntractABI,
     stakingContractAdress
   );
-  contract.methods
+  const res = contract.methods
     .addMuonNode(nodeAddress, peerId, myWeb3.utils.toWei("1000", "ether"))
     .send({ from: account });
+  return res;
 };
 
 const getBalanceaOfTokenTest = async (address, web3) => {

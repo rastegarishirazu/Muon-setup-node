@@ -582,18 +582,18 @@ export default {
     addNode() {
       nodeAdressIsValid(this.nodeAddress, this.web3).then((res) => {
         if (res > 0) {
-          this.dialog = true;
           this.reapetedNodeAdressDialog = true;
+          this.dialog = true;
         } else {
-          newAddNode(
-            this.account,
-            this.web3,
-            this.nodeAddress,
-            this.peerId
-          ).then(() => {
-            this.checkHaveNode();
-            this.getTokenTestBalance();
-          });
+          newAddNode(this.account, this.web3, this.nodeAddress, this.peerId)
+            .then(() => {
+              this.checkHaveNode();
+              this.getTokenTestBalance();
+            })
+            .finally(() => {
+              this.checkHaveNode();
+              this.getTokenTestBalance();
+            });
         }
       });
     },
