@@ -530,7 +530,6 @@ export default {
       getNodeInfo(nodeId)
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
           if (data?.success && data?.result?.nodeInfo?.uptime) {
             this.nodeIsActive = "Active";
             this.nodeUptime = data.result.nodeInfo.uptime;
@@ -600,7 +599,7 @@ export default {
     },
     addNode() {
       nodeAdressIsValid(this.nodeAddress, this.web3).then((res) => {
-        if (res > 0) {
+        if (res[0] > 0) {
           this.reapetedNodeAdressDialog = true;
           this.dialog = true;
         } else {
