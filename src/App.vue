@@ -542,10 +542,21 @@ export default {
         this.tokenTestBalance = res;
       });
     },
-    rewardCheck() {
-      rewardChecker(this.account, this.web3).then((res) => {
-        this.rewardAmount = Number(res).toFixed(2);
-      });
+    rewardCheck(flag = true) {
+      if (flag) {
+        rewardChecker(this.account, this.web3).then((res) => {
+          this.rewardAmount = Number(res).toFixed(4);
+          this.rewardCheck(false);
+        });
+      } else {
+        setTimeout(() => {
+          rewardChecker(this.account, this.web3).then((res) => {
+            this.rewardAmount = Number(res).toFixed(4);
+          });
+          console.log("shode");
+          this.rewardCheck(false);
+        }, 15000);
+      }
     },
     checkHaveNode() {
       if (this.account) {
@@ -702,8 +713,10 @@ export default {
       this.getNativeBalance();
       this.checkHaveNode();
     });
+
     ethereum.on("disconnect", () => {
-      this.isConnected = ethereum.isConnected();
+      console.log("disconnect");
+      this.isConnected = false;
     });
     ethereum.on("chainChanged", (chainId) => {
       this.currntIdChain = chainId;
