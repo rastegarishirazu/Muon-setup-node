@@ -455,7 +455,7 @@ export default {
     mintAmount: 1000,
     nativeTokenBalance: 0,
     nodeInfo: Object,
-    nodeIsActive: "...",
+    nodeIsActive: "Loading...",
     nodeUptime: "",
     reapetedNodeAdressDialog: false,
     rewardAmount: 0,
@@ -526,7 +526,7 @@ export default {
   },
   methods: {
     moreNodeInfo(nodeId) {
-      this.nodeIsActive = "...";
+      this.nodeIsActive = "Loading...";
       getNodeInfo(nodeId)
         .then((response) => response.json())
         .then((data) => {
