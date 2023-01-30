@@ -530,7 +530,8 @@ export default {
       getNodeInfo(nodeId)
         .then((response) => response.json())
         .then((data) => {
-          if (data?.success && data?.result?.nodeInfo?.uptime.length > 2) {
+          console.log(data);
+          if (data?.success && data?.result?.nodeInfo?.uptime) {
             this.nodeIsActive = "Active";
             this.nodeUptime = data.result.nodeInfo.uptime;
           } else {
