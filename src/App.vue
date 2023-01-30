@@ -308,7 +308,10 @@
                   <v-col>
                     <ul>
                       <li>Peer ID: {{ nodeInfo.peerId }}</li>
-                      <li>Status: {{ nodeInfo.active ? "ACTIVE" : "OFF" }}</li>
+                      <li>Status: {{ nodeIsActive ? nodeIsActive : "OFF" }}</li>
+                      <li v-if="nodeIsActive === 'Active'">
+                        Uptime: {{ nodeUptime }}
+                      </li>
                     </ul>
                   </v-col>
                 </v-row>
@@ -412,6 +415,7 @@ import {
   nodeAdressIsValid,
   rewardChecker,
 } from "@/utils/transactions";
+import { getNodeInfo } from "@/utils/fetch";
 import particles from "@/components/Particles";
 import Header from "@/components/Header.vue";
 const mainChainId = 0x61;
@@ -451,6 +455,8 @@ export default {
     mintAmount: 1000,
     nativeTokenBalance: 0,
     nodeInfo: Object,
+    nodeIsActive: "...",
+    nodeUptime: "",
     reapetedNodeAdressDialog: false,
     rewardAmount: 0,
     minMint: [
@@ -519,6 +525,20 @@ export default {
     },
   },
   methods: {
+    moreNodeInfo(nodeId) {
+      this.nodeIsActive = "...";
+      getNodeInfo(nodeId)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          if (data?.success && data?.result?.nodeInfo?.uptime.length > 2) {
+            this.nodeIsActive = "Active";
+            this.nodeUptime = data.result.nodeInfo.uptime;
+          } else {
+            this.nodeIsActive = false;
+          }
+        });
+    },
     changeTheme() {
       this.themeIsDark = !this.themeIsDark;
     },
@@ -533,7 +553,6 @@ export default {
     },
     mint() {
       mint(this.account, this.web3, this.mintAmount).then((res) => {
-        console.log(res);
         this.getTokenTestBalance();
       });
     },
@@ -553,7 +572,6 @@ export default {
           rewardChecker(this.account, this.web3).then((res) => {
             this.rewardAmount = Number(res).toFixed(4);
           });
-          console.log("shode");
           this.rewardCheck(false);
         }, 15000);
       }
@@ -570,6 +588,7 @@ export default {
               this.nodeInfo["nodeAddress"] = res[1];
               this.nodeInfo["peerId"] = res[3];
               this.nodeInfo["active"] = res[4];
+              this.moreNodeInfo(res[0]);
             } else {
               this.haveNode = false;
             }
@@ -614,7 +633,6 @@ export default {
           .request({ method: "eth_accounts" })
           .then((res) => {
             if (res.length && this.isCorrectChain) {
-              console.log(res.length);
               this.connectToMetamask();
             }
           })
@@ -656,7 +674,6 @@ export default {
     },
     approve() {
       approve(this.account, this.web3).then((res) => {
-        console.log(res);
         this.checkApproved();
       });
     },
@@ -707,7 +724,6 @@ export default {
     ethereum.on("accountsChanged", async (accounts) => {
       const address = accounts[0];
       this.account = address;
-      console.log(this.account);
       this.checkApproved();
       this.getTokenTestBalance();
       this.getNativeBalance();
@@ -715,7 +731,6 @@ export default {
     });
 
     ethereum.on("disconnect", () => {
-      console.log("disconnect");
       this.isConnected = false;
     });
     ethereum.on("chainChanged", (chainId) => {
