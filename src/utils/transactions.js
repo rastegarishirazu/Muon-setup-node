@@ -73,7 +73,6 @@ const howMuchStake = async (account, web3) => {
 const haveNode = async (account, web3) => {
   const contract = new web3.eth.Contract(nodeManagerABI, nodeManagerAddress);
   const res = await contract.methods.stakerAddressInfo(account).call();
-  console.log(res);
   return res;
 };
 
@@ -119,10 +118,8 @@ const mint = async (account, web3, amount) => {
 };
 
 const nodeAdressIsValid = async (account, web3) => {
-  console.log("start");
   const contract = new web3.eth.Contract(nodeManagerABI, nodeManagerAddress);
   const res = await contract.methods.nodeAddressInfo(account).call();
-  console.log(res);
   return res;
 };
 const rewardChecker = async (account, web3) => {

@@ -530,7 +530,6 @@ export default {
       getNodeInfo(nodeId)
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
           if (data?.success && data?.result?.nodeInfo?.uptime.length > 2) {
             this.nodeIsActive = "Active";
             this.nodeUptime = data.result.nodeInfo.uptime;
@@ -689,6 +688,7 @@ export default {
           this.checkApproved();
           this.getNativeBalance();
           this.checkHaveNode();
+          this.getTokenTestBalance();
         });
     },
     async getChainId() {
@@ -736,7 +736,6 @@ export default {
     ethereum.on("chainChanged", (chainId) => {
       this.currntIdChain = chainId;
     });
-    this.getTokenTestBalance();
     this.checkNetwork();
 
     if (localStorage.themeIsDark === "true") {
