@@ -530,12 +530,16 @@ export default {
       getNodeInfo(nodeId)
         .then((response) => response.json())
         .then((data) => {
+          console.log(data);
           if (data?.success && data?.result?.nodeInfo?.uptime) {
             this.nodeIsActive = "Active";
             this.nodeUptime = data.result.nodeInfo.uptime;
           } else if (!data.success) {
             this.nodeIsActive = "OFF";
           }
+        })
+        .catch((err) => {
+          console.log(err);
         });
     },
     changeTheme() {
