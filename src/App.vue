@@ -309,9 +309,6 @@
                     <ul>
                       <li>Peer ID: {{ nodeInfo.peerId }}</li>
                       <li>Status: {{ nodeIsActive }}</li>
-                      <li v-if="nodeIsActive === 'Active'">
-                        Uptime: {{ nodeUptime }}
-                      </li>
                     </ul>
                   </v-col>
                 </v-row>
@@ -530,7 +527,6 @@ export default {
       getNodeInfo(nodeId)
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
           if (data?.success && data?.result?.nodeInfo?.uptime) {
             this.nodeIsActive = "Active";
             this.nodeUptime = data.result.nodeInfo.uptime;
