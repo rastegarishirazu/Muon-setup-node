@@ -308,7 +308,7 @@
                   <v-col>
                     <ul>
                       <li>Peer ID: {{ nodeInfo.peerId }}</li>
-                      <li>Status: {{ nodeIsActive ? nodeIsActive : "OFF" }}</li>
+                      <li>Status: {{ nodeIsActive }}</li>
                       <li v-if="nodeIsActive === 'Active'">
                         Uptime: {{ nodeUptime }}
                       </li>
@@ -533,8 +533,8 @@ export default {
           if (data?.success && data?.result?.nodeInfo?.uptime) {
             this.nodeIsActive = "Active";
             this.nodeUptime = data.result.nodeInfo.uptime;
-          } else {
-            this.nodeIsActive = false;
+          } else if (!data.success) {
+            this.nodeIsActive = "OFF";
           }
         });
     },
