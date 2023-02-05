@@ -311,6 +311,17 @@
                       <li>Status: {{ nodeIsActive }}</li>
                     </ul>
                   </v-col>
+                  <v-col cols="12" class="text-center">
+                    <p v-if="nodeIsActive == 'OFF'">
+                      To find out why your node is offline, see
+                      <a
+                        target="_blank"
+                        href="https://docs.muon.net/muon-network/muon-nodes/joining-the-testnet-alice/faq-for-alice#when-i-check-the-status-of-my-node-on-the-dashboard-why-do-i-see-loading-or-offline"
+                      >
+                        here </a
+                      >.
+                    </p>
+                  </v-col>
                 </v-row>
               </div>
               <div
@@ -522,21 +533,10 @@ export default {
     },
   },
   methods: {
-    moreNodeInfo(nodeId) {
+    async moreNodeInfo(nodeId) {
       this.nodeIsActive = "Loading...";
-      getNodeInfo(nodeId)
-        .then((response) => response.json())
-        .then((data) => {
-          if (data?.success && data?.result?.nodeInfo?.uptime) {
-            this.nodeIsActive = "Active";
-            this.nodeUptime = data.result.nodeInfo.uptime;
-          } else if (!data.success) {
-            this.nodeIsActive = "OFF";
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      const res = await getNodeInfo(nodeId);
+      this.nodeIsActive = res ? "ACTIVE" : "OFF";
     },
     changeTheme() {
       this.themeIsDark = !this.themeIsDark;
