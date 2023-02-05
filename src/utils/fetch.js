@@ -1,3 +1,6 @@
+const controller = new AbortController();
+const id = setTimeout(() => controller.abort(), 15000);
+
 const getNodeInfo = async (nodeId) => {
   const listOfNodes = [
     "https://alice.muon.net/v1/",
@@ -9,10 +12,11 @@ const getNodeInfo = async (nodeId) => {
   let res;
   var flag = false;
 
-  while (tryed < 8 && !flag) {
+  while (tryed < 4 && !flag) {
     res = await fetch(
-      `${listOfNodes[tryed % 4]}?app=explorer&method=node&params[id]=${nodeId}`
+      `${listOfNodes[tryed % 4]}?app=explorer&method=node&params[id]=${nodeId}`,
       // "https://catfact.ninja/fact"
+      { signal: controller.signal }
     )
       .then((response) => response.json())
       .then((data) => {
@@ -27,6 +31,7 @@ const getNodeInfo = async (nodeId) => {
         console.log(err);
       });
     tryed++;
+    clearTimeout(id);
   }
   return res;
 };
