@@ -23,6 +23,73 @@
         <!-- <v-row justify="center" class="my-2">
           <v-col> <h1 class="main_title">ALICE testnet</h1></v-col>
         </v-row> -->
+        <v-row class="mt-10" justify="center">
+          <v-col md="5">
+            <div class="d-flex justify-center" width="100%">
+              <div class="title_card_box text-center py-5">
+                <h2 class="title_card_box_font text-h4">Adding a Node</h2>
+                <h3 class="subtitle_card_box_font text-h6">
+                  To the ALICE Network
+                </h3>
+              </div>
+            </div>
+          </v-col>
+        </v-row>
+        <v-row justify="center">
+          <v-col md="4">
+            <v-row>
+              <v-col md="4" class="text-center">
+                <div
+                  class="setp_box height-step-box text-center primaryOrange white--text rounded-lg py-3"
+                  width="100%"
+                >
+                  Step 1
+                </div>
+                <div class="d-flex justify-center">
+                  <div class="divider_step_box height-steps"></div>
+                </div>
+                <div
+                  class="setp_box height-step-box text-center gray rounded-lg py-3"
+                  width="100%"
+                >
+                  Step 2
+                </div>
+                <div class="d-flex justify-center">
+                  <div class="border-dashed height-steps"></div>
+                </div>
+                <div
+                  class="setp_box height-step-box text-center gray rounded-lg py-3"
+                  width="100%"
+                >
+                  Step 3
+                </div>
+              </v-col>
+              <v-col>
+                <div class="height-step-box">
+                  <h4 class="text-subtitle-1 font-weight-black">
+                    Mint 1000 Alice Tokens
+                  </h4>
+                  <h5 class="font-weight-regular">to your wallet</h5>
+                </div>
+                <div class="height-steps"></div>
+                <div class="height-step-box">
+                  <h4 class="text-subtitle-1">Approve the Staking Contract</h4>
+                  <h5 class="font-weight-regular">
+                    to be able to deposit your tokens
+                  </h5>
+                </div>
+                <div class="height-steps"></div>
+                <div class="height-step-box">
+                  <h4 class="text-subtitle-1">Add your Node to the Network</h4>
+                  <h5 class="font-weight-regular">
+                    and start securing the network!
+                  </h5>
+                </div>
+              </v-col>
+            </v-row>
+          </v-col>
+          <v-col md="4"></v-col>
+        </v-row>
         <v-row
           :class="[
             ' pb-15',
@@ -238,7 +305,7 @@
                     Step 1
                   </div>
                   <div class="d-flex justify-center">
-                    <div class="divider_step_box height-80"></div>
+                    <div class="divider_step_box height-steps"></div>
                   </div>
                   <div
                     class="setp_box text-center gray rounded-lg py-3"
@@ -247,7 +314,7 @@
                     Step 2
                   </div>
                   <div class="d-flex justify-center">
-                    <div class="border-dashed height-80"></div>
+                    <div class="border-dashed height-steps"></div>
                   </div>
                   <div
                     class="setp_box text-center gray rounded-lg py-3"
@@ -269,7 +336,7 @@
                       to your wallet, using the button below.
                     </h6>
                   </div>
-                  <div class="height-80"></div>
+                  <div class="height-steps"></div>
                   <div class="step_box">
                     <h5 class="myFont font-weight-light text-h6">
                       Approve the Staking Contract
@@ -278,7 +345,7 @@
                       to be able to deposit your tokens.
                     </h6>
                   </div>
-                  <div class="height-80"></div>
+                  <div class="height-steps"></div>
                   <div class="step_box">
                     <h5 class="myFont font-weight-light text-h6">
                       Add your Node to the Network
@@ -752,6 +819,9 @@ export default {
 #particles-js {
   max-height: 98%;
 }
+.v-application {
+  font-family: "Montserrat", sans-serif !important;
+}
 .myFont {
   font-family: "Montserrat", sans-serif !important;
 }
@@ -922,12 +992,14 @@ h3 {
 .border-dashed {
   border-left: 3px dashed #e9eff6;
 }
-.height-80 {
-  height: 40px;
+.height-steps {
+  height: 70px;
 }
 .setp_box {
-  height: 50px;
   max-height: 50px;
+}
+.height-step-box {
+  height: 50px;
 }
 .text-small {
   font-size: 10px;
