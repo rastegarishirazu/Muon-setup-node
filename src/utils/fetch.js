@@ -42,26 +42,6 @@ const getNodeInfo = async (nodeId) => {
       console.log(res);
       return res;
     }
-
-    // res = await fetch(
-    //   `${listOfNodes[tryed % 4]}?app=explorer&method=node&params[id]=${nodeId}`,
-    //   // "https://catfact.ninja/fact"
-    //   { signal: controller.signal }
-    // )
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     if (data?.success && data?.result?.nodeInfo?.uptime.length > 1) {
-    //       flag = true;
-    //       return data;
-    //     } else {
-    //       return false;
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-    // tryed++;
-    // clearTimeout(id);
   }
   return res;
 };
