@@ -23,10 +23,10 @@
         <!-- <v-row justify="center" class="my-2">
           <v-col> <h1 class="main_title">ALICE testnet</h1></v-col>
         </v-row> -->
-        <v-row class="mt-10" justify="center">
+        <v-row class="mt-2" justify="center">
           <v-col md="5">
             <div class="d-flex justify-center" width="100%">
-              <div class="title_card_box text-center py-5">
+              <div class="title_card_box text-center py-5 mt-1">
                 <h2 class="title_card_box_font text-h4">Adding a Node</h2>
                 <h3 class="subtitle_card_box_font text-h6">
                   To the ALICE Network
@@ -35,8 +35,8 @@
             </div>
           </v-col>
         </v-row>
-        <v-row justify="center">
-          <v-col md="4">
+        <v-row justify="center" class="mt-10">
+          <v-col md="4" xl="3" align-self="center">
             <v-row>
               <v-col md="4" class="text-center">
                 <div
@@ -88,7 +88,130 @@
               </v-col>
             </v-row>
           </v-col>
-          <v-col md="4"></v-col>
+          <v-col md="4" xl="3">
+            <v-card
+              elevation="0"
+              class="px-2 py-5 rounded-lg input-card-min-height"
+            >
+              <v-container class="full-height">
+                <v-rwo class="input-card-min-height d-flex">
+                  <v-col v-if="testEl === 0" cols="12">
+                    <div class="mint-level">
+                      <div class="lightPrimaryOrange rounded-lg px-2">
+                        <v-row>
+                          <v-col cols="2">
+                            <v-icon color="primaryOrange" class="text-h3">
+                              mdi-alert-circle
+                            </v-icon>
+                          </v-col>
+                          <v-col>
+                            <p class="mb-0">
+                              You don't have enough tokens. You need at least
+                              <b> 1000 ALICE</b>
+                            </p>
+                          </v-col>
+                        </v-row>
+                      </div>
+                      <p class="mt-5 font-weight-regular">
+                        Your <b>ALICE</b> token balance: <b>0</b>
+                        <v-btn class="ml-2" icon color="success">
+                          <v-icon color="black" class="gray rounded-lg"
+                            >mdi-refresh</v-icon
+                          >
+                        </v-btn>
+                      </p>
+                      <p class="mt-10">Token amount (min: 1000)</p>
+                      <v-text-field
+                        solo
+                        flat
+                        class="rounded-lg"
+                        name="name"
+                        label="Enter Amount you wish to mint"
+                        id="id"
+                        background-color="gray"
+                      ></v-text-field>
+                      <v-btn
+                        block
+                        color="primary"
+                        elevation="0"
+                        class="rounded-lg"
+                        >Mint ALICE</v-btn
+                      >
+                    </div>
+                  </v-col>
+                  <v-col v-if="testEl === 1" align-self="end" cols="12">
+                    <div class="">
+                      <p
+                        class="text-center mb-10 font-weight-medium text-subtitle-2"
+                      >
+                        Now you need to approve the <br />
+                        staking contract to use the tokens
+                      </p>
+                      <v-row>
+                        <v-col cols="10"
+                          ><v-btn elevation="0" block color="primary"
+                            >Approve</v-btn
+                          ></v-col
+                        >
+                        <v-col cols="2" class="pl-0"
+                          ><v-btn block color="gray" elevation="0">
+                            <v-icon color="black" class="gray rounded-lg">
+                              mdi-refresh
+                            </v-icon>
+                          </v-btn></v-col
+                        >
+                      </v-row>
+                    </div>
+                  </v-col>
+                  <v-col v-if="testEl === 2" cols="12">
+                    <div class="lightInfo rounded-lg px-2">
+                      <v-row>
+                        <v-col cols="2">
+                          <v-icon color="info" class="text-h3">
+                            mdi-alert-box
+                          </v-icon>
+                        </v-col>
+                        <v-col>
+                          <p class="mb-0 text-caption font-weight-bold">
+                            While adding your node. you will automatically stake
+                            1000 ALICE tokens
+                          </p>
+                        </v-col>
+                      </v-row>
+                    </div>
+                    <v-row>
+                      <v-col cols="12" class="mt-15">
+                        <span>Peer ID</span>
+                        <v-text-field
+                          solo
+                          flat
+                          class="rounded-lg"
+                          name="name"
+                          label="Enter 6-digits peer id"
+                          id="id"
+                          background-color="gray"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row class="mt-15">
+                      <v-col cols="3">
+                        <v-btn block color="gray" elevation="0">
+                          <v-icon color="black" class="gray rounded-lg">
+                            mdi-arrow-left-top-bold
+                          </v-icon>
+                        </v-btn>
+                      </v-col>
+                      <v-col cols="9" class="pl-0">
+                        <v-btn elevation="0" block color="primary">
+                          Add node
+                        </v-btn>
+                      </v-col>
+                    </v-row>
+                  </v-col>
+                </v-rwo>
+              </v-container>
+            </v-card>
+          </v-col>
         </v-row>
         <v-row
           :class="[
@@ -505,6 +628,7 @@ export default {
   components: { Header, particles },
 
   data: () => ({
+    testEl: 2, // remove it befor build
     cardLoading: false,
     TR: true,
     themeIsDark: false,
@@ -916,6 +1040,7 @@ h3 {
   background-image: url("@/assets/presale-header.svg");
   background-repeat: no-repeat;
   background-position: center;
+  box-shadow: 0 0 10px 1px #5159f66e;
 }
 .title_card_box_font {
   font-family: "Montserrat";
@@ -993,7 +1118,7 @@ h3 {
   border-left: 3px dashed #e9eff6;
 }
 .height-steps {
-  height: 70px;
+  height: 60px;
 }
 .setp_box {
   max-height: 50px;
@@ -1006,5 +1131,11 @@ h3 {
 }
 .full-width {
   width: 100%;
+}
+.input-card-min-height {
+  min-height: 350px;
+}
+.full-height {
+  height: 100%;
 }
 </style>
