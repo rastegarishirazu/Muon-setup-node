@@ -9,7 +9,7 @@ const helpFunction = async (url, nodeId) => {
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
-      if (data?.success && data?.result?.nodeInfo?.multiaddrs.length > 1) {
+      if (data?.success && data?.result?.nodeInfo?.multiaddrs.length > 0) {
         return data;
       } else {
         return false;
@@ -35,7 +35,7 @@ const getNodeInfo = async (nodeId) => {
   while (tryed < 4 && !flag) {
     console.log(listOfNodes[tryed % 4]);
     res = await helpFunction(listOfNodes[tryed % 4], nodeId);
-    if (res === "timeOut") {
+    if (res === "timeOut" || res === false) {
       tryed++;
       res = false;
       // clearTimeout(id);
