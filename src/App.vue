@@ -36,29 +36,61 @@
           </v-col>
         </v-row>
         <v-row justify="center" class="mt-10">
-          <v-col md="4" xl="3" align-self="center">
+          <v-col md="5" xl="3" align-self="center">
             <v-row>
-              <v-col md="4" class="text-center">
+              <v-col md="3" class="text-center">
                 <div
-                  class="setp_box height-step-box text-center primaryOrange white--text rounded-lg py-3"
+                  :class="[
+                    'setp_box',
+                    'height-step-box',
+                    'text-center',
+                    'rounded-lg',
+                    'py-3',
+                    'primaryOrange',
+                    'white--text',
+                  ]"
                   width="100%"
                 >
                   Step 1
                 </div>
                 <div class="d-flex justify-center">
-                  <div class="divider_step_box height-steps"></div>
+                  <div
+                    :class="[
+                      'height-steps',
+                      testEl > 1 ? 'divider_step_box' : 'border-dashed',
+                    ]"
+                  ></div>
                 </div>
                 <div
-                  class="setp_box height-step-box text-center gray rounded-lg py-3"
+                  :class="[
+                    'setp_box',
+                    'height-step-box',
+                    'text-center',
+                    'rounded-lg',
+                    'py-3',
+                    testEl > 1 ? 'primaryOrange white--text' : 'gray',
+                  ]"
                   width="100%"
                 >
                   Step 2
                 </div>
                 <div class="d-flex justify-center">
-                  <div class="border-dashed height-steps"></div>
+                  <div
+                    :class="[
+                      'height-steps',
+                      testEl > 2 ? 'divider_step_box' : 'border-dashed',
+                    ]"
+                  ></div>
                 </div>
                 <div
-                  class="setp_box height-step-box text-center gray rounded-lg py-3"
+                  :class="[
+                    'setp_box',
+                    'height-step-box',
+                    'text-center',
+                    'rounded-lg',
+                    'py-3',
+                    testEl > 2 ? 'primaryOrange white--text' : 'gray',
+                  ]"
                   width="100%"
                 >
                   Step 3
@@ -66,21 +98,40 @@
               </v-col>
               <v-col>
                 <div class="height-step-box">
-                  <h4 class="text-subtitle-1 font-weight-black">
+                  <h4
+                    :class="[
+                      'text-subtitle-1',
+                      { 'font-weight-black': testEl == 1 },
+                    ]"
+                  >
                     Mint 1000 Alice Tokens
                   </h4>
                   <h5 class="font-weight-regular">to your wallet</h5>
                 </div>
                 <div class="height-steps"></div>
                 <div class="height-step-box">
-                  <h4 class="text-subtitle-1">Approve the Staking Contract</h4>
+                  <h4
+                    :class="[
+                      'text-subtitle-1',
+                      { 'font-weight-black': testEl == 2 },
+                    ]"
+                  >
+                    Approve the Staking Contract
+                  </h4>
                   <h5 class="font-weight-regular">
                     to be able to deposit your tokens
                   </h5>
                 </div>
                 <div class="height-steps"></div>
                 <div class="height-step-box">
-                  <h4 class="text-subtitle-1">Add your Node to the Network</h4>
+                  <h4
+                    :class="[
+                      'text-subtitle-1',
+                      { 'font-weight-black': testEl == 3 },
+                    ]"
+                  >
+                    Add your Node to the Network
+                  </h4>
                   <h5 class="font-weight-regular">
                     and start securing the network!
                   </h5>
@@ -89,13 +140,10 @@
             </v-row>
           </v-col>
           <v-col md="4" xl="3">
-            <v-card
-              elevation="0"
-              class="px-2 py-5 rounded-lg input-card-min-height"
-            >
+            <v-card elevation="0" class="px-2 rounded-lg input-card-min-height">
               <v-container class="full-height">
                 <v-rwo class="input-card-min-height d-flex">
-                  <v-col v-if="testEl === 0" cols="12">
+                  <v-col v-if="testEl === 1" cols="12">
                     <div class="mint-level">
                       <div class="lightPrimaryOrange rounded-lg px-2">
                         <v-row>
@@ -139,8 +187,13 @@
                       >
                     </div>
                   </v-col>
-                  <v-col v-if="testEl === 1" align-self="end" cols="12">
+                  <v-col v-if="testEl === 2" align-self="end" cols="12">
                     <div class="">
+                      <lottie-vue-player
+                        ref="anim"
+                        src="https://lottie.host/868900ff-6aee-4393-a1e8-b60ad88620b1/T2cHITcdet.json"
+                        :autoplay="true"
+                      />
                       <p
                         class="text-center mb-10 font-weight-medium text-subtitle-2"
                       >
@@ -163,7 +216,7 @@
                       </v-row>
                     </div>
                   </v-col>
-                  <v-col v-if="testEl === 2" cols="12">
+                  <v-col v-if="testEl === 3" cols="12">
                     <div class="lightInfo rounded-lg px-2">
                       <v-row>
                         <v-col cols="2">
@@ -171,7 +224,7 @@
                             mdi-alert-box
                           </v-icon>
                         </v-col>
-                        <v-col>
+                        <v-col align-self="center">
                           <p class="mb-0 text-caption font-weight-bold">
                             While adding your node. you will automatically stake
                             1000 ALICE tokens
@@ -187,13 +240,14 @@
                           flat
                           class="rounded-lg"
                           name="name"
-                          label="Enter 6-digits peer id"
+                          label="Enter 46-digits peer id"
+                          :rules="[rules.peerId, rules.peerIdLenght]"
                           id="id"
                           background-color="gray"
                         ></v-text-field>
                       </v-col>
                     </v-row>
-                    <v-row class="mt-15">
+                    <v-row class="mt-8">
                       <v-col cols="3">
                         <v-btn block color="gray" elevation="0">
                           <v-icon color="black" class="gray rounded-lg">
@@ -202,7 +256,12 @@
                         </v-btn>
                       </v-col>
                       <v-col cols="9" class="pl-0">
-                        <v-btn elevation="0" block color="primary">
+                        <v-btn
+                          :disabled="!rules.peerId || !rules.peerIdLenght"
+                          elevation="0"
+                          block
+                          color="primary"
+                        >
                           Add node
                         </v-btn>
                       </v-col>
@@ -231,7 +290,7 @@
               elevation="2"
             >
               <div class="d-flex justify-center" width="100%">
-                <div class="title_card_box text-center py-5">
+                <div class="title_card_box text-center">
                   <h2 class="title_card_box_font text-h4">Adding a Node</h2>
                   <h3 class="subtitle_card_box_font text-h6">
                     To the ALICE Network
@@ -602,6 +661,7 @@
 
 <script>
 import Web3 from "web3";
+import wating from "@/assets/animation/waiting-for-approve.json";
 import {
   approve,
   checkApproved,
@@ -628,7 +688,8 @@ export default {
   components: { Header, particles },
 
   data: () => ({
-    testEl: 2, // remove it befor build
+    myJson: wating,
+    testEl: 1, // remove it befor build
     cardLoading: false,
     TR: true,
     themeIsDark: false,
@@ -671,6 +732,10 @@ export default {
       (value) => !!value || "Required.",
       (value) => (value && value.length === 42) || "The address is wrong.",
     ],
+    rules: {
+      peerId: (value) => value.slice(0, 2) === "Qm" || "Invalid peer id",
+      peerIdLenght: (value) => value.length === 46 || "Invalid peer id",
+    },
   }),
   watch: {
     themeIsDark(newState, oldState) {
@@ -1133,7 +1198,7 @@ h3 {
   width: 100%;
 }
 .input-card-min-height {
-  min-height: 350px;
+  min-height: 330px;
 }
 .full-height {
   height: 100%;
