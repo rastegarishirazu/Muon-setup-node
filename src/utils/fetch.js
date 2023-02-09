@@ -2,13 +2,14 @@ const helpFunction = async (url, nodeId) => {
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), 15000);
   return await fetch(
-    `${url}?app=explorer&method=node&params[id]=${nodeId}`,
+    `${url}?app=explorer&method=node-peer&params[id]=${nodeId}`,
     // "https://catfact.ninja/fact"
     { signal: controller.signal }
   )
     .then((response) => response.json())
     .then((data) => {
-      if (data?.success && data?.result?.nodeInfo?.uptime.length > 1) {
+      console.log(data);
+      if (data?.success && data?.result?.nodeInfo?.multiaddrs.length > 1) {
         return data;
       } else {
         return false;
