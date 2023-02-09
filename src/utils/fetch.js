@@ -9,7 +9,7 @@ const helpFunction = async (url, nodeId) => {
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
-      if (data?.success && data?.result?.nodeInfo?.multiaddrs.length > 0) {
+      if (data?.success && data?.result?.peerInfo?.multiaddrs.length > 0) {
         return data;
       } else {
         return false;
