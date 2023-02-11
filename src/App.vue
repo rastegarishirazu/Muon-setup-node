@@ -145,7 +145,10 @@
                 <v-rwo class="input-card-min-height d-flex">
                   <v-col v-if="testEl === 1" cols="12">
                     <div class="mint-level">
-                      <div class="lightPrimaryOrange rounded-lg px-2">
+                      <div
+                        v-if="!haveEnoughTokenTEst"
+                        class="lightPrimaryOrange rounded-lg px-2"
+                      >
                         <v-row>
                           <v-col cols="2">
                             <v-icon color="primaryOrange" class="text-h3">
@@ -161,8 +164,14 @@
                         </v-row>
                       </div>
                       <p class="mt-5 font-weight-regular">
-                        Your <b>ALICE</b> token balance: <b>0</b>
-                        <v-btn class="ml-2" icon color="success">
+                        Your <b>ALICE</b> token balance:
+                        <b>{{ muonTestTokenShow }}</b>
+                        <v-btn
+                          @click="getTokenTestBalance"
+                          class="ml-2"
+                          icon
+                          color="success"
+                        >
                           <v-icon color="black" class="gray rounded-lg"
                             >mdi-refresh</v-icon
                           >
@@ -172,6 +181,8 @@
                       <v-text-field
                         solo
                         flat
+                        v-model="mintAmount"
+                        :rules="minMint"
                         class="rounded-lg"
                         name="name"
                         label="Enter Amount you wish to mint"
@@ -180,6 +191,9 @@
                       ></v-text-field>
                       <v-btn
                         block
+                        :loading="btnLoading"
+                        :disabled="mintAmount > 1000 || mintAmount < 1"
+                        @click="mint"
                         color="primary"
                         elevation="0"
                         class="rounded-lg"
@@ -202,12 +216,22 @@
                       </p>
                       <v-row>
                         <v-col cols="10"
-                          ><v-btn elevation="0" block color="primary"
+                          ><v-btn
+                            :loading="btnLoading"
+                            @click="approve"
+                            elevation="0"
+                            block
+                            color="primary"
                             >Approve</v-btn
                           ></v-col
                         >
                         <v-col cols="2" class="pl-0"
-                          ><v-btn block color="gray" elevation="0">
+                          ><v-btn
+                            @click="checkApproved"
+                            block
+                            color="gray"
+                            elevation="0"
+                          >
                             <v-icon color="black" class="gray rounded-lg">
                               mdi-refresh
                             </v-icon>
@@ -661,7 +685,6 @@
 
 <script>
 import Web3 from "web3";
-import wating from "@/assets/animation/waiting-for-approve.json";
 import {
   approve,
   checkApproved,
@@ -688,8 +711,7 @@ export default {
   components: { Header, particles },
 
   data: () => ({
-    myJson: wating,
-    testEl: 1, // remove it befor build
+    testEl: 2, // remove it befor build
     cardLoading: false,
     TR: true,
     themeIsDark: false,
@@ -719,6 +741,7 @@ export default {
     nodeUptime: "",
     reapetedNodeAdressDialog: false,
     rewardAmount: 0,
+    btnLoading: false,
     minMint: [
       (value) => !!value || "Required.",
       (value) => (value && value <= 1000 && value > 0) || "min:1 , max:1000",
@@ -807,9 +830,15 @@ export default {
       });
     },
     mint() {
-      mint(this.account, this.web3, this.mintAmount).then((res) => {
-        this.getTokenTestBalance();
-      });
+      this.btnLoading = true;
+      mint(this.account, this.web3, this.mintAmount)
+        .then((res) => {
+          this.getTokenTestBalance();
+        })
+        .finally(() => {
+          console.log("finish");
+          this.btnLoading = false;
+        });
     },
     getTokenTestBalance() {
       getBalanceaOfTokenTest(this.account, this.web3).then((res) => {
@@ -919,7 +948,7 @@ export default {
                   decimals: 18,
                   symbol: "tBNB",
                 },
-                rpcUrls: ["https://data-seed-prebsc-1-s3.binance.org:8545/"],
+                rpcUrls: ["https://bsc-testnet.public.blastapi.io"],
                 blockExplorerUrls: ["https://testnet.bscscan.com/"],
               },
             ],
@@ -928,9 +957,14 @@ export default {
       }
     },
     approve() {
-      approve(this.account, this.web3).then((res) => {
-        this.checkApproved();
-      });
+      this.btnLoading = true;
+      approve(this.account, this.web3)
+        .then((res) => {
+          this.checkApproved();
+        })
+        .finally(() => {
+          this.btnLoading = false;
+        });
     },
     connectToMetamask() {
       ethereum
