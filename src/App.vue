@@ -298,17 +298,31 @@
                   </h3>
                 </v-row>
                 <v-row>
-                  <v-col>
+                  <v-col cols="12">
                     <ul>
                       <li>Node ID: {{ nodeInfo.id }}</li>
                       <li>Node address: {{ nodeInfo.nodeAddress }}</li>
-                      <li>Reward: {{ rewardAmount }}</li>
+                      <li>Peer ID: {{ nodeInfo.peerId }}</li>
+                      <li>Join at: {{ nodeInfo.startTime }}</li>
                     </ul>
                   </v-col>
-                  <v-col>
+                  <v-col cols="12">
                     <ul>
-                      <li>Peer ID: {{ nodeInfo.peerId }}</li>
+                      <li>Node IP: "{{ nodeInfo.nodeIP }}""</li>
                       <li>Status: {{ nodeIsActive }}</li>
+                      <li>Online: {{ nodeInfo.onlinePercent }}</li>
+                      <li>
+                        Reward: {{ nodeInfo.rewardAmount }} (
+                        {{ nodeInfo.rewardPercent }})
+                      </li>
+                    </ul>
+                  </v-col>
+                  <v-col cols="12">
+                    <ul>
+                      <h4>Your node has been down during these times.</h4>
+                      <li v-for="item in downNodeTimes">
+                        {{ item }}
+                      </li>
                     </ul>
                   </v-col>
                   <v-col cols="12" class="text-center">
@@ -467,6 +481,7 @@ export default {
     nodeUptime: "",
     reapetedNodeAdressDialog: false,
     rewardAmount: 0,
+    downNodeTimes: [],
     minMint: [
       (value) => !!value || "Required.",
       (value) => (value && value <= 1000 && value > 0) || "min:1 , max:1000",
@@ -536,7 +551,49 @@ export default {
     async moreNodeInfo(nodeId) {
       this.nodeIsActive = "Loading...";
       const res = await getNodeInfo(nodeId);
-      this.nodeIsActive = res ? "ACTIVE" : "OFF";
+      const tests = res["node"]["tests"];
+      this.nodeIsActive =
+        tests["networking"] && tests["peerInfo"] && tests["status"]
+          ? "Active"
+          : "OFF";
+      this.nodeInfo["nodeAddress"] = res["node"]["nodeAddress"];
+      this.nodeInfo["peerId"] = res["node"]["peerId"];
+      this.nodeInfo["startTime"] = new Date(res["node"]["startTime"] * 1000);
+      this.nodeInfo["nodeIP"] = res["node"]["ip"];
+      this.nodeInfo["rewardAmount"] = Number(
+        this.web3.utils.fromWei(String(res["reward"]["earned"]), "ether")
+      ).toFixed(4);
+      this.nodeInfo["rewardAmount"];
+      this.nodeInfo["onlinePercent"] = res["reward"]["onlinePercent"];
+      this.nodeInfo["rewardPercent"] = res["reward"]["rewardPercent"];
+      this.nodeInfo["history"] = res["history"].reverse();
+
+      var messages = [];
+      for (var [i, valueFrom] of this.nodeInfo["history"].entries()) {
+        if (!valueFrom["isOnline"]) {
+          var flag = true;
+          var from = valueFrom;
+          from = new Date(from["timestamp"] * 1000);
+          from = `${from.getMonth()}/${from.getDay()}/${from.getFullYear()} ${from.getHours()}:${from.getMinutes()}`;
+          for (var [j, valueTo] of this.nodeInfo["history"]
+            .slice(i)
+            .entries()) {
+            if (valueTo["isOnline"]) {
+              var to = valueTo;
+              to = new Date(to["timestamp"] * 1000);
+              to = `${to.getMonth()}/${to.getDay()}/${to.getFullYear()} ${to.getHours()}:${to.getMinutes()}`;
+              messages.push(`${from} until ${to}`);
+              flag = false;
+              break;
+            }
+          }
+          if (flag) {
+            messages.push(`${from} until now`);
+          }
+        }
+      }
+      this.downNodeTimes = messages;
+      console.log(messages);
     },
     changeTheme() {
       this.themeIsDark = !this.themeIsDark;
@@ -579,15 +636,15 @@ export default {
       if (this.account) {
         this.cardLoading = true;
         haveNode(this.account, this.web3)
-          .then((res) => {
+          .then(async (res) => {
             if (Number(res[0])) {
               this.rewardCheck();
               this.haveNode = true;
               this.nodeInfo["id"] = res[0];
-              this.nodeInfo["nodeAddress"] = res[1];
-              this.nodeInfo["peerId"] = res[3];
-              this.nodeInfo["active"] = res[4];
-              this.moreNodeInfo(res[0]);
+              await this.moreNodeInfo(res[0]);
+              // this.nodeInfo["nodeAddress"] = res[1];
+              // this.nodeInfo["peerId"] = res[3];
+              // this.nodeInfo["active"] = res[4];
             } else {
               this.haveNode = false;
             }

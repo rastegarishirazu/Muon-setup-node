@@ -1,19 +1,25 @@
 const helpFunction = async (url, nodeId) => {
   const controller = new AbortController();
-  const id = setTimeout(() => controller.abort(), 15000);
+  const id = setTimeout(() => controller.abort(), 20000);
+
+  var myHeaders = new Headers();
+  myHeaders.append("Accept", "application/json");
+
+  var requestOptions = {
+    method: "GET",
+    headers: myHeaders,
+    signal: controller.signal,
+    // redirect: "follow",
+  };
+
   return await fetch(
-    `${url}?app=explorer&method=node&params[id]=${nodeId}`,
+    `${url}/${nodeId}/status`,
     // "https://catfact.ninja/fact"
-    { signal: controller.signal }
+    requestOptions
   )
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
-      if (data?.success && data?.result?.nodeInfo?.uptime.length > 0) {
-        return data;
-      } else {
-        return false;
-      }
+      return data["result"];
     })
     .catch((err) => {
       console.log(err);
@@ -22,18 +28,28 @@ const helpFunction = async (url, nodeId) => {
     });
 };
 const getNodeInfo = async (nodeId) => {
-  const listOfNodes = [
-    "https://alice.muon.net/v1/",
-    "https://alice.muon.net/v1-1/",
-    "https://alice.muon.net/v1-2/",
-    "https://alice.muon.net/v1-3/",
-  ];
+  const listOfNodes = ["http://103.75.196.96/nodes"];
   let tryed = 0;
   let res;
   var flag = false;
 
+  var myHeaders = new Headers();
+  myHeaders.append("Accept", "application/json");
+
+  var requestOptions = {
+    method: "GET",
+    // mode: "no-cors",
+    headers: myHeaders,
+    // redirect: "follow",
+  };
+
+  // await fetch("http://103.75.196.96/nodes/45/status", requestOptions)
+  //   .then((response) => response.json())
+  //   .then((result) => console.log(result))
+  //   .catch((error) => console.log("error", error));
+
   while (tryed < 4 && !flag) {
-    console.log(listOfNodes[tryed % 4]);
+    console.log(listOfNodes[tryed % 1]);
     res = await helpFunction(listOfNodes[tryed % 4], nodeId);
     if (res === "timeOut" || res === false) {
       tryed++;
