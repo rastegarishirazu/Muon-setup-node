@@ -28,7 +28,7 @@ const helpFunction = async (url, nodeId) => {
     });
 };
 const getNodeInfo = async (nodeId) => {
-  const listOfNodes = ["http://103.75.196.96/nodes"];
+  const listOfNodes = ["https://alice.muon.net/test-proxy/nodes"];
   let tryed = 0;
   let res;
   var flag = false;
