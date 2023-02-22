@@ -300,26 +300,27 @@
                 <v-row>
                   <v-col cols="12">
                     <ul>
-                      <li>Node ID: {{ nodeInfo.id }}</li>
-                      <li>Node address: {{ nodeInfo.nodeAddress }}</li>
+                      <li>ID: {{ nodeInfo.id }}</li>
+                      <li>Address: {{ nodeInfo.nodeAddress }}</li>
                       <li>Peer ID: {{ nodeInfo.peerId }}</li>
                       <li>Join at: {{ nodeInfo.startTime }}</li>
                     </ul>
                   </v-col>
                   <v-col cols="12">
                     <ul>
-                      <li>Node IP: "{{ nodeInfo.nodeIP }}""</li>
+                      <li>IP: {{ nodeInfo.nodeIP }}</li>
                       <li>Status: {{ nodeIsActive }}</li>
                       <li>Online: {{ nodeInfo.onlinePercent }}</li>
                       <li>
-                        Reward: {{ nodeInfo.rewardAmount }} (
-                        {{ nodeInfo.rewardPercent }})
+                        Reward: {{ nodeInfo.rewardAmount }} ({{
+                          nodeInfo.rewardPercent
+                        }})
                       </li>
                     </ul>
                   </v-col>
                   <v-col cols="12">
                     <ul>
-                      <h4>Your node has been down during these times.</h4>
+                      <h4>Your node has been down during these periods:</h4>
                       <li v-for="item in downNodeTimes">
                         {{ item }}
                       </li>
@@ -558,7 +559,10 @@ export default {
           : "OFF";
       this.nodeInfo["nodeAddress"] = res["node"]["nodeAddress"];
       this.nodeInfo["peerId"] = res["node"]["peerId"];
-      this.nodeInfo["startTime"] = new Date(res["node"]["startTime"] * 1000);
+      this.nodeInfo["startTime"] = new Date(res["node"]["startTime"] * 1000)
+        .toISOString()
+        .split("T")[0];
+
       this.nodeInfo["nodeIP"] = res["node"]["ip"];
       this.nodeInfo["rewardAmount"] = Number(
         this.web3.utils.fromWei(String(res["reward"]["earned"]), "ether")
@@ -574,14 +578,20 @@ export default {
           var flag = true;
           var from = valueFrom;
           from = new Date(from["timestamp"] * 1000);
-          from = `${from.getMonth()}/${from.getDay()}/${from.getFullYear()} ${from.getHours()}:${from.getMinutes()}`;
+          from = from.toISOString();
+          from = from.split(".")[0].split("T");
+          from = from[0] + " " + from[1];
+          // from = `${from.getMonth()}/${from.getDay()}/${from.getFullYear()} ${from.getHours()}:${from.getMinutes()}`;
           for (var [j, valueTo] of this.nodeInfo["history"]
             .slice(i)
             .entries()) {
             if (valueTo["isOnline"]) {
               var to = valueTo;
               to = new Date(to["timestamp"] * 1000);
-              to = `${to.getMonth()}/${to.getDay()}/${to.getFullYear()} ${to.getHours()}:${to.getMinutes()}`;
+              to = to.toISOString();
+              to = to.split(".")[0].split("T");
+              to = to[0] + " " + to[1];
+              // to = `${to.getMonth()}/${to.getDay()}/${to.getFullYear()} ${to.getHours()}:${to.getMinutes()}`;
               messages.push(`${from} until ${to}`);
               flag = false;
               break;
