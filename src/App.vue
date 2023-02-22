@@ -319,7 +319,7 @@
                     </ul>
                   </v-col>
                   <v-col cols="12">
-                    <ul>
+                    <ul v-if="downNodeTimes">
                       <h4>Your node has been down during these periods:</h4>
                       <li v-for="item in downNodeTimes">
                         {{ item }}
@@ -432,7 +432,6 @@ import {
   checkApproved,
   stake,
   mint,
-  haveNode,
   newAddNode,
   getBalanceaOfTokenTest,
   nodeAdressIsValid,
@@ -447,6 +446,26 @@ const STEPS = {
   approve: 2,
   addNode: 3,
 };
+
+function timeDifference(date1, date2) {
+  var difference = date1.getTime() - date2.getTime();
+
+  var daysDifference = Math.floor(difference / 1000 / 60 / 60 / 24);
+  difference -= daysDifference * 1000 * 60 * 60 * 24;
+
+  var hoursDifference = Math.floor(difference / 1000 / 60 / 60);
+  difference -= hoursDifference * 1000 * 60 * 60;
+
+  var minutesDifference = Math.floor(difference / 1000 / 60);
+  difference -= minutesDifference * 1000 * 60;
+
+  var secondsDifference = Math.floor(difference / 1000);
+
+  return `${daysDifference ? daysDifference + " days & " : ""}  ${
+    hoursDifference ? hoursDifference + " hours & " : ""
+  }  ${minutesDifference ? minutesDifference + " minutes" : ""} `;
+}
+
 export default {
   name: "App",
 
@@ -474,7 +493,6 @@ export default {
     haveNode: false,
     tokenTestBalance: 0,
     haveEnoughTokenTEst: false,
-    haveNode: false,
     mintAmount: 1000,
     nativeTokenBalance: 0,
     nodeInfo: Object,
@@ -533,11 +551,6 @@ export default {
         "..." +
         this.account.slice(this.account.length - 4, this.account.length);
     },
-    // isConnected() {
-    //   if (this.isConnected) {
-    //     this.connectToMetamask();
-    //   }
-    // },
     e1(newE1, oldE1) {
       if (newE1 === this.steps.addNode) {
         this.checkHaveNode();
@@ -549,62 +562,6 @@ export default {
     },
   },
   methods: {
-    async moreNodeInfo(nodeId) {
-      this.nodeIsActive = "Loading...";
-      const res = await getNodeInfo(nodeId);
-      const tests = res["node"]["tests"];
-      this.nodeIsActive =
-        tests["networking"] && tests["peerInfo"] && tests["status"]
-          ? "Active"
-          : "OFF";
-      this.nodeInfo["nodeAddress"] = res["node"]["nodeAddress"];
-      this.nodeInfo["peerId"] = res["node"]["peerId"];
-      this.nodeInfo["startTime"] = new Date(res["node"]["startTime"] * 1000)
-        .toISOString()
-        .split("T")[0];
-
-      this.nodeInfo["nodeIP"] = res["node"]["ip"];
-      this.nodeInfo["rewardAmount"] = Number(
-        this.web3.utils.fromWei(String(res["reward"]["earned"]), "ether")
-      ).toFixed(4);
-      this.nodeInfo["rewardAmount"];
-      this.nodeInfo["onlinePercent"] = res["reward"]["onlinePercent"];
-      this.nodeInfo["rewardPercent"] = res["reward"]["rewardPercent"];
-      this.nodeInfo["history"] = res["history"].reverse();
-
-      var messages = [];
-      for (var [i, valueFrom] of this.nodeInfo["history"].entries()) {
-        if (!valueFrom["isOnline"]) {
-          var flag = true;
-          var from = valueFrom;
-          from = new Date(from["timestamp"] * 1000);
-          from = from.toISOString();
-          from = from.split(".")[0].split("T");
-          from = from[0] + " " + from[1];
-          // from = `${from.getMonth()}/${from.getDay()}/${from.getFullYear()} ${from.getHours()}:${from.getMinutes()}`;
-          for (var [j, valueTo] of this.nodeInfo["history"]
-            .slice(i)
-            .entries()) {
-            if (valueTo["isOnline"]) {
-              var to = valueTo;
-              to = new Date(to["timestamp"] * 1000);
-              to = to.toISOString();
-              to = to.split(".")[0].split("T");
-              to = to[0] + " " + to[1];
-              // to = `${to.getMonth()}/${to.getDay()}/${to.getFullYear()} ${to.getHours()}:${to.getMinutes()}`;
-              messages.push(`${from} until ${to}`);
-              flag = false;
-              break;
-            }
-          }
-          if (flag) {
-            messages.push(`${from} until now`);
-          }
-        }
-      }
-      this.downNodeTimes = messages;
-      console.log(messages);
-    },
     changeTheme() {
       this.themeIsDark = !this.themeIsDark;
     },
@@ -645,16 +602,76 @@ export default {
     checkHaveNode() {
       if (this.account) {
         this.cardLoading = true;
-        haveNode(this.account, this.web3)
-          .then(async (res) => {
-            if (Number(res[0])) {
-              this.rewardCheck();
+        getNodeInfo(this.account)
+          .then((res) => {
+            if (res && res != "node not found") {
               this.haveNode = true;
-              this.nodeInfo["id"] = res[0];
-              await this.moreNodeInfo(res[0]);
-              // this.nodeInfo["nodeAddress"] = res[1];
-              // this.nodeInfo["peerId"] = res[3];
-              // this.nodeInfo["active"] = res[4];
+              this.nodeIsActive = "Loading...";
+              const tests = res["node"]["tests"];
+              this.nodeIsActive =
+                tests["networking"] && tests["peerInfo"] && tests["status"]
+                  ? "Active"
+                  : "OFF";
+              this.nodeInfo["nodeAddress"] = res["node"]["nodeAddress"];
+              this.nodeInfo["id"] = res["node"]["id"];
+              this.nodeInfo["peerId"] = res["node"]["peerId"];
+              this.nodeInfo["startTime"] = new Date(
+                res["node"]["startTime"] * 1000
+              )
+                .toISOString()
+                .split("T")[0];
+
+              this.nodeInfo["nodeIP"] = res["node"]["ip"];
+              this.nodeInfo["rewardAmount"] = Number(
+                this.web3.utils.fromWei(
+                  String(res["reward"]["earned"]),
+                  "ether"
+                )
+              ).toFixed(4);
+              this.nodeInfo["rewardAmount"];
+              this.nodeInfo["onlinePercent"] = res["reward"]["onlinePercent"];
+              this.nodeInfo["rewardPercent"] = res["reward"]["rewardPercent"];
+              this.nodeInfo["history"] = res["history"].reverse();
+
+              var messages = [];
+              for (var [i, valueFrom] of this.nodeInfo["history"].entries()) {
+                if (!valueFrom["isOnline"]) {
+                  var flag = true;
+                  var from = valueFrom;
+                  var fromDate = new Date(from["timestamp"] * 1000);
+                  from = fromDate.toISOString();
+                  from = from.split(".")[0].split("T");
+                  from = from[0] + " " + from[1];
+                  for (var [j, valueTo] of this.nodeInfo["history"]
+                    .slice(i)
+                    .entries()) {
+                    if (valueTo["isOnline"]) {
+                      var to = valueTo;
+                      var toDate = new Date(to["timestamp"] * 1000);
+                      to = toDate.toISOString();
+                      to = to.split(".")[0].split("T");
+                      to = to[0] + " " + to[1];
+                      messages.push(
+                        `${from} until ${to} for ${timeDifference(
+                          toDate,
+                          fromDate
+                        )}`
+                      );
+                      flag = false;
+                      break;
+                    }
+                  }
+                  if (flag) {
+                    messages.push(
+                      `${from} until now for ${timeDifference(
+                        new Date(),
+                        fromDate
+                      )}`
+                    );
+                  }
+                }
+              }
+              this.downNodeTimes = messages;
             } else {
               this.haveNode = false;
             }
