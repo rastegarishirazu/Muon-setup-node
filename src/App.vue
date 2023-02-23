@@ -294,7 +294,11 @@
               <div v-else>
                 <v-row justify="center">
                   <h3 class="myFont py-10 mt-10 black--text text-h5">
-                    Your node has been added to the network.
+                    {{
+                      nodeInfo["active"]
+                        ? "Your node has been added to the network."
+                        : "Your node has left the network."
+                    }}
                   </h3>
                 </v-row>
                 <v-row>
@@ -304,9 +308,12 @@
                       <li>Address: {{ nodeInfo.nodeAddress }}</li>
                       <li>Peer ID: {{ nodeInfo.peerId }}</li>
                       <li>Join at: {{ nodeInfo.startTime }}</li>
+                      <li v-if="!nodeInfo['active']">
+                        left at: {{ nodeInfo.entTime }}
+                      </li>
                     </ul>
                   </v-col>
-                  <v-col cols="12">
+                  <v-col v-if="nodeInfo['active']" cols="12">
                     <ul>
                       <li>IP: {{ nodeInfo.nodeIP }}</li>
                       <li>Status: {{ nodeIsActive }}</li>
@@ -318,7 +325,7 @@
                       </li>
                     </ul>
                   </v-col>
-                  <v-col cols="12">
+                  <v-col v-if="nodeInfo['active']" cols="12">
                     <ul v-if="downNodeTimes">
                       <h4>Your node has been down during these periods:</h4>
                       <li v-for="item in downNodeTimes">
@@ -326,7 +333,7 @@
                       </li>
                     </ul>
                   </v-col>
-                  <v-col cols="12">
+                  <v-col v-if="nodeInfo['active']" cols="12">
                     <ul v-if="nodeInfo.messages">
                       <h4>messages:</h4>
                       <li v-for="item in nodeInfo.messages">
@@ -616,11 +623,8 @@ export default {
             if (res && res != "node not found") {
               this.haveNode = true;
               this.nodeIsActive = "Loading...";
+              this.nodeInfo["active"] = res["node"]["active"];
               const tests = res["node"]["tests"];
-              this.nodeIsActive =
-                tests["networking"] && tests["peerInfo"] && tests["status"]
-                  ? "Active"
-                  : "OFF";
               this.nodeInfo["nodeAddress"] = res["node"]["nodeAddress"];
               this.nodeInfo["id"] = res["node"]["id"];
               this.nodeInfo["peerId"] = res["node"]["peerId"];
@@ -629,57 +633,65 @@ export default {
               )
                 .toISOString()
                 .split("T")[0];
+              this.nodeInfo["entTime"] = new Date(res["node"]["endTime"] * 1000)
+                .toISOString()
+                .split("T")[0];
+              if (this.nodeInfo["active"]) {
+                this.nodeIsActive =
+                  tests["networking"] && tests["peerInfo"] && tests["status"]
+                    ? "Active"
+                    : "OFF";
+                this.nodeInfo["nodeIP"] = res["node"]["ip"];
+                this.nodeInfo["messages"] = res["messages"];
+                this.nodeInfo["rewardAmount"] = Number(
+                  this.web3.utils.fromWei(
+                    String(res["reward"]["earned"]),
+                    "ether"
+                  )
+                ).toFixed(4);
+                this.nodeInfo["rewardAmount"];
+                this.nodeInfo["onlinePercent"] = res["reward"]["onlinePercent"];
+                this.nodeInfo["rewardPercent"] = res["reward"]["rewardPercent"];
+                this.nodeInfo["history"] = res["history"].reverse();
 
-              this.nodeInfo["nodeIP"] = res["node"]["ip"];
-              this.nodeInfo["messages"] = res["messages"];
-              this.nodeInfo["rewardAmount"] = Number(
-                this.web3.utils.fromWei(
-                  String(res["reward"]["earned"]),
-                  "ether"
-                )
-              ).toFixed(4);
-              this.nodeInfo["rewardAmount"];
-              this.nodeInfo["onlinePercent"] = res["reward"]["onlinePercent"];
-              this.nodeInfo["rewardPercent"] = res["reward"]["rewardPercent"];
-              this.nodeInfo["history"] = res["history"].reverse();
-
-              var messages = [];
-              for (var [i, valueFrom] of this.nodeInfo["history"].entries()) {
-                if (!valueFrom["isOnline"]) {
-                  var flag = true;
-                  var from = valueFrom;
-                  var fromDate = new Date(from["timestamp"] * 1000);
-                  var fromMoment = moment(fromDate);
-                  from = fromDate.toISOString();
-                  from = from.split(".")[0].split("T");
-                  from = from[0] + " " + from[1];
-                  for (var [j, valueTo] of this.nodeInfo["history"]
-                    .slice(i)
-                    .entries()) {
-                    if (valueTo["isOnline"]) {
-                      var toDate = new Date(valueTo["timestamp"] * 1000);
-                      var toMoment = moment(toDate);
-                      var to = toDate.toISOString();
-                      to = to.split(".")[0].split("T");
-                      to = to[0] + " " + to[1];
+                var messages = [];
+                for (var [i, valueFrom] of this.nodeInfo["history"].entries()) {
+                  if (!valueFrom["isOnline"]) {
+                    var flag = true;
+                    var from = valueFrom;
+                    var fromDate = new Date(from["timestamp"] * 1000);
+                    var fromMoment = moment(fromDate);
+                    from = fromDate.toISOString();
+                    from = from.split(".")[0].split("T");
+                    from = from[0] + " " + from[1];
+                    for (var [j, valueTo] of this.nodeInfo["history"]
+                      .slice(i)
+                      .entries()) {
+                      if (valueTo["isOnline"]) {
+                        var toDate = new Date(valueTo["timestamp"] * 1000);
+                        var toMoment = moment(toDate);
+                        var to = toDate.toISOString();
+                        to = to.split(".")[0].split("T");
+                        to = to[0] + " " + to[1];
+                        messages.push(
+                          `${from} until ${to} for ${toMoment.to(
+                            fromMoment,
+                            true
+                          )}`
+                        );
+                        flag = false;
+                        break;
+                      }
+                    }
+                    if (flag) {
                       messages.push(
-                        `${from} until ${to} for ${toMoment.to(
-                          fromMoment,
-                          true
-                        )}`
+                        `${from} until now for ${moment().to(fromMoment, true)}`
                       );
-                      flag = false;
-                      break;
                     }
                   }
-                  if (flag) {
-                    messages.push(
-                      `${from} until now for ${moment().to(fromMoment, true)}`
-                    );
-                  }
                 }
+                this.downNodeTimes = messages;
               }
-              this.downNodeTimes = messages;
             } else {
               this.haveNode = false;
             }
