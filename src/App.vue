@@ -326,6 +326,14 @@
                       </li>
                     </ul>
                   </v-col>
+                  <v-col cols="12">
+                    <ul v-if="nodeInfo.messages">
+                      <h4>messages:</h4>
+                      <li v-for="item in nodeInfo.messages">
+                        {{ item.message }}
+                      </li>
+                    </ul>
+                  </v-col>
                   <v-col cols="12" class="text-center">
                     <p v-if="nodeIsActive == 'OFF'">
                       To find out why your node is offline, see
@@ -623,6 +631,7 @@ export default {
                 .split("T")[0];
 
               this.nodeInfo["nodeIP"] = res["node"]["ip"];
+              this.nodeInfo["messages"] = res["messages"];
               this.nodeInfo["rewardAmount"] = Number(
                 this.web3.utils.fromWei(
                   String(res["reward"]["earned"]),
@@ -665,10 +674,7 @@ export default {
                   }
                   if (flag) {
                     messages.push(
-                      `${from} until now for ${timeDifference(
-                        new Date(),
-                        fromDate
-                      )}`
+                      `${from} until now for ${moment().to(fromMoment, true)}`
                     );
                   }
                 }

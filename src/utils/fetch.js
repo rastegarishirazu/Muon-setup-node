@@ -34,6 +34,7 @@ const getNodeInfo = async (nodeId) => {
       tryed++;
       res = false;
     } else {
+      console.log(res);
       return res;
     }
   }
