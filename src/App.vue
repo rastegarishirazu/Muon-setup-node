@@ -439,6 +439,7 @@ import {
 } from "@/utils/transactions";
 import { getNodeInfo } from "@/utils/fetch";
 import particles from "@/components/Particles";
+import moment from "moment";
 import Header from "@/components/Header.vue";
 const mainChainId = 0x61;
 const STEPS = {
@@ -639,6 +640,7 @@ export default {
                   var flag = true;
                   var from = valueFrom;
                   var fromDate = new Date(from["timestamp"] * 1000);
+                  var fromMoment = moment(fromDate);
                   from = fromDate.toISOString();
                   from = from.split(".")[0].split("T");
                   from = from[0] + " " + from[1];
@@ -646,15 +648,15 @@ export default {
                     .slice(i)
                     .entries()) {
                     if (valueTo["isOnline"]) {
-                      var to = valueTo;
-                      var toDate = new Date(to["timestamp"] * 1000);
-                      to = toDate.toISOString();
+                      var toDate = new Date(valueTo["timestamp"] * 1000);
+                      var toMoment = moment(toDate);
+                      var to = toDate.toISOString();
                       to = to.split(".")[0].split("T");
                       to = to[0] + " " + to[1];
                       messages.push(
-                        `${from} until ${to} for ${timeDifference(
-                          toDate,
-                          fromDate
+                        `${from} until ${to} for ${toMoment.to(
+                          fromMoment,
+                          true
                         )}`
                       );
                       flag = false;
