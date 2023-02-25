@@ -628,7 +628,7 @@ export default {
       if (this.account) {
         this.cardLoading = true;
         getNodeInfo(this.account)
-          // getNodeInfo(9093)
+          // getNodeInfo(9099)
           .then((res) => {
             if (res && res != "node not found") {
               this.haveNode = true;
@@ -703,6 +703,7 @@ export default {
                   }
                 }
                 this.downNodeTimes = messages;
+                console.log(this.downNodeTimes);
               }
             } else if (res === "node not found") {
               this.haveNode = false;
