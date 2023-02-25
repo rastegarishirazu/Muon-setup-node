@@ -331,8 +331,11 @@
                       </li>
                     </ul>
                   </v-col>
-                  <v-col v-if="nodeInfo['active']" cols="12">
-                    <ul v-if="downNodeTimes">
+                  <v-col
+                    v-if="nodeInfo['active'] && !nodeInfo['isNew']"
+                    cols="12"
+                  >
+                    <ul v-if="downNodeTimes.length">
                       <h4>Your node has been down during these periods:</h4>
                       <li v-for="item in downNodeTimes">
                         {{ item }}
@@ -625,7 +628,7 @@ export default {
       if (this.account) {
         this.cardLoading = true;
         getNodeInfo(this.account)
-          // getNodeInfo(8993)
+          // getNodeInfo(9093)
           .then((res) => {
             if (res && res != "node not found") {
               this.haveNode = true;
