@@ -36,7 +36,7 @@
             cols="12"
             offset-md="3"
           >
-            <h2 v-if="this.haveNode === 'error'">
+            <h2 v-if="this.haveNode === 'error'" class="text-center">
               something went wrong. please try again later.
             </h2>
             <v-card
@@ -319,10 +319,12 @@
                   </v-col>
                   <v-col v-if="nodeInfo['active']" cols="12">
                     <ul>
-                      <li>IP: {{ nodeInfo.nodeIP }}</li>
+                      <li v-if="!nodeInfo.isNew">IP: {{ nodeInfo.nodeIP }}</li>
                       <li>Status: {{ nodeIsActive }}</li>
-                      <li>Online: {{ nodeInfo.onlinePercent }}</li>
-                      <li>
+                      <li v-if="!nodeInfo.isNew">
+                        Online: {{ nodeInfo.onlinePercent }}
+                      </li>
+                      <li v-if="!nodeInfo.isNew">
                         Reward: {{ nodeInfo.rewardAmount }} ({{
                           nodeInfo.rewardPercent
                         }})
@@ -623,10 +625,12 @@ export default {
       if (this.account) {
         this.cardLoading = true;
         getNodeInfo(this.account)
+          // getNodeInfo(8993)
           .then((res) => {
             if (res && res != "node not found") {
               this.haveNode = true;
               this.nodeIsActive = "Loading...";
+              this.nodeInfo["isNew"] = res["node"]["isNew"];
               this.nodeInfo["active"] = res["node"]["active"];
               const tests = res["node"]["tests"];
               this.nodeInfo["nodeAddress"] = res["node"]["nodeAddress"];
@@ -641,10 +645,11 @@ export default {
                 .toISOString()
                 .split("T")[0];
               if (this.nodeInfo["active"]) {
-                this.nodeIsActive =
-                  tests["networking"] && tests["peerInfo"] && tests["status"]
-                    ? "Active"
-                    : "OFF";
+                this.nodeIsActive = this.nodeInfo.isNew
+                  ? "Your node has been added to the network successfully. Its initialization will take a few minutes."
+                  : tests["networking"] && tests["peerInfo"] && tests["status"]
+                  ? "Active"
+                  : "OFF";
                 this.nodeInfo["nodeIP"] = res["node"]["ip"];
                 this.nodeInfo["messages"] = res["messages"];
                 this.nodeInfo["rewardAmount"] = Number(
