@@ -334,7 +334,7 @@
                     </ul>
                   </v-col>
                   <v-col v-if="nodeInfo['active']" cols="12">
-                    <ul v-if="nodeInfo.messages">
+                    <ul v-if="nodeInfo.messages && nodeInfo.message.length">
                       <h4>messages:</h4>
                       <li v-for="item in nodeInfo.messages">
                         {{ item.message }}

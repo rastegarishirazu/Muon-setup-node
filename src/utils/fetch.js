@@ -20,6 +20,9 @@ const helpFunction = async (url, nodeId) => {
       console.log(err);
       clearTimeout(id);
       return "timeOut";
+    })
+    .finally(() => {
+      clearTimeout(id);
     });
 };
 const getNodeInfo = async (nodeId) => {
@@ -29,7 +32,7 @@ const getNodeInfo = async (nodeId) => {
   var flag = false;
 
   while (tryed < 4 && !flag) {
-    res = await helpFunction(listOfNodes[tryed % 4], nodeId);
+    res = await helpFunction(listOfNodes[tryed % listOfNodes.length], nodeId);
     if (res === "timeOut" || res === false) {
       tryed++;
       res = false;
