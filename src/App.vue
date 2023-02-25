@@ -36,7 +36,11 @@
             cols="12"
             offset-md="3"
           >
+            <h2 v-if="this.haveNode === 'error'">
+              something went wrong please try again later.
+            </h2>
             <v-card
+              v-else
               :class="['px-5', $vuetify.theme.dark ? 'backgorundpic_dark' : '']"
               elevation="2"
             >
@@ -334,10 +338,10 @@
                     </ul>
                   </v-col>
                   <v-col v-if="nodeInfo['active']" cols="12">
-                    <ul v-if="nodeInfo.messages && nodeInfo.message.length">
+                    <ul v-if="nodeInfo.messages && nodeInfo.messages.length">
                       <h4>messages:</h4>
                       <li v-for="item in nodeInfo.messages">
-                        {{ item.message }}
+                        <p v-html="item.message"></p>
                       </li>
                     </ul>
                   </v-col>
@@ -692,8 +696,10 @@ export default {
                 }
                 this.downNodeTimes = messages;
               }
-            } else {
+            } else if (res === "node not found") {
               this.haveNode = false;
+            } else {
+              this.haveNode = "error";
             }
           })
           .finally(() => {
