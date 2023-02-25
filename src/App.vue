@@ -37,7 +37,7 @@
             offset-md="3"
           >
             <h2 v-if="this.haveNode === 'error'">
-              something went wrong please try again later.
+              something went wrong. please try again later.
             </h2>
             <v-card
               v-else
