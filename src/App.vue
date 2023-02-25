@@ -335,7 +335,7 @@
                     v-if="nodeInfo['active'] && !nodeInfo['isNew']"
                     cols="12"
                   >
-                    <ul v-if="downNodeTimes.length">
+                    <ul v-if="downNodeTimes.length > 0">
                       <h4>Your node has been down during these periods:</h4>
                       <li v-for="item in downNodeTimes">
                         {{ item }}
@@ -817,6 +817,7 @@ export default {
     },
   },
   created() {
+    console.log("v1.0.1");
     document.title = "Join ALICE network";
     this.web3 = new Web3(window.ethereum);
     this.getChainId();
