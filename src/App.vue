@@ -926,9 +926,6 @@ h3 {
 .footer_gradiant_dark {
   background: linear-gradient(90deg, #fac739 -2.48%, #fb0d6a 102.48%);
 }
-.full_height {
-  /* min-height: 90vh !important; */
-}
 .main_title {
   font-family: "Montserrat";
   font-style: normal;

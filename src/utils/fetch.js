@@ -1,6 +1,9 @@
 const helpFunction = async (url, nodeId) => {
   const controller = new AbortController();
-  const id = setTimeout(() => controller.abort(), 20000);
+  const id = setTimeout(() => {
+    console.log("my timeout");
+    return controller.abort();
+  }, 30000);
 
   var myHeaders = new Headers();
   myHeaders.append("Accept", "application/json");
@@ -31,7 +34,7 @@ const getNodeInfo = async (nodeId) => {
   let res;
   var flag = false;
 
-  while (tryed < 4 && !flag) {
+  while (tryed < 3 && !flag) {
     res = await helpFunction(listOfNodes[tryed % listOfNodes.length], nodeId);
     if (res === "timeOut" || res === false) {
       tryed++;
