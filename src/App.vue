@@ -134,6 +134,7 @@
                         <v-col md="4">
                           <v-btn
                             @click="mint"
+                            :loading="btnLoading"
                             block
                             :disabled="mintAmount > 1000 || mintAmount < 1"
                             color="primary"
@@ -155,7 +156,11 @@
                     </v-stepper-content>
                     <v-stepper-content :step="steps.approve">
                       <v-row justify="center" class="my-5">
-                        <v-btn @click="approve" color="primary" class=""
+                        <v-btn
+                          @click="approve"
+                          :loading="btnLoading"
+                          color="primary"
+                          class=""
                           >approve</v-btn
                         >
 
@@ -208,6 +213,7 @@
                           <v-col class="text-right">
                             <v-btn
                               :disabled="!haveEnoughTokenTEst"
+                              :loading="btnLoading"
                               color="primary"
                               @click="addNode"
                             >
@@ -521,6 +527,7 @@ export default {
     mintAmount: 1000,
     nativeTokenBalance: 0,
     nodeInfo: Object,
+    btnLoading: false,
     nodeIsActive: "Loading...",
     nodeUptime: "",
     reapetedNodeAdressDialog: false,
@@ -600,9 +607,14 @@ export default {
       });
     },
     mint() {
-      mint(this.account, this.web3, this.mintAmount).then((res) => {
-        this.getTokenTestBalance();
-      });
+      this.btnLoading = true;
+      mint(this.account, this.web3, this.mintAmount)
+        .then((res) => {
+          this.getTokenTestBalance();
+        })
+        .finally(() => {
+          this.btnLoading = false;
+        });
     },
     getTokenTestBalance() {
       getBalanceaOfTokenTest(this.account, this.web3).then((res) => {
@@ -717,10 +729,12 @@ export default {
       }
     },
     addNode() {
+      this.btnLoading = true;
       nodeAdressIsValid(this.nodeAddress, this.web3).then((res) => {
         if (res[0] > 0) {
           this.reapetedNodeAdressDialog = true;
           this.dialog = true;
+          this.btnLoading = false;
         } else {
           newAddNode(this.account, this.web3, this.nodeAddress, this.peerId)
             .then(() => {
@@ -730,6 +744,7 @@ export default {
             .finally(() => {
               this.checkHaveNode();
               this.getTokenTestBalance();
+              this.btnLoading = false;
             });
         }
       });
@@ -791,9 +806,14 @@ export default {
       }
     },
     approve() {
-      approve(this.account, this.web3).then((res) => {
-        this.checkApproved();
-      });
+      this.btnLoading = true;
+      approve(this.account, this.web3)
+        .then((res) => {
+          this.checkApproved();
+        })
+        .finally(() => {
+          this.btnLoading = false;
+        });
     },
     connectToMetamask() {
       ethereum
