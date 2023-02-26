@@ -837,7 +837,7 @@ export default {
     },
   },
   created() {
-    console.log("v1.0.1");
+    console.log("v1.0.2");
     document.title = "Join ALICE network";
     this.web3 = new Web3(window.ethereum);
     this.getChainId();
