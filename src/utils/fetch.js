@@ -1,4 +1,4 @@
-const helpFunction = async (url, nodeId) => {
+const helpFunction = async (url) => {
   const controller = new AbortController();
   const id = setTimeout(() => {
     console.log("my timeout");
@@ -14,10 +14,10 @@ const helpFunction = async (url, nodeId) => {
     signal: controller.signal,
   };
 
-  return await fetch(`${url}/${nodeId}/status`, requestOptions)
+  return await fetch(url, requestOptions)
     .then((response) => response.json())
     .then((data) => {
-      return data["result"];
+      return data;
     })
     .catch((err) => {
       console.log(err);
@@ -35,7 +35,9 @@ const getNodeInfo = async (nodeId) => {
   var flag = false;
 
   while (tryed < 3 && !flag) {
-    res = await helpFunction(listOfNodes[tryed % listOfNodes.length], nodeId);
+    res = await helpFunction(
+      `${listOfNodes[tryed % listOfNodes.length]}/${nodeId}/status`
+    );
     if (res === "timeOut" || res === false) {
       tryed++;
       res = false;
@@ -47,4 +49,25 @@ const getNodeInfo = async (nodeId) => {
   return res;
 };
 
-export { getNodeInfo };
+const checkIP = async (ip) => {
+  const listOfNodes = ["https://alice.muon.net/test-proxy/status"];
+  let tryed = 0;
+  let res;
+  var flag = false;
+
+  while (tryed < 3 && !flag) {
+    res = await helpFunction(
+      `${listOfNodes[tryed % listOfNodes.length]}?ip=${ip}`
+    );
+    if (res === "timeOut" || res === false) {
+      tryed++;
+      res = false;
+    } else {
+      console.log(res);
+      return res;
+    }
+  }
+  return res;
+};
+
+export { getNodeInfo, checkIP };

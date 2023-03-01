@@ -15,14 +15,18 @@
     ></Header>
 
     <v-main>
+      <h2 v-if="this.haveNode === 'error'" class="text-center mt-5">
+        something went wrong. please try again later.
+      </h2>
       <v-responsive
+        v-else
         width="100%"
         overflow-hidden
         class="overflow-hidden px-5 mt-4"
       >
         <!-- <v-row justify="center" class="my-2">
-          <v-col> <h1 class="main_title">ALICE testnet</h1></v-col>
-        </v-row> -->
+      <v-col> <h1 class="main_title">ALICE testnet</h1></v-col>
+    </v-row> -->
         <v-row class="mt-2" justify="center">
           <v-col md="5">
             <div class="d-flex justify-center" width="100%">
@@ -57,7 +61,7 @@
                   <div
                     :class="[
                       'height-steps',
-                      testEl > 1 ? 'divider_step_box' : 'border-dashed',
+                      e1 > steps.mint ? 'divider_step_box' : 'border-dashed',
                     ]"
                   ></div>
                 </div>
@@ -68,7 +72,7 @@
                     'text-center',
                     'rounded-lg',
                     'py-3',
-                    testEl > 1 ? 'primaryOrange white--text' : 'gray',
+                    e1 > steps.mint ? 'primaryOrange white--text' : 'gray',
                   ]"
                   width="100%"
                 >
@@ -78,7 +82,7 @@
                   <div
                     :class="[
                       'height-steps',
-                      testEl > 2 ? 'divider_step_box' : 'border-dashed',
+                      e1 > steps.approve ? 'divider_step_box' : 'border-dashed',
                     ]"
                   ></div>
                 </div>
@@ -89,7 +93,7 @@
                     'text-center',
                     'rounded-lg',
                     'py-3',
-                    testEl > 2 ? 'primaryOrange white--text' : 'gray',
+                    e1 > steps.approve ? 'primaryOrange white--text' : 'gray',
                   ]"
                   width="100%"
                 >
@@ -101,7 +105,7 @@
                   <h4
                     :class="[
                       'text-subtitle-1',
-                      { 'font-weight-black': testEl == 1 },
+                      { 'font-weight-black': e1 === steps.mint },
                     ]"
                   >
                     Mint 1000 Alice Tokens
@@ -113,7 +117,7 @@
                   <h4
                     :class="[
                       'text-subtitle-1',
-                      { 'font-weight-black': testEl == 2 },
+                      { 'font-weight-black': e1 == steps.approve },
                     ]"
                   >
                     Approve the Staking Contract
@@ -127,7 +131,7 @@
                   <h4
                     :class="[
                       'text-subtitle-1',
-                      { 'font-weight-black': testEl == 3 },
+                      { 'font-weight-black': e1 == steps.addNode },
                     ]"
                   >
                     Add your Node to the Network
@@ -142,12 +146,12 @@
           <v-col md="4" xl="3">
             <v-card elevation="0" class="px-2 rounded-lg input-card-min-height">
               <v-container class="full-height">
-                <v-rwo class="input-card-min-height d-flex">
-                  <v-col v-if="testEl === 1" cols="12">
+                <v-row class="input-card-min-height d-flex">
+                  <v-col v-if="e1 === steps.mint" cols="12">
                     <div class="mint-level">
                       <div
                         v-if="!haveEnoughTokenTEst"
-                        class="lightPrimaryOrange rounded-lg px-2"
+                        class="lightPrimaryOrange rounded-lg px-2 mt-5"
                       >
                         <v-row>
                           <v-col cols="2">
@@ -189,19 +193,45 @@
                         id="id"
                         background-color="gray"
                       ></v-text-field>
-                      <v-btn
-                        block
-                        :loading="btnLoading"
-                        :disabled="mintAmount > 1000 || mintAmount < 1"
-                        @click="mint"
-                        color="primary"
-                        elevation="0"
-                        class="rounded-lg"
-                        >Mint ALICE</v-btn
-                      >
+                      <v-row>
+                        <v-col cols="9">
+                          <v-btn
+                            block
+                            large
+                            :loading="btnLoading"
+                            :disabled="mintAmount > 1000 || mintAmount < 1"
+                            @click="mint"
+                            color="primary"
+                            elevation="0"
+                            class="rounded-lg"
+                            >Mint ALICE</v-btn
+                          >
+                        </v-col>
+                        <v-col cols="3">
+                          <v-tooltip bottom>
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-btn
+                                v-bind="attrs"
+                                v-on="on"
+                                @click="($event) => (e1 = steps.approve)"
+                                block
+                                large
+                                color="gray"
+                                elevation="0"
+                                :disabled="!haveEnoughTokenTEst"
+                              >
+                                <v-icon color="black" class="gray rounded-lg">
+                                  mdi-arrow-right-top-bold
+                                </v-icon>
+                              </v-btn>
+                            </template>
+                            <span>Next Step</span>
+                          </v-tooltip>
+                        </v-col>
+                      </v-row>
                     </div>
                   </v-col>
-                  <v-col v-if="testEl === 2" align-self="end" cols="12">
+                  <v-col v-if="e1 === steps.approve" align-self="end" cols="12">
                     <div class="">
                       <lottie-vue-player
                         ref="anim"
@@ -240,8 +270,8 @@
                       </v-row>
                     </div>
                   </v-col>
-                  <v-col v-if="testEl === 3" cols="12">
-                    <div class="lightInfo rounded-lg px-2">
+                  <v-col v-if="e1 === steps.addNode" cols="12">
+                    <div class="lightInfo rounded-lg px-2 mt-2">
                       <v-row>
                         <v-col cols="2">
                           <v-icon color="info" class="text-h3">
@@ -258,14 +288,14 @@
                     </div>
                     <v-row>
                       <v-col cols="12" class="mt-15">
-                        <span>Peer ID</span>
+                        <span>Node IP</span>
                         <v-text-field
+                          v-model="nodeIPInput"
                           solo
                           flat
                           class="rounded-lg"
                           name="name"
-                          label="Enter 46-digits peer id"
-                          :rules="[rules.peerId, rules.peerIdLenght]"
+                          label="Enter your node IP"
                           id="id"
                           background-color="gray"
                         ></v-text-field>
@@ -273,400 +303,45 @@
                     </v-row>
                     <v-row class="mt-8">
                       <v-col cols="3">
-                        <v-btn block color="gray" elevation="0">
-                          <v-icon color="black" class="gray rounded-lg">
-                            mdi-arrow-left-top-bold
-                          </v-icon>
-                        </v-btn>
+                        <v-tooltip bottom>
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-btn
+                              v-bind="attrs"
+                              v-on="on"
+                              @click="($event) => (e1 = steps.mint)"
+                              block
+                              large
+                              color="gray"
+                              elevation="0"
+                            >
+                              <v-icon color="black" class="gray rounded-lg">
+                                mdi-arrow-left-top-bold
+                              </v-icon>
+                            </v-btn>
+                          </template>
+                          <span>Back to mint</span>
+                        </v-tooltip>
                       </v-col>
                       <v-col cols="9" class="pl-0">
                         <v-btn
-                          :disabled="!rules.peerId || !rules.peerIdLenght"
+                          :loading="btnLoading"
                           elevation="0"
                           block
+                          large
                           color="primary"
+                          class="font-weight-bold"
                         >
                           Add node
                         </v-btn>
                       </v-col>
                     </v-row>
                   </v-col>
-                </v-rwo>
+                </v-row>
               </v-container>
             </v-card>
           </v-col>
         </v-row>
-        <v-row
-          :class="[
-            ' pb-15',
-            $vuetify.breakpoint.smAndDown ? '' : 'full_height',
-          ]"
-        >
-          <v-col
-            class="mt-15"
-            align-self="center"
-            md="6"
-            cols="12"
-            offset-md="3"
-          >
-            <h2 v-if="this.haveNode === 'error'" class="text-center">
-              something went wrong. please try again later.
-            </h2>
-            <v-card
-              v-else
-              :class="['px-5', $vuetify.theme.dark ? 'backgorundpic_dark' : '']"
-              elevation="2"
-            >
-              <div class="d-flex justify-center" width="100%">
-                <div class="title_card_box text-center">
-                  <h2 class="title_card_box_font text-h4">Adding a Node</h2>
-                  <h3 class="subtitle_card_box_font text-h6">
-                    To the ALICE Network
-                  </h3>
-                </div>
-              </div>
-              <v-row class="my-10 py-10" justify="center" v-if="cardLoading">
-                <v-progress-circular
-                  indeterminate
-                  color="primary"
-                ></v-progress-circular>
-              </v-row>
-              <v-row
-                class="my-5"
-                v-else-if="!haveNode || !isConnected || !isCorrectChain"
-              >
-                <v-stepper
-                  v-if="isCorrectChain && isConnected"
-                  v-model="e1"
-                  class="full-width my-2"
-                  elevation="0"
-                >
-                  <v-stepper-header class="px-8 stepper_header_text">
-                    <v-stepper-step
-                      color="primaryOrange"
-                      :complete="e1 > steps.mint"
-                      :step="steps.mint"
-                    >
-                      Mint
-                    </v-stepper-step>
-                    <v-divider></v-divider>
-                    <v-stepper-step
-                      color="primaryOrange"
-                      :complete="e1 > steps.approve"
-                      :step="steps.approve"
-                    >
-                      Approve
-                    </v-stepper-step>
 
-                    <v-divider></v-divider>
-
-                    <v-stepper-step color="primaryOrange" :step="steps.addNode">
-                      Add node
-                    </v-stepper-step>
-                  </v-stepper-header>
-
-                  <v-stepper-items class="finger_print_background">
-                    <v-stepper-content :step="steps.mint">
-                      <v-row class="mt-5 px-5" justify="center">
-                        <h5
-                          v-if="!haveEnoughTokenTEst"
-                          class="text-center px-3 enough_tokens_message py-3"
-                        >
-                          You don't have enough tokens.<br />
-                          You need at least 1000 ALICE..
-                        </h5>
-                      </v-row>
-                      <v-row justify="center">
-                        <p class="myFont font-weight-medium">
-                          Your ALICE token balance ≈
-                          {{ muonTestTokenShow }}
-                          <v-btn
-                            @click="getTokenTestBalance"
-                            class="mt-n1 mx-1"
-                            icon
-                            ><v-icon>mdi-refresh-circle</v-icon></v-btn
-                          >
-                        </p>
-                      </v-row>
-
-                      <v-row class="" justify="center">
-                        <v-col md="8">
-                          <span class="text-caption myFont pb-3">Mint:</span>
-                          <v-text-field
-                            label="Mint amount"
-                            solo
-                            v-model="mintAmount"
-                            :rules="minMint"
-                            type="number"
-                            step="100"
-                            background-color="#e9eff6bf"
-                          ></v-text-field>
-                        </v-col>
-                      </v-row>
-                      <v-row justify="center">
-                        <v-col md="4">
-                          <v-btn
-                            @click="mint"
-                            :loading="btnLoading"
-                            block
-                            :disabled="mintAmount > 1000 || mintAmount < 1"
-                            color="primary"
-                            class="mb-5 mx-2 text-capitalize"
-                            >Mint</v-btn
-                          >
-                        </v-col>
-                        <v-col md="4">
-                          <v-btn
-                            @click="e1 = steps.approve"
-                            color="primary"
-                            block
-                            class="mx-2 text-capitalize"
-                            :disabled="!haveEnoughTokenTEst"
-                            >Next Step</v-btn
-                          >
-                        </v-col>
-                      </v-row>
-                    </v-stepper-content>
-                    <v-stepper-content :step="steps.approve">
-                      <v-row justify="center" class="my-5">
-                        <v-btn
-                          @click="approve"
-                          :loading="btnLoading"
-                          color="primary"
-                          class=""
-                          >approve</v-btn
-                        >
-
-                        <v-btn @click="checkApproved" class="mx-1" icon
-                          ><v-icon>mdi-refresh-circle</v-icon></v-btn
-                        >
-                      </v-row>
-                    </v-stepper-content>
-
-                    <v-stepper-content :step="steps.addNode">
-                      <div v-if="!haveNode">
-                        <h5
-                          v-if="!haveEnoughTokenTEst"
-                          class="text-center px-3"
-                        >
-                          You have't enough token. You need another
-                          {{ 1000 - tokenTestBalance }}.
-                        </h5>
-                        <div class="full-width text-center px-8 mt-5">
-                          <p class="myFont font-weight-bold">
-                            Note: While adding your node, you will automatically
-                            stake 1000 ALICE tokens.
-                          </p>
-                        </div>
-                        <v-row class="mt-5"
-                          ><v-text-field
-                            :disabled="!haveEnoughTokenTEst"
-                            class="px-5"
-                            label="Node Address"
-                            v-model="nodeAddress"
-                            :rules="addressCheck"
-                            hide-details="auto"
-                          ></v-text-field
-                        ></v-row>
-                        <v-row class="mb-5"
-                          ><v-text-field
-                            :disabled="!haveEnoughTokenTEst"
-                            class="px-5"
-                            label="Peer Id"
-                            v-model="peerId"
-                            hide-details="auto"
-                          ></v-text-field
-                        ></v-row>
-                        <v-row class="mb-5" justify="space-between">
-                          <v-col>
-                            <v-btn @click="e1 = 1" color="primary"
-                              >back to mint</v-btn
-                            >
-                          </v-col>
-                          <v-col class="text-right">
-                            <v-btn
-                              :disabled="!haveEnoughTokenTEst"
-                              :loading="btnLoading"
-                              color="primary"
-                              @click="addNode"
-                            >
-                              Add node
-                            </v-btn>
-                          </v-col>
-                        </v-row>
-                      </div>
-                      <div v-else>
-                        <v-row class="my-5" justify="cetner">
-                          <v-col cols="10" class="text-center">
-                            <v-icon class="text-h1" color="green">
-                              mdi-check-decagram
-                            </v-icon>
-                          </v-col>
-                        </v-row>
-                      </div>
-                    </v-stepper-content>
-                  </v-stepper-items>
-                </v-stepper>
-
-                <v-col
-                  offset=""
-                  cols="4"
-                  v-if="!isCorrectChain || !isConnected"
-                  class="text-center"
-                >
-                  <div
-                    class="setp_box text-center primaryOrange white--text rounded-lg py-3"
-                    width="100%"
-                  >
-                    Step 1
-                  </div>
-                  <div class="d-flex justify-center">
-                    <div class="divider_step_box height-steps"></div>
-                  </div>
-                  <div
-                    class="setp_box text-center gray rounded-lg py-3"
-                    width="100%"
-                  >
-                    Step 2
-                  </div>
-                  <div class="d-flex justify-center">
-                    <div class="border-dashed height-steps"></div>
-                  </div>
-                  <div
-                    class="setp_box text-center gray rounded-lg py-3"
-                    width="100%"
-                  >
-                    Step 3
-                  </div>
-                </v-col>
-                <v-col
-                  offset=""
-                  cols="8"
-                  v-if="!isCorrectChain || !isConnected"
-                >
-                  <div class="setp_box">
-                    <h5 class="myFont font-weight-light text-h6">
-                      Mint 1000 ALICE Tokens
-                    </h5>
-                    <h6 class="myFont text-caption">
-                      to your wallet, using the button below.
-                    </h6>
-                  </div>
-                  <div class="height-steps"></div>
-                  <div class="step_box">
-                    <h5 class="myFont font-weight-light text-h6">
-                      Approve the Staking Contract
-                    </h5>
-                    <h6 class="myFont text-caption">
-                      to be able to deposit your tokens.
-                    </h6>
-                  </div>
-                  <div class="height-steps"></div>
-                  <div class="step_box">
-                    <h5 class="myFont font-weight-light text-h6">
-                      Add your Node to the Network
-                    </h5>
-                    <h6 class="myFont text-caption">
-                      and start securing the network!
-                    </h6>
-                  </div>
-                </v-col>
-
-                <!-- <v-btn @click="approve" color="success"> approve </v-btn> -->
-              </v-row>
-              <div v-else>
-                <v-row justify="center">
-                  <h3 class="myFont py-10 mt-10 black--text text-h5">
-                    {{
-                      nodeInfo["active"]
-                        ? "Your node has been added to the network."
-                        : "Your node has left the network."
-                    }}
-                  </h3>
-                </v-row>
-                <v-row>
-                  <v-col cols="12">
-                    <ul>
-                      <li>ID: {{ nodeInfo.id }}</li>
-                      <li>Address: {{ nodeInfo.nodeAddress }}</li>
-                      <li>Peer ID: {{ nodeInfo.peerId }}</li>
-                      <li>Join at: {{ nodeInfo.startTime }}</li>
-                      <li v-if="!nodeInfo['active']">
-                        left at: {{ nodeInfo.entTime }}
-                      </li>
-                    </ul>
-                  </v-col>
-                  <v-col v-if="nodeInfo['active']" cols="12">
-                    <ul>
-                      <li v-if="!nodeInfo.isNew">IP: {{ nodeInfo.nodeIP }}</li>
-                      <li>Status: {{ nodeIsActive }}</li>
-                      <li v-if="!nodeInfo.isNew">
-                        Online: {{ nodeInfo.onlinePercent }}
-                      </li>
-                      <li v-if="!nodeInfo.isNew">
-                        Reward: {{ nodeInfo.rewardAmount }} ({{
-                          nodeInfo.rewardPercent
-                        }})
-                      </li>
-                    </ul>
-                  </v-col>
-                  <v-col
-                    v-if="nodeInfo['active'] && !nodeInfo['isNew']"
-                    cols="12"
-                  >
-                    <ul v-if="downNodeTimes.length > 0">
-                      <h4>Your node has been down during these periods:</h4>
-                      <li v-for="item in downNodeTimes">
-                        {{ item }}
-                      </li>
-                    </ul>
-                  </v-col>
-                  <v-col v-if="nodeInfo['active']" cols="12">
-                    <ul v-if="nodeInfo.messages && nodeInfo.messages.length">
-                      <h4>messages:</h4>
-                      <li v-for="item in nodeInfo.messages">
-                        <p v-html="item.message"></p>
-                      </li>
-                    </ul>
-                  </v-col>
-                  <v-col cols="12" class="text-center">
-                    <p v-if="nodeIsActive == 'OFF'">
-                      To find out why your node is offline, see
-                      <a
-                        target="_blank"
-                        href="https://docs.muon.net/muon-network/muon-nodes/joining-the-testnet-alice/faq-for-alice#when-i-check-the-status-of-my-node-on-the-dashboard-why-do-i-see-loading-or-offline"
-                      >
-                        here </a
-                      >.
-                    </p>
-                  </v-col>
-                </v-row>
-              </div>
-              <div
-                v-if="!isCorrectChain || !isConnected"
-                class="d-flex justify-center"
-              >
-                <div class="footer_card px-10 pt-8">
-                  <v-btn
-                    v-if="isCorrectChain && !isConnected"
-                    block
-                    color="primary"
-                    @click="connectToMetamask"
-                    >connect Wallet</v-btn
-                  >
-                  <v-btn
-                    v-if="!isCorrectChain"
-                    block
-                    color="primary"
-                    @click="switchToCorrectChain"
-                  >
-                    switch network
-                  </v-btn>
-                </div>
-              </div>
-            </v-card>
-          </v-col>
-        </v-row>
         <v-dialog
           v-if="isCorrectChain && isConnected"
           dark
@@ -674,36 +349,12 @@
           width="500"
         >
           <v-card color="#fff">
-            <v-card-text v-if="reapetedNodeAdressDialog">
-              <v-row class="mt-5 px-5" justify="center">
-                <h4
-                  class="myFont blackText--text text-h6 mt-10 underlite_dialog"
-                >
-                  wrong!
-                </h4>
-                <p class="myFont blackText--text text-center mt-5">
-                  This node address has already been added.
-                </p>
-              </v-row>
-            </v-card-text>
-            <v-card-text v-else>
-              <v-row class="mt-5 px-5" justify="center">
-                <h4
-                  class="myFont blackText--text text-h6 mt-10 underlite_dialog"
-                >
-                  Not enough gas...
-                </h4>
-                <p class="myFont blackText--text text-center mt-5">
-                  You need more TEST BNB as gas tokens to use the dashboard.<br />
-                  Use the following faucet to get some.
-                </p>
-
-                <a
-                  class="primaryOrange--text"
-                  target="_blank"
-                  href="https://testnet.bnbchain.org/faucet-smart"
-                  >BNB Smart Chain Faucet</a
-                >
+            <v-card-text>
+              <v-row
+                v-html="dialogContext.text"
+                class="mt-5 px-5"
+                justify="center"
+              >
               </v-row>
             </v-card-text>
 
@@ -740,7 +391,7 @@ import {
   nodeAdressIsValid,
   rewardChecker,
 } from "@/utils/transactions";
-import { getNodeInfo } from "@/utils/fetch";
+import { getNodeInfo, checkIP } from "@/utils/fetch";
 import particles from "@/components/Particles";
 import moment from "moment";
 import Header from "@/components/Header.vue";
@@ -749,26 +400,8 @@ const STEPS = {
   mint: 1,
   approve: 2,
   addNode: 3,
+  addNodeSuccess: 4,
 };
-
-function timeDifference(date1, date2) {
-  var difference = date1.getTime() - date2.getTime();
-
-  var daysDifference = Math.floor(difference / 1000 / 60 / 60 / 24);
-  difference -= daysDifference * 1000 * 60 * 60 * 24;
-
-  var hoursDifference = Math.floor(difference / 1000 / 60 / 60);
-  difference -= hoursDifference * 1000 * 60 * 60;
-
-  var minutesDifference = Math.floor(difference / 1000 / 60);
-  difference -= minutesDifference * 1000 * 60;
-
-  var secondsDifference = Math.floor(difference / 1000);
-
-  return `${daysDifference ? daysDifference + " days & " : ""}  ${
-    hoursDifference ? hoursDifference + " hours & " : ""
-  }  ${minutesDifference ? minutesDifference + " minutes" : ""} `;
-}
 
 export default {
   name: "App",
@@ -776,7 +409,7 @@ export default {
   components: { Header, particles },
 
   data: () => ({
-    testEl: 2, // remove it befor build
+    testEl: 1, // remove it befor build
     cardLoading: false,
     TR: true,
     themeIsDark: false,
@@ -804,10 +437,10 @@ export default {
     btnLoading: false,
     nodeIsActive: "Loading...",
     nodeUptime: "",
-    reapetedNodeAdressDialog: false,
     rewardAmount: 0,
-    btnLoading: false,
     downNodeTimes: [],
+    nodeIPInput: "",
+    dialogContext: { text: String },
     minMint: [
       (value) => !!value || "Required.",
       (value) => (value && value <= 1000 && value > 0) || "min:1 , max:1000",
@@ -817,14 +450,6 @@ export default {
       (value) =>
         (value && value >= 1000 - totalStake) || "At least 1000 test tokens",
     ],
-    addressCheck: [
-      (value) => !!value || "Required.",
-      (value) => (value && value.length === 42) || "The address is wrong.",
-    ],
-    rules: {
-      peerId: (value) => value.slice(0, 2) === "Qm" || "Invalid peer id",
-      peerIdLenght: (value) => value.length === 46 || "Invalid peer id",
-    },
   }),
   watch: {
     themeIsDark(newState, oldState) {
@@ -882,6 +507,24 @@ export default {
         this.nativeTokenBalance = Number(balance);
         if (res === "0") {
           this.dialog = true;
+          this.dialogContext.text = `
+          <h4
+                  class="myFont blackText--text text-h6 mt-10 underlite_dialog"
+                >
+                  Not enough gas...
+                </h4>
+                <p class="myFont blackText--text text-center mt-5">
+                  You need more TEST BNB as gas tokens to use the dashboard.<br />
+                  Use the following faucet to get some.
+                </p>
+
+                <a
+                  class="primaryOrange--text"
+                  target="_blank"
+                  href="https://testnet.bnbchain.org/faucet-smart"
+                  >BNB Smart Chain Faucet</a
+                >
+          `;
         }
       });
     },
@@ -921,6 +564,7 @@ export default {
         getNodeInfo(this.account)
           // getNodeInfo(9099)
           .then((res) => {
+            res = res["result"];
             if (res && res != "node not found") {
               this.haveNode = true;
               this.nodeIsActive = "Loading...";
@@ -1009,22 +653,39 @@ export default {
     },
     addNode() {
       this.btnLoading = true;
-      nodeAdressIsValid(this.nodeAddress, this.web3).then((res) => {
-        if (res[0] > 0) {
-          this.reapetedNodeAdressDialog = true;
-          this.dialog = true;
-          this.btnLoading = false;
-        } else {
-          newAddNode(this.account, this.web3, this.nodeAddress, this.peerId)
+      checkIP(this.nodeIPInput).then((res) => {
+        if (res && res.success) {
+          newAddNode(
+            this.account,
+            this.web3,
+            res.result.nodeAddress,
+            res.result.peerId
+          )
             .then(() => {
               this.checkHaveNode();
               this.getTokenTestBalance();
             })
+            .catch((err) => {
+              console.log(err);
+            })
             .finally(() => {
-              this.checkHaveNode();
-              this.getTokenTestBalance();
-              this.btnLoading = false;
+              this.btnLoading = true;
             });
+        } else if (res) {
+          this.dialogContext.text = `
+          <h4
+                  class="myFont blackText--text text-h6 mt-10 underlite_dialog"
+                >
+                  wrong!
+                </h4>
+                <p class="myFont blackText--text text-center mt-5">
+                  ${res.result.message}
+                </p>
+          `;
+          this.dialog = true;
+          this.btnLoading = false;
+        } else {
+          this.haveNode = "error";
         }
       });
     },
@@ -1358,7 +1019,7 @@ h3 {
   width: 100%;
 }
 .input-card-min-height {
-  min-height: 330px;
+  min-height: 280px;
 }
 .full-height {
   height: 100%;
