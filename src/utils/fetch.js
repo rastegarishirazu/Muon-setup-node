@@ -1,43 +1,44 @@
 const helpFunction = async (url, nodeId) => {
   const controller = new AbortController();
-  const id = setTimeout(() => controller.abort(), 15000);
-  return await fetch(
-    `${url}?app=explorer&method=node&params[id]=${nodeId}`,
-    // "https://catfact.ninja/fact"
-    { signal: controller.signal }
-  )
+  const id = setTimeout(() => {
+    console.log("my timeout");
+    return controller.abort();
+  }, 30000);
+
+  var myHeaders = new Headers();
+  myHeaders.append("Accept", "application/json");
+
+  var requestOptions = {
+    method: "GET",
+    headers: myHeaders,
+    signal: controller.signal,
+  };
+
+  return await fetch(`${url}/${nodeId}/status`, requestOptions)
     .then((response) => response.json())
     .then((data) => {
-      if (data?.success && data?.result?.nodeInfo?.uptime.length > 1) {
-        return data;
-      } else {
-        return false;
-      }
+      return data["result"];
     })
     .catch((err) => {
       console.log(err);
       clearTimeout(id);
       return "timeOut";
+    })
+    .finally(() => {
+      clearTimeout(id);
     });
 };
 const getNodeInfo = async (nodeId) => {
-  const listOfNodes = [
-    "https://alice.muon.net/v1/",
-    "https://alice.muon.net/v1-1/",
-    "https://alice.muon.net/v1-2/",
-    "https://alice.muon.net/v1-3/",
-  ];
+  const listOfNodes = ["https://alice.muon.net/test-proxy/nodes"];
   let tryed = 0;
   let res;
   var flag = false;
 
-  while (tryed < 4 && !flag) {
-    console.log(listOfNodes[tryed % 4]);
-    res = await helpFunction(listOfNodes[tryed % 4], nodeId);
-    if (res === "timeOut") {
+  while (tryed < 3 && !flag) {
+    res = await helpFunction(listOfNodes[tryed % listOfNodes.length], nodeId);
+    if (res === "timeOut" || res === false) {
       tryed++;
       res = false;
-      // clearTimeout(id);
     } else {
       console.log(res);
       return res;

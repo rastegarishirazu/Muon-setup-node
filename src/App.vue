@@ -309,7 +309,11 @@
             cols="12"
             offset-md="3"
           >
+            <h2 v-if="this.haveNode === 'error'" class="text-center">
+              something went wrong. please try again later.
+            </h2>
             <v-card
+              v-else
               :class="['px-5', $vuetify.theme.dark ? 'backgorundpic_dark' : '']"
               elevation="2"
             >
@@ -403,6 +407,7 @@
                         <v-col md="4">
                           <v-btn
                             @click="mint"
+                            :loading="btnLoading"
                             block
                             :disabled="mintAmount > 1000 || mintAmount < 1"
                             color="primary"
@@ -424,7 +429,11 @@
                     </v-stepper-content>
                     <v-stepper-content :step="steps.approve">
                       <v-row justify="center" class="my-5">
-                        <v-btn @click="approve" color="primary" class=""
+                        <v-btn
+                          @click="approve"
+                          :loading="btnLoading"
+                          color="primary"
+                          class=""
                           >approve</v-btn
                         >
 
@@ -477,6 +486,7 @@
                           <v-col class="text-right">
                             <v-btn
                               :disabled="!haveEnoughTokenTEst"
+                              :loading="btnLoading"
                               color="primary"
                               @click="addNode"
                             >
@@ -567,21 +577,56 @@
               <div v-else>
                 <v-row justify="center">
                   <h3 class="myFont py-10 mt-10 black--text text-h5">
-                    Your node has been added to the network.
+                    {{
+                      nodeInfo["active"]
+                        ? "Your node has been added to the network."
+                        : "Your node has left the network."
+                    }}
                   </h3>
                 </v-row>
                 <v-row>
-                  <v-col>
+                  <v-col cols="12">
                     <ul>
-                      <li>Node ID: {{ nodeInfo.id }}</li>
-                      <li>Node address: {{ nodeInfo.nodeAddress }}</li>
-                      <li>Reward: {{ rewardAmount }}</li>
+                      <li>ID: {{ nodeInfo.id }}</li>
+                      <li>Address: {{ nodeInfo.nodeAddress }}</li>
+                      <li>Peer ID: {{ nodeInfo.peerId }}</li>
+                      <li>Join at: {{ nodeInfo.startTime }}</li>
+                      <li v-if="!nodeInfo['active']">
+                        left at: {{ nodeInfo.entTime }}
+                      </li>
                     </ul>
                   </v-col>
-                  <v-col>
+                  <v-col v-if="nodeInfo['active']" cols="12">
                     <ul>
-                      <li>Peer ID: {{ nodeInfo.peerId }}</li>
+                      <li v-if="!nodeInfo.isNew">IP: {{ nodeInfo.nodeIP }}</li>
                       <li>Status: {{ nodeIsActive }}</li>
+                      <li v-if="!nodeInfo.isNew">
+                        Online: {{ nodeInfo.onlinePercent }}
+                      </li>
+                      <li v-if="!nodeInfo.isNew">
+                        Reward: {{ nodeInfo.rewardAmount }} ({{
+                          nodeInfo.rewardPercent
+                        }})
+                      </li>
+                    </ul>
+                  </v-col>
+                  <v-col
+                    v-if="nodeInfo['active'] && !nodeInfo['isNew']"
+                    cols="12"
+                  >
+                    <ul v-if="downNodeTimes.length > 0">
+                      <h4>Your node has been down during these periods:</h4>
+                      <li v-for="item in downNodeTimes">
+                        {{ item }}
+                      </li>
+                    </ul>
+                  </v-col>
+                  <v-col v-if="nodeInfo['active']" cols="12">
+                    <ul v-if="nodeInfo.messages && nodeInfo.messages.length">
+                      <h4>messages:</h4>
+                      <li v-for="item in nodeInfo.messages">
+                        <p v-html="item.message"></p>
+                      </li>
                     </ul>
                   </v-col>
                   <v-col cols="12" class="text-center">
@@ -690,7 +735,6 @@ import {
   checkApproved,
   stake,
   mint,
-  haveNode,
   newAddNode,
   getBalanceaOfTokenTest,
   nodeAdressIsValid,
@@ -698,6 +742,7 @@ import {
 } from "@/utils/transactions";
 import { getNodeInfo } from "@/utils/fetch";
 import particles from "@/components/Particles";
+import moment from "moment";
 import Header from "@/components/Header.vue";
 const mainChainId = 0x61;
 const STEPS = {
@@ -705,6 +750,26 @@ const STEPS = {
   approve: 2,
   addNode: 3,
 };
+
+function timeDifference(date1, date2) {
+  var difference = date1.getTime() - date2.getTime();
+
+  var daysDifference = Math.floor(difference / 1000 / 60 / 60 / 24);
+  difference -= daysDifference * 1000 * 60 * 60 * 24;
+
+  var hoursDifference = Math.floor(difference / 1000 / 60 / 60);
+  difference -= hoursDifference * 1000 * 60 * 60;
+
+  var minutesDifference = Math.floor(difference / 1000 / 60);
+  difference -= minutesDifference * 1000 * 60;
+
+  var secondsDifference = Math.floor(difference / 1000);
+
+  return `${daysDifference ? daysDifference + " days & " : ""}  ${
+    hoursDifference ? hoursDifference + " hours & " : ""
+  }  ${minutesDifference ? minutesDifference + " minutes" : ""} `;
+}
+
 export default {
   name: "App",
 
@@ -733,15 +798,16 @@ export default {
     haveNode: false,
     tokenTestBalance: 0,
     haveEnoughTokenTEst: false,
-    haveNode: false,
     mintAmount: 1000,
     nativeTokenBalance: 0,
     nodeInfo: Object,
+    btnLoading: false,
     nodeIsActive: "Loading...",
     nodeUptime: "",
     reapetedNodeAdressDialog: false,
     rewardAmount: 0,
     btnLoading: false,
+    downNodeTimes: [],
     minMint: [
       (value) => !!value || "Required.",
       (value) => (value && value <= 1000 && value > 0) || "min:1 , max:1000",
@@ -796,11 +862,6 @@ export default {
         "..." +
         this.account.slice(this.account.length - 4, this.account.length);
     },
-    // isConnected() {
-    //   if (this.isConnected) {
-    //     this.connectToMetamask();
-    //   }
-    // },
     e1(newE1, oldE1) {
       if (newE1 === this.steps.addNode) {
         this.checkHaveNode();
@@ -812,11 +873,6 @@ export default {
     },
   },
   methods: {
-    async moreNodeInfo(nodeId) {
-      this.nodeIsActive = "Loading...";
-      const res = await getNodeInfo(nodeId);
-      this.nodeIsActive = res ? "ACTIVE" : "OFF";
-    },
     changeTheme() {
       this.themeIsDark = !this.themeIsDark;
     },
@@ -836,7 +892,6 @@ export default {
           this.getTokenTestBalance();
         })
         .finally(() => {
-          console.log("finish");
           this.btnLoading = false;
         });
     },
@@ -863,18 +918,88 @@ export default {
     checkHaveNode() {
       if (this.account) {
         this.cardLoading = true;
-        haveNode(this.account, this.web3)
+        getNodeInfo(this.account)
+          // getNodeInfo(9099)
           .then((res) => {
-            if (Number(res[0])) {
-              this.rewardCheck();
+            if (res && res != "node not found") {
               this.haveNode = true;
-              this.nodeInfo["id"] = res[0];
-              this.nodeInfo["nodeAddress"] = res[1];
-              this.nodeInfo["peerId"] = res[3];
-              this.nodeInfo["active"] = res[4];
-              this.moreNodeInfo(res[0]);
-            } else {
+              this.nodeIsActive = "Loading...";
+              this.nodeInfo["isNew"] = res["node"]["isNew"];
+              this.nodeInfo["active"] = res["node"]["active"];
+              const tests = res["node"]["tests"];
+              this.nodeInfo["nodeAddress"] = res["node"]["nodeAddress"];
+              this.nodeInfo["id"] = res["node"]["id"];
+              this.nodeInfo["peerId"] = res["node"]["peerId"];
+              this.nodeInfo["startTime"] = new Date(
+                res["node"]["startTime"] * 1000
+              )
+                .toISOString()
+                .split("T")[0];
+              this.nodeInfo["entTime"] = new Date(res["node"]["endTime"] * 1000)
+                .toISOString()
+                .split("T")[0];
+              if (this.nodeInfo["active"]) {
+                this.nodeIsActive = this.nodeInfo.isNew
+                  ? "Your node has been added to the network successfully. Its initialization will take a few minutes."
+                  : tests["networking"] && tests["peerInfo"] && tests["status"]
+                  ? "Active"
+                  : "OFF";
+                this.nodeInfo["nodeIP"] = res["node"]["ip"];
+                this.nodeInfo["messages"] = res["messages"];
+                this.nodeInfo["rewardAmount"] = Number(
+                  this.web3.utils.fromWei(
+                    String(res["reward"]["earned"]),
+                    "ether"
+                  )
+                ).toFixed(4);
+                this.nodeInfo["rewardAmount"];
+                this.nodeInfo["onlinePercent"] = res["reward"]["onlinePercent"];
+                this.nodeInfo["rewardPercent"] = res["reward"]["rewardPercent"];
+                this.nodeInfo["history"] = res["history"].reverse();
+
+                var messages = [];
+                for (var [i, valueFrom] of this.nodeInfo["history"].entries()) {
+                  if (!valueFrom["isOnline"]) {
+                    var flag = true;
+                    var from = valueFrom;
+                    var fromDate = new Date(from["timestamp"] * 1000);
+                    var fromMoment = moment(fromDate);
+                    from = fromDate.toISOString();
+                    from = from.split(".")[0].split("T");
+                    from = from[0] + " " + from[1];
+                    for (var [j, valueTo] of this.nodeInfo["history"]
+                      .slice(i)
+                      .entries()) {
+                      if (valueTo["isOnline"]) {
+                        var toDate = new Date(valueTo["timestamp"] * 1000);
+                        var toMoment = moment(toDate);
+                        var to = toDate.toISOString();
+                        to = to.split(".")[0].split("T");
+                        to = to[0] + " " + to[1];
+                        messages.push(
+                          `${from} until ${to} for ${toMoment.to(
+                            fromMoment,
+                            true
+                          )}`
+                        );
+                        flag = false;
+                        break;
+                      }
+                    }
+                    if (flag) {
+                      messages.push(
+                        `${from} until now for ${moment().to(fromMoment, true)}`
+                      );
+                    }
+                  }
+                }
+                this.downNodeTimes = messages;
+                console.log(this.downNodeTimes);
+              }
+            } else if (res === "node not found") {
               this.haveNode = false;
+            } else {
+              this.haveNode = "error";
             }
           })
           .finally(() => {
@@ -883,10 +1008,12 @@ export default {
       }
     },
     addNode() {
+      this.btnLoading = true;
       nodeAdressIsValid(this.nodeAddress, this.web3).then((res) => {
         if (res[0] > 0) {
           this.reapetedNodeAdressDialog = true;
           this.dialog = true;
+          this.btnLoading = false;
         } else {
           newAddNode(this.account, this.web3, this.nodeAddress, this.peerId)
             .then(() => {
@@ -896,6 +1023,7 @@ export default {
             .finally(() => {
               this.checkHaveNode();
               this.getTokenTestBalance();
+              this.btnLoading = false;
             });
         }
       });
@@ -988,6 +1116,7 @@ export default {
     },
   },
   created() {
+    console.log("v1.0.2");
     document.title = "Join ALICE network";
     this.web3 = new Web3(window.ethereum);
     this.getChainId();
@@ -1108,9 +1237,6 @@ h3 {
 }
 .footer_gradiant_dark {
   background: linear-gradient(90deg, #fac739 -2.48%, #fb0d6a 102.48%);
-}
-.full_height {
-  /* min-height: 90vh !important; */
 }
 .main_title {
   font-family: "Montserrat";
