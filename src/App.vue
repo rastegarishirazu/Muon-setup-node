@@ -39,7 +39,17 @@
             </div>
           </v-col>
         </v-row>
-        <v-row justify="center" class="mt-10">
+        <v-row v-if="cardLoading" justify="center">
+          <lottie-vue-player
+            ref="anim"
+            src="https://lottie.host/1fb3a319-394b-446d-8fce-824aa4f1787c/xjtL4nMuB2.json"
+            :autoplay="true"
+            :loop="true"
+            height="200px"
+            class="transparent"
+          />
+        </v-row>
+        <v-row v-else-if="e1 <= steps.addNode" justify="center" class="mt-10">
           <v-col md="5" xl="3" align-self="center">
             <v-row>
               <v-col md="3" class="text-center">
@@ -341,6 +351,49 @@
             </v-card>
           </v-col>
         </v-row>
+        <v-row justify="center">
+          <v-col md="10" cols="12">
+            <v-scroll-x-reverse-transition>
+              <v-card
+                v-show="!cardLoading && e1 >= steps.newNode"
+                width="100%"
+                transition="slide-x-transition"
+                elevation="0"
+                class="px-2 rounded-lg"
+              >
+                <v-row justify="center">
+                  <v-col md="4" class="text-center" align-self="end">
+                    <lottie-vue-player
+                      ref="anim"
+                      src="https://lottie.host/d93bca6a-cfea-4e40-a6b9-4d191832b2ef/uWgbTRaCzm.json"
+                      :autoplay="true"
+                      height="200"
+                      class="transparent"
+                    />
+                    <h3 class="blackText--text font-weight-bold">
+                      Your node has been added <br />
+                      to Alice network
+                    </h3>
+                    <v-row>
+                      <v-col cols="10">
+                        <h5>Preparing your dashboard</h5>
+                      </v-col>
+                      <v-col cols="2">
+                        <lottie-vue-player
+                          ref="anim"
+                          src="https://lottie.host/1fb3a319-394b-446d-8fce-824aa4f1787c/xjtL4nMuB2.json"
+                          :autoplay="true"
+                          :loop="true"
+                          class="transparent"
+                        />
+                      </v-col>
+                    </v-row>
+                  </v-col>
+                </v-row>
+              </v-card>
+            </v-scroll-x-reverse-transition>
+          </v-col>
+        </v-row>
 
         <v-dialog
           v-if="isCorrectChain && isConnected"
@@ -400,7 +453,8 @@ const STEPS = {
   mint: 1,
   approve: 2,
   addNode: 3,
-  addNodeSuccess: 4,
+  newNode: 4,
+  haveNode: 5,
 };
 
 export default {
@@ -410,7 +464,7 @@ export default {
 
   data: () => ({
     testEl: 1, // remove it befor build
-    cardLoading: false,
+    cardLoading: true,
     TR: true,
     themeIsDark: false,
     dialog: false,
@@ -569,6 +623,9 @@ export default {
               this.haveNode = true;
               this.nodeIsActive = "Loading...";
               this.nodeInfo["isNew"] = res["node"]["isNew"];
+              this.e1 = this.nodeInfo
+                ? this.steps.newNode
+                : this.steps.haveNode;
               this.nodeInfo["active"] = res["node"]["active"];
               const tests = res["node"]["tests"];
               this.nodeInfo["nodeAddress"] = res["node"]["nodeAddress"];
@@ -1023,5 +1080,8 @@ h3 {
 }
 .full-height {
   height: 100%;
+}
+.transparent {
+  background: none;
 }
 </style>
