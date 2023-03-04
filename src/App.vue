@@ -357,11 +357,12 @@
               <v-card
                 v-show="!cardLoading && e1 >= steps.newNode"
                 width="100%"
+                height="500px"
                 transition="slide-x-transition"
                 elevation="0"
                 class="px-2 rounded-lg"
               >
-                <v-row justify="center">
+                <v-row justify="center" v-if="e1 === steps.newNode">
                   <v-col md="4" class="text-center" align-self="end">
                     <lottie-vue-player
                       ref="anim"
@@ -374,20 +375,47 @@
                       Your node has been added <br />
                       to Alice network
                     </h3>
-                    <v-row>
-                      <v-col cols="10">
-                        <h5>Preparing your dashboard</h5>
+                    <v-row justify="center">
+                      <v-col
+                        cols="9"
+                        class="text-right pr-0"
+                        align-self="center"
+                      >
+                        <h5 class="primary--text text-body-1">
+                          Preparing your dashboard
+                        </h5>
                       </v-col>
-                      <v-col cols="2">
+                      <v-col cols="3" class="text-left pl-0">
                         <lottie-vue-player
                           ref="anim"
                           src="https://lottie.host/1fb3a319-394b-446d-8fce-824aa4f1787c/xjtL4nMuB2.json"
                           :autoplay="true"
                           :loop="true"
-                          class="transparent"
+                          class="transparent ml-n2"
                         />
                       </v-col>
                     </v-row>
+                  </v-col>
+                </v-row>
+                <v-row class="full-height" justify="center">
+                  <v-col
+                    md="4"
+                    align-self="center"
+                    height="500px"
+                    class="text-center"
+                  >
+                    <h5 class="info--text text-body-1">
+                      Your dashboard is ready!
+                      <v-icon color="green">mdi-check</v-icon>
+                    </h5>
+                    <v-btn
+                      block
+                      large
+                      color="primary"
+                      class="mt-5 font-weight-bold rounded-lg"
+                      elevation="0"
+                      >Launch my dashboard</v-btn
+                    >
                   </v-col>
                 </v-row>
               </v-card>
@@ -454,7 +482,8 @@ const STEPS = {
   approve: 2,
   addNode: 3,
   newNode: 4,
-  haveNode: 5,
+  beforHaveNode: 5,
+  haveNode: 6,
 };
 
 export default {
@@ -623,9 +652,9 @@ export default {
               this.haveNode = true;
               this.nodeIsActive = "Loading...";
               this.nodeInfo["isNew"] = res["node"]["isNew"];
-              this.e1 = this.nodeInfo
+              this.e1 = this.nodeInfo["isNew"]
                 ? this.steps.newNode
-                : this.steps.haveNode;
+                : this.steps.beforHaveNode;
               this.nodeInfo["active"] = res["node"]["active"];
               const tests = res["node"]["tests"];
               this.nodeInfo["nodeAddress"] = res["node"]["nodeAddress"];
@@ -663,25 +692,22 @@ export default {
                   if (!valueFrom["isOnline"]) {
                     var flag = true;
                     var from = valueFrom;
-                    var fromDate = new Date(from["timestamp"] * 1000);
+                    // var fromDate = new Date(from["timestamp"] * 1000);
+                    var fromDate = moment(from["timestamp"] * 1000);
                     var fromMoment = moment(fromDate);
-                    from = fromDate.toISOString();
-                    from = from.split(".")[0].split("T");
-                    from = from[0] + " " + from[1];
                     for (var [j, valueTo] of this.nodeInfo["history"]
                       .slice(i)
                       .entries()) {
                       if (valueTo["isOnline"]) {
-                        var toDate = new Date(valueTo["timestamp"] * 1000);
+                        // var toDate = new Date(valueTo["timestamp"] * 1000);
+                        var toDate = moment(valueTo["timestamp"] * 1000);
                         var toMoment = moment(toDate);
-                        var to = toDate.toISOString();
-                        to = to.split(".")[0].split("T");
-                        to = to[0] + " " + to[1];
                         messages.push(
-                          `${from} until ${to} for ${toMoment.to(
-                            fromMoment,
-                            true
-                          )}`
+                          `${fromDate.format(
+                            "YYYY-M-D H:m:s A"
+                          )} until ${toDate.format(
+                            "YYYY-M-D H:m:s A"
+                          )} for ${toMoment.to(fromMoment, true)}`
                         );
                         flag = false;
                         break;
@@ -689,7 +715,9 @@ export default {
                     }
                     if (flag) {
                       messages.push(
-                        `${from} until now for ${moment().to(fromMoment, true)}`
+                        `${fromDate.format(
+                          "YYYY-M-D H:m:s A"
+                        )} until now for ${moment().to(fromMoment, true)}`
                       );
                     }
                   }
