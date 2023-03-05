@@ -695,9 +695,9 @@ export default {
                         var toMoment = moment(toDate);
                         messages.push(
                           `${fromDate.format(
-                            "YYYY-M-D h:m:s A"
+                            "YYYY-M-D hh:mm:ss A"
                           )} until ${toDate.format(
-                            "YYYY-M-D h:m:s A"
+                            "YYYY-M-D hh:mm:ss A"
                           )} for ${toMoment.to(fromMoment, true)}`
                         );
                         flag = false;
@@ -707,7 +707,7 @@ export default {
                     if (flag) {
                       messages.push(
                         `${fromDate.format(
-                          "YYYY-M-D h:m:s A"
+                          "YYYY-M-D hh:mm:ss A"
                         )} until now for ${moment().to(fromMoment, true)}`
                       );
                     }
