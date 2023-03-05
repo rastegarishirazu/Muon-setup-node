@@ -523,6 +523,7 @@ export default {
     rewardAmount: 0,
     downNodeTimes: [],
     nodeIPInput: "",
+    checkHaveNodeInterval: Object,
     dialogContext: { text: String },
     minMint: [
       (value) => !!value || "Required.",
@@ -577,6 +578,14 @@ export default {
       }
       if (newE1 === this.steps.approve && this.isApproved) {
         this.e1 = this.steps.addNode;
+      }
+      if (newE1 === this.steps.newNode) {
+        this.checkHaveNodeInterval = setInterval(
+          this.checkHaveNode,
+          3 * 60 * 1000
+        );
+      } else {
+        clearInterval(this.checkHaveNodeInterval);
       }
     },
   },
@@ -652,9 +661,15 @@ export default {
               this.haveNode = true;
               this.nodeIsActive = "Loading...";
               this.nodeInfo["isNew"] = res["node"]["isNew"];
-              this.e1 = this.nodeInfo["isNew"]
-                ? this.steps.newNode
-                : this.steps.beforHaveNode;
+              if (this.e1 === this.steps.newNode) {
+                this.e1 = this.nodeInfo["isNew"]
+                  ? this.steps.newNode
+                  : this.steps.beforHaveNode;
+              } else {
+                this.e1 = this.nodeInfo["isNew"]
+                  ? this.steps.newNode
+                  : this.steps.haveNode;
+              }
               this.nodeInfo["active"] = res["node"]["active"];
               const tests = res["node"]["tests"];
               this.nodeInfo["nodeAddress"] = res["node"]["nodeAddress"];
