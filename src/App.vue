@@ -683,25 +683,22 @@ export default {
                   if (!valueFrom["isOnline"]) {
                     var flag = true;
                     var from = valueFrom;
-                    var fromDate = new Date(from["timestamp"] * 1000);
+                    // var fromDate = new Date(from["timestamp"] * 1000);
+                    var fromDate = moment(from["timestamp"] * 1000);
                     var fromMoment = moment(fromDate);
-                    from = fromDate.toISOString();
-                    from = from.split(".")[0].split("T");
-                    from = from[0] + " " + from[1];
                     for (var [j, valueTo] of this.nodeInfo["history"]
                       .slice(i)
                       .entries()) {
                       if (valueTo["isOnline"]) {
-                        var toDate = new Date(valueTo["timestamp"] * 1000);
+                        // var toDate = new Date(valueTo["timestamp"] * 1000);
+                        var toDate = moment(valueTo["timestamp"] * 1000);
                         var toMoment = moment(toDate);
-                        var to = toDate.toISOString();
-                        to = to.split(".")[0].split("T");
-                        to = to[0] + " " + to[1];
                         messages.push(
-                          `${from} until ${to} for ${toMoment.to(
-                            fromMoment,
-                            true
-                          )}`
+                          `${fromDate.format(
+                            "YYYY-M-D h:m:s A"
+                          )} until ${toDate.format(
+                            "YYYY-M-D h:m:s A"
+                          )} for ${toMoment.to(fromMoment, true)}`
                         );
                         flag = false;
                         break;
@@ -709,7 +706,9 @@ export default {
                     }
                     if (flag) {
                       messages.push(
-                        `${from} until now for ${moment().to(fromMoment, true)}`
+                        `${fromDate.format(
+                          "YYYY-M-D h:m:s A"
+                        )} until now for ${moment().to(fromMoment, true)}`
                       );
                     }
                   }
