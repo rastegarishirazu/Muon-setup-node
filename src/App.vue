@@ -18,6 +18,16 @@
       <h2 v-if="this.haveNode === 'error'" class="text-center mt-5">
         something went wrong. please try again later.
       </h2>
+      <v-row v-if="cardLoading" justify="center">
+        <lottie-vue-player
+          ref="anim"
+          src="https://lottie.host/1fb3a319-394b-446d-8fce-824aa4f1787c/xjtL4nMuB2.json"
+          :autoplay="true"
+          :loop="true"
+          height="200px"
+          class="transparent"
+        />
+      </v-row>
       <v-responsive
         v-else
         width="100%"
@@ -27,7 +37,7 @@
         <!-- <v-row justify="center" class="my-2">
       <v-col> <h1 class="main_title">ALICE testnet</h1></v-col>
     </v-row> -->
-        <v-row class="mt-2" justify="center">
+        <v-row v-if="e1 < steps.newNode" class="mt-2" justify="center">
           <v-col md="5">
             <div class="d-flex justify-center" width="100%">
               <div class="title_card_box text-center py-5 mt-1">
@@ -38,16 +48,6 @@
               </div>
             </div>
           </v-col>
-        </v-row>
-        <v-row v-if="cardLoading" justify="center">
-          <lottie-vue-player
-            ref="anim"
-            src="https://lottie.host/1fb3a319-394b-446d-8fce-824aa4f1787c/xjtL4nMuB2.json"
-            :autoplay="true"
-            :loop="true"
-            height="200px"
-            class="transparent"
-          />
         </v-row>
         <v-row v-else-if="e1 <= steps.addNode" justify="center" class="mt-10">
           <v-col md="5" xl="3" align-self="center">
@@ -351,7 +351,10 @@
             </v-card>
           </v-col>
         </v-row>
-        <v-row justify="center">
+        <v-row
+          v-if="e1 > steps.addNode && e1 < steps.haveNode"
+          justify="center"
+        >
           <v-col md="10" cols="12">
             <v-scroll-x-reverse-transition>
               <v-card
@@ -397,7 +400,11 @@
                     </v-row>
                   </v-col>
                 </v-row>
-                <v-row class="full-height" justify="center">
+                <v-row
+                  v-if="e1 === steps.beforHaveNode"
+                  class="full-height"
+                  justify="center"
+                >
                   <v-col
                     md="4"
                     align-self="center"
@@ -420,6 +427,139 @@
                 </v-row>
               </v-card>
             </v-scroll-x-reverse-transition>
+          </v-col>
+        </v-row>
+        <v-row justify="center" class="mt-15">
+          <v-col md="2">
+            <v-card
+              color="rgba(81, 88, 246, 0.1)"
+              class="node_id_card px-2 py-4 rounded-lg"
+              elevation="0"
+            >
+              <h6 class="textGray--text text-subtitle-2 font-weight-bold">
+                Node ID
+              </h6>
+              <v-row justify="end" class="mt-2">
+                <v-col align-self="center" class="text-right">
+                  <b class="mr-2">27</b>
+                  <v-btn icon>
+                    <v-img src="@/assets/dashboard/Copy.svg"></v-img>
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-card>
+          </v-col>
+          <v-col md="4">
+            <v-card
+              color="rgba(81, 88, 246, 0.1)"
+              class="node_id_card px-2 py-4 rounded-lg"
+              elevation="0"
+            >
+              <h6 class="textGray--text text-subtitle-2 font-weight-bold">
+                Node address
+              </h6>
+              <v-row justify="end" class="mt-2">
+                <v-col align-self="center" class="text-right">
+                  <b class="mr-2">0x003a7...a19F14 </b>
+                  <v-btn icon>
+                    <v-img src="@/assets/dashboard/Copy.svg"></v-img>
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-card>
+          </v-col>
+          <v-col md="4">
+            <v-card
+              color="rgba(81, 88, 246, 0.1)"
+              class="node_id_card px-2 py-4 rounded-lg"
+              elevation="0"
+            >
+              <h6 class="textGray--text text-subtitle-2 font-weight-bold">
+                peer ID
+              </h6>
+              <v-row justify="end" class="mt-2">
+                <v-col align-self="center" class="text-right">
+                  <b class="mr-2">qMu5WT...a19F14</b>
+                  <v-btn icon>
+                    <v-img src="@/assets/dashboard/Copy.svg"></v-img>
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-card>
+          </v-col>
+        </v-row>
+        <v-row justify="center">
+          <v-col md="2">
+            <v-card
+              color="rgba(81, 88, 246, 0.1)"
+              class="node_id_card px-2 py-4 rounded-lg text-center"
+              elevation="0"
+            >
+              <h6 class="text-subtitle-2 font-weight-medium">Uptime</h6>
+              <div class="mt-2">
+                <b>99.8</b>
+              </div>
+              <div class="mt-6">
+                <h6 class="text-subtitle-2 font-weight-medium">Status</h6>
+              </div>
+              <b class="info--text text-h6 font-weight-bold">Online</b>
+            </v-card>
+          </v-col>
+          <v-col md="4">
+            <v-card
+              color="rgba(81, 88, 246, 0.1)"
+              class="full-height node_id_card px-2 py-4 rounded-lg"
+              elevation="0"
+            >
+              <v-row justify="spase-between">
+                <v-col cols="8">
+                  <h6 class="black--text text-h6">Staked MUON</h6>
+                </v-col>
+                <v-col class="text-right">
+                  <b>1500</b>
+                </v-col>
+              </v-row>
+              <v-card-actions>
+                <v-row justify="end" class="mt-10">
+                  <v-col align-self="center" class="text-right">
+                    <v-btn
+                      elevation="0"
+                      color="rgba(81, 88, 246, 0.1)"
+                      class="primary--text font-weight-bold"
+                      >Stake more</v-btn
+                    >
+                  </v-col>
+                </v-row>
+              </v-card-actions>
+            </v-card>
+          </v-col>
+          <v-col md="4">
+            <v-card
+              class="full-height node_id_card px-2 py-4 rounded-lg reward_background"
+              elevation="0"
+            >
+              <v-row justify="spase-between">
+                <v-col cols="5">
+                  <h6 class="black--text text-h6">Reward</h6>
+                </v-col>
+                <v-col class="text-right">
+                  <b>6.6142 MUON</b>
+                </v-col>
+              </v-row>
+              <v-card-actions>
+                <v-row justify="end" class="mt-10">
+                  <v-col align-self="center" class="text-right">
+                    <v-btn
+                      elevation="0"
+                      color="#FEEFE9"
+                      class="primaryOrange--text font-weight-bold text-subtitle-2"
+                    >
+                      Withdraw and exit
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-card-actions>
+            </v-card>
           </v-col>
         </v-row>
 
@@ -1126,5 +1266,15 @@ h3 {
 }
 .transparent {
   background: none;
+}
+.node_id_card {
+  background: rgba(81, 88, 246, 0.1);
+}
+.reward_background {
+  background: linear-gradient(
+    92.79deg,
+    rgba(246, 150, 81, 0.177) -1.84%,
+    rgba(246, 81, 121, 0.183) 108.07%
+  );
 }
 </style>

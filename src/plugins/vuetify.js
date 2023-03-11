@@ -18,6 +18,7 @@ export default new Vuetify({
         info: "#23B5D3",
         lightPrimaryOrange: "#FCDCCE",
         gray: "#E9EFF6",
+        textGray: "#6F7787",
       },
       dark: {
         primary: "#FAC739",
