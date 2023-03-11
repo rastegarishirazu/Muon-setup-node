@@ -300,6 +300,20 @@
                 </v-col>
 
                 <!-- <v-btn @click="approve" color="success"> approve </v-btn> -->
+                <v-col
+                  v-if="!isCorrectChain || !isConnected"
+                  cols="12"
+                  class="text-center text-caption"
+                  >Follow the
+                  <a
+                    href="https://docs.muon.net/muon-network/muon-nodes/joining-the-testnet-alice/"
+                    target="_blank"
+                  >
+                    official guide</a
+                  >
+                  to find out more about how add your node to the
+                  network.</v-col
+                >
               </v-row>
               <div v-else>
                 <v-row justify="center">
