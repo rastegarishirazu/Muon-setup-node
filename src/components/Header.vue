@@ -4,7 +4,7 @@
       <v-col md="2" sm="5" cols="12" class="text-center">
         <img src="../assets/muon-logo1.svg" width="120px" alt="" />
       </v-col>
-      <v-col offset-md="5" md="3" sm="4" cols="6">
+      <v-col offset-md="4" md="4" sm="4" cols="6">
         <div
           :class="[
             'card',

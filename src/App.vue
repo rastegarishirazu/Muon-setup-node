@@ -14,7 +14,7 @@
       :isConnected="isConnected"
     ></Header>
 
-    <v-main>
+    <v-main class="pb-10">
       <h2 v-if="this.haveNode === 'error'" class="text-center mt-5">
         something went wrong. please try again later.
       </h2>
@@ -29,14 +29,11 @@
         />
       </v-row>
       <v-responsive
-        v-else
+        v-else-if="haveNode != 'error'"
         width="100%"
         overflow-hidden
         class="overflow-hidden px-5 mt-4"
       >
-        <!-- <v-row justify="center" class="my-2">
-      <v-col> <h1 class="main_title">ALICE testnet</h1></v-col>
-    </v-row> -->
         <v-row v-if="e1 < steps.newNode" class="mt-2" justify="center">
           <v-col md="5">
             <div class="d-flex justify-center" width="100%">
@@ -49,7 +46,7 @@
             </div>
           </v-col>
         </v-row>
-        <v-row v-else-if="e1 <= steps.addNode" justify="center" class="mt-10">
+        <v-row v-if="e1 <= steps.addNode" justify="center" class="mt-10">
           <v-col md="5" xl="3" align-self="center">
             <v-row>
               <v-col md="3" class="text-center">
@@ -281,14 +278,14 @@
                     </div>
                   </v-col>
                   <v-col v-if="e1 === steps.addNode" cols="12">
-                    <div class="lightInfo rounded-lg px-2 mt-2">
+                    <div class="lightInfo rounded-lg px-1 mt-2">
                       <v-row>
-                        <v-col cols="2">
+                        <v-col align-self="center" cols="2">
                           <v-icon color="info" class="text-h3">
                             mdi-alert-box
                           </v-icon>
                         </v-col>
-                        <v-col align-self="center">
+                        <v-col align-self="center" class="pl-6">
                           <p class="mb-0 text-caption font-weight-bold">
                             While adding your node. you will automatically stake
                             1000 ALICE tokens
@@ -332,7 +329,7 @@
                           <span>Back to mint</span>
                         </v-tooltip>
                       </v-col>
-                      <v-col cols="9" class="pl-0">
+                      <v-col cols="9" class="">
                         <v-btn
                           :loading="btnLoading"
                           elevation="0"
@@ -429,8 +426,27 @@
             </v-scroll-x-reverse-transition>
           </v-col>
         </v-row>
-        <v-row justify="center" class="mt-15">
-          <v-col md="2">
+        <v-row v-if="e1 === steps.haveNode" justify="center" class="mt-15 px-5">
+          <v-col md="3">
+            <v-card
+              color="rgba(81, 88, 246, 0.1)"
+              class="node_id_card px-2 py-4 rounded-lg"
+              elevation="0"
+            >
+              <h6 class="textGray--text text-subtitle-2 font-weight-bold">
+                IP Address
+              </h6>
+              <v-row justify="end" class="mt-2">
+                <v-col align-self="center" class="text-right">
+                  <b class="mr-2">{{ nodeInfo.nodeIP }}</b>
+                  <v-btn @click="copyURL(nodeInfo.nodeIP)" icon>
+                    <v-img src="@/assets/dashboard/Copy.svg"></v-img>
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-card>
+          </v-col>
+          <v-col md="3">
             <v-card
               color="rgba(81, 88, 246, 0.1)"
               class="node_id_card px-2 py-4 rounded-lg"
@@ -441,15 +457,17 @@
               </h6>
               <v-row justify="end" class="mt-2">
                 <v-col align-self="center" class="text-right">
-                  <b class="mr-2">27</b>
-                  <v-btn icon>
+                  <b class="mr-2">
+                    {{ nodeInfo.id }}
+                  </b>
+                  <v-btn icon @click="copyURL(nodeInfo.id)">
                     <v-img src="@/assets/dashboard/Copy.svg"></v-img>
                   </v-btn>
                 </v-col>
               </v-row>
             </v-card>
           </v-col>
-          <v-col md="4">
+          <v-col md="3">
             <v-card
               color="rgba(81, 88, 246, 0.1)"
               class="node_id_card px-2 py-4 rounded-lg"
@@ -460,15 +478,17 @@
               </h6>
               <v-row justify="end" class="mt-2">
                 <v-col align-self="center" class="text-right">
-                  <b class="mr-2">0x003a7...a19F14 </b>
-                  <v-btn icon>
+                  <b class="mr-2"
+                    >{{ addressToShort(nodeInfo.nodeAddress) }}
+                  </b>
+                  <v-btn icon @click="copyURL(nodeInfo.nodeAddress)">
                     <v-img src="@/assets/dashboard/Copy.svg"></v-img>
                   </v-btn>
                 </v-col>
               </v-row>
             </v-card>
           </v-col>
-          <v-col md="4">
+          <v-col md="3">
             <v-card
               color="rgba(81, 88, 246, 0.1)"
               class="node_id_card px-2 py-4 rounded-lg"
@@ -479,8 +499,8 @@
               </h6>
               <v-row justify="end" class="mt-2">
                 <v-col align-self="center" class="text-right">
-                  <b class="mr-2">qMu5WT...a19F14</b>
-                  <v-btn icon>
+                  <b class="mr-2">{{ addressToShort(nodeInfo.peerId) }}</b>
+                  <v-btn icon @click="copyURL(nodeInfo.peerId)">
                     <v-img src="@/assets/dashboard/Copy.svg"></v-img>
                   </v-btn>
                 </v-col>
@@ -488,21 +508,49 @@
             </v-card>
           </v-col>
         </v-row>
-        <v-row justify="center">
-          <v-col md="2">
+        <v-row v-if="e1 === steps.haveNode" justify="center" class="px-5">
+          <v-col md="4">
             <v-card
               color="rgba(81, 88, 246, 0.1)"
-              class="node_id_card px-2 py-4 rounded-lg text-center"
+              class="full-height node_id_card px-2 py-4 rounded-lg text-center"
               elevation="0"
             >
-              <h6 class="text-subtitle-2 font-weight-medium">Uptime</h6>
-              <div class="mt-2">
-                <b>99.8</b>
-              </div>
-              <div class="mt-6">
-                <h6 class="text-subtitle-2 font-weight-medium">Status</h6>
-              </div>
-              <b class="info--text text-h6 font-weight-bold">Online</b>
+              <v-row>
+                <v-col>
+                  <h6 class="text-subtitle-2 font-weight-medium">Uptime</h6>
+                  <div class="mt-2">
+                    <v-progress-circular
+                      :rotate="-180"
+                      :size="100"
+                      :width="15"
+                      :value="Number(nodeInfo.onlinePercent.split('%')[0])"
+                    >
+                      <v-avatar
+                        color="#5158F666"
+                        size="60"
+                        class="font-weight-bold"
+                      >
+                        {{ nodeInfo.onlinePercent }}
+                      </v-avatar>
+                    </v-progress-circular>
+                  </div>
+                </v-col>
+                <v-col>
+                  <div>
+                    <h6 class="text-subtitle-2 font-weight-medium">Status</h6>
+                  </div>
+                  <b class="info--text text-h6 font-weight-bold">{{
+                    nodeIsActive
+                  }}</b>
+                  <v-btn
+                    elevation="0"
+                    color="rgba(81, 88, 246, 0.1)"
+                    class="mt-9 primary--text font-weight-bold"
+                    @click="setnodeDetailsDialogModel(true)"
+                    >Details</v-btn
+                  >
+                </v-col>
+              </v-row>
             </v-card>
           </v-col>
           <v-col md="4">
@@ -516,7 +564,7 @@
                   <h6 class="black--text text-h6">Staked MUON</h6>
                 </v-col>
                 <v-col class="text-right">
-                  <b>1500</b>
+                  <b>{{ nodeInfo.staked }}</b>
                 </v-col>
               </v-row>
               <v-card-actions>
@@ -543,7 +591,7 @@
                   <h6 class="black--text text-h6">Reward</h6>
                 </v-col>
                 <v-col class="text-right">
-                  <b>6.6142 MUON</b>
+                  <b>{{ nodeInfo.rewardAmount }} MUON</b> <br />
                 </v-col>
               </v-row>
               <v-card-actions>
@@ -563,6 +611,12 @@
           </v-col>
         </v-row>
 
+        <nodeDetailsDialog
+          v-if="e1 === steps.haveNode"
+          :nodeInfo="nodeInfo"
+          :sample-dialog-model="nodeDetailsDialogModel"
+          :sample-dialog-model-seter="setnodeDetailsDialogModel"
+        ></nodeDetailsDialog>
         <v-dialog
           v-if="isCorrectChain && isConnected"
           dark
@@ -589,6 +643,19 @@
         </v-dialog>
       </v-responsive>
     </v-main>
+    <v-footer v-if="e1 === steps.haveNode">
+      <v-row justify="end">
+        <v-col cols="5">
+          <v-alert
+            v-for="value in nodeInfo.messages"
+            dismissible
+            :type="value.type"
+          >
+            <p class="text-caption" v-html="value.message"></p>
+          </v-alert>
+        </v-col>
+      </v-row>
+    </v-footer>
     <v-footer padless>
       <v-col cols="12" class="text-center myFont">
         <div class="d-flex align-center text-center justify-center">
@@ -597,6 +664,18 @@
         </div>
       </v-col>
     </v-footer>
+    <v-snackbar
+      text
+      top
+      width="200"
+      min-width="200"
+      color="info"
+      v-model="copySnackbar"
+      :timeout="1500"
+      class="text-center"
+    >
+      Copy to clipboard
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -616,6 +695,7 @@ import { getNodeInfo, checkIP } from "@/utils/fetch";
 import particles from "@/components/Particles";
 import moment from "moment";
 import Header from "@/components/Header.vue";
+import nodeDetailsDialog from "@/components/nodeDetailsDialog.vue";
 const mainChainId = 0x61;
 const STEPS = {
   mint: 1,
@@ -629,11 +709,12 @@ const STEPS = {
 export default {
   name: "App",
 
-  components: { Header, particles },
+  components: { Header, particles, nodeDetailsDialog },
 
   data: () => ({
     testEl: 1, // remove it befor build
     cardLoading: true,
+    copySnackbar: false,
     TR: true,
     themeIsDark: false,
     dialog: false,
@@ -665,6 +746,7 @@ export default {
     nodeIPInput: "",
     checkHaveNodeInterval: Object,
     dialogContext: { text: String },
+    nodeDetailsDialogModel: false,
     minMint: [
       (value) => !!value || "Required.",
       (value) => (value && value <= 1000 && value > 0) || "min:1 , max:1000",
@@ -713,7 +795,6 @@ export default {
     },
     e1(newE1, oldE1) {
       if (newE1 === this.steps.addNode) {
-        this.checkHaveNode();
         this.getTokenTestBalance();
       }
       if (newE1 === this.steps.approve && this.isApproved) {
@@ -730,6 +811,16 @@ export default {
     },
   },
   methods: {
+    setnodeDetailsDialogModel(input) {
+      this.nodeDetailsDialogModel = input;
+    },
+    addressToShort(address) {
+      return (
+        address.slice(0, 4) +
+        "..." +
+        address.slice(this.account.length - 4, this.account.length)
+      );
+    },
     changeTheme() {
       this.themeIsDark = !this.themeIsDark;
     },
@@ -827,7 +918,7 @@ export default {
                 this.nodeIsActive = this.nodeInfo.isNew
                   ? "Your node has been added to the network successfully. Its initialization will take a few minutes."
                   : tests["networking"] && tests["peerInfo"] && tests["status"]
-                  ? "Active"
+                  ? "Online"
                   : "OFF";
                 this.nodeInfo["nodeIP"] = res["node"]["ip"];
                 this.nodeInfo["messages"] = res["messages"];
@@ -837,6 +928,11 @@ export default {
                     "ether"
                   )
                 ).toFixed(4);
+                this.nodeInfo["staked"] = this.web3.utils.fromWei(
+                  res["reward"]["balance"].toLocaleString("fullwide", {
+                    useGrouping: false,
+                  })
+                );
                 this.nodeInfo["rewardAmount"];
                 this.nodeInfo["onlinePercent"] = res["reward"]["onlinePercent"];
                 this.nodeInfo["rewardPercent"] = res["reward"]["rewardPercent"];
@@ -877,8 +973,9 @@ export default {
                     }
                   }
                 }
-                this.downNodeTimes = messages;
+                this.nodeInfo["downNodeTimes"] = messages;
                 console.log(this.downNodeTimes);
+                console.log(this.nodeInfo);
               }
             } else if (res === "node not found") {
               this.haveNode = false;
@@ -1014,6 +1111,14 @@ export default {
       ethereum.request({ method: "eth_chainId" }).then((res) => {
         this.currntIdChain = res;
       });
+    },
+    async copyURL(mytext) {
+      try {
+        await navigator.clipboard.writeText(mytext);
+        this.copySnackbar = true;
+      } catch ($e) {
+        console.log("Cannot copy");
+      }
     },
   },
   created() {
@@ -1276,5 +1381,13 @@ h3 {
     rgba(246, 150, 81, 0.177) -1.84%,
     rgba(246, 81, 121, 0.183) 108.07%
   );
+}
+.v-progress-circular__underlay {
+  stroke: none;
+}
+.v-progress-circular__overlay {
+  stroke: #5158f6;
+  stroke-width: 2px;
+  filter: drop-shadow(0px 0px 1px #5158f6);
 }
 </style>
