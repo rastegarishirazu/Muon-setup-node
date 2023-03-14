@@ -20,15 +20,7 @@
             </v-expansion-panel-header>
             <v-divider></v-divider>
           </v-expansion-panel>
-          <v-expansion-panel readonly>
-            <v-expansion-panel-header>
-              Reward rate <v-spacer></v-spacer> {{ nodeInfo.rewardPercent }}
-              <template v-slot:actions>
-                <v-icon color="primary"> </v-icon>
-              </template>
-            </v-expansion-panel-header>
-            <v-divider></v-divider>
-          </v-expansion-panel>
+
           <v-expansion-panel>
             <v-expansion-panel-header
               >Down times <v-spacer></v-spacer>
@@ -36,7 +28,7 @@
             </v-expansion-panel-header>
             <v-expansion-panel-content>
               <ul>
-                <li v-for="item in nodeInfo.downNodeTimes">
+                <li v-for="(item, i) in nodeInfo.downNodeTimes" :key="i">
                   {{ item }}
                 </li>
               </ul>

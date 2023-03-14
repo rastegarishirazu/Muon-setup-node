@@ -1,7 +1,6 @@
 const helpFunction = async (url) => {
   const controller = new AbortController();
   const id = setTimeout(() => {
-    console.log("my timeout");
     return controller.abort();
   }, 30000);
 
@@ -42,7 +41,6 @@ const getNodeInfo = async (nodeId) => {
       tryed++;
       res = false;
     } else {
-      console.log(res);
       return res;
     }
   }

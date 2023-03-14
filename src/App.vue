@@ -18,7 +18,7 @@
       <h2 v-if="this.haveNode === 'error'" class="text-center mt-5">
         something went wrong. please try again later.
       </h2>
-      <v-row v-if="cardLoading" justify="center">
+      <v-row v-if="cardLoading && isConnected" justify="center">
         <lottie-vue-player
           ref="anim"
           src="https://lottie.host/1fb3a319-394b-446d-8fce-824aa4f1787c/xjtL4nMuB2.json"
@@ -150,202 +150,273 @@
               </v-col>
             </v-row>
           </v-col>
-          <v-col md="4" xl="3">
-            <v-card elevation="0" class="px-2 rounded-lg input-card-min-height">
-              <v-container class="full-height">
-                <v-row class="input-card-min-height d-flex">
-                  <v-col v-if="e1 === steps.mint" cols="12">
-                    <div class="mint-level">
-                      <div
-                        v-if="!haveEnoughTokenTEst"
-                        class="lightPrimaryOrange rounded-lg px-2 mt-5"
-                      >
-                        <v-row>
-                          <v-col cols="2">
-                            <v-icon color="primaryOrange" class="text-h3">
-                              mdi-alert-circle
-                            </v-icon>
-                          </v-col>
-                          <v-col>
-                            <p class="mb-0">
-                              You don't have enough tokens. You need at least
-                              <b> 1000 ALICE</b>
-                            </p>
-                          </v-col>
-                        </v-row>
-                      </div>
-                      <p class="mt-5 font-weight-regular">
-                        Your <b>ALICE</b> token balance:
-                        <b>{{ muonTestTokenShow }}</b>
-                        <v-btn
-                          @click="getTokenTestBalance"
-                          class="ml-2"
-                          icon
-                          color="success"
+          <v-col md="5" xl="3">
+            <v-expand-transition>
+              <v-card
+                elevation="0"
+                class="px-2 rounded-lg input-card-min-height"
+              >
+                <v-container class="full-height">
+                  <v-row class="input-card-min-height d-flex">
+                    <v-col v-if="e1 === steps.mint" cols="12">
+                      <div class="mint-level">
+                        <div
+                          v-if="!haveEnoughTokenTEst"
+                          class="lightPrimaryOrange rounded-lg px-2 mt-5"
                         >
-                          <v-icon color="black" class="gray rounded-lg"
-                            >mdi-refresh</v-icon
-                          >
-                        </v-btn>
-                      </p>
-                      <p class="mt-10">Token amount (min: 1000)</p>
-                      <v-text-field
-                        solo
-                        flat
-                        v-model="mintAmount"
-                        :rules="minMint"
-                        class="rounded-lg"
-                        name="name"
-                        label="Enter Amount you wish to mint"
-                        id="id"
-                        background-color="gray"
-                      ></v-text-field>
-                      <v-row>
-                        <v-col cols="9">
+                          <v-row>
+                            <v-col cols="2">
+                              <v-icon color="primaryOrange" class="text-h3">
+                                mdi-alert-circle
+                              </v-icon>
+                            </v-col>
+                            <v-col>
+                              <p class="mb-0">
+                                You don't have enough tokens. You need at least
+                                <b> 1000 ALICE</b>
+                              </p>
+                            </v-col>
+                          </v-row>
+                        </div>
+                        <p class="mt-5 font-weight-regular">
+                          Your <b>ALICE</b> token balance:
+                          <b>{{ muonTestTokenShow }}</b>
                           <v-btn
-                            block
-                            large
-                            :loading="btnLoading"
-                            :disabled="mintAmount > 1000 || mintAmount < 1"
-                            @click="mint"
-                            color="primary"
-                            elevation="0"
-                            class="rounded-lg"
-                            >Mint ALICE</v-btn
+                            @click="getTokenTestBalance"
+                            class="ml-2"
+                            icon
+                            color="success"
                           >
-                        </v-col>
-                        <v-col cols="3">
-                          <v-tooltip bottom>
-                            <template v-slot:activator="{ on, attrs }">
-                              <v-btn
-                                v-bind="attrs"
-                                v-on="on"
-                                @click="($event) => (e1 = steps.approve)"
-                                block
-                                large
-                                color="gray"
-                                elevation="0"
-                                :disabled="!haveEnoughTokenTEst"
-                              >
-                                <v-icon color="black" class="gray rounded-lg">
-                                  mdi-arrow-right-top-bold
-                                </v-icon>
-                              </v-btn>
-                            </template>
-                            <span>Next Step</span>
-                          </v-tooltip>
-                        </v-col>
-                      </v-row>
-                    </div>
-                  </v-col>
-                  <v-col v-if="e1 === steps.approve" align-self="end" cols="12">
-                    <div class="">
-                      <lottie-vue-player
-                        ref="anim"
-                        src="https://lottie.host/868900ff-6aee-4393-a1e8-b60ad88620b1/T2cHITcdet.json"
-                        :autoplay="true"
-                      />
-                      <p
-                        class="text-center mb-10 font-weight-medium text-subtitle-2"
-                      >
-                        Now you need to approve the <br />
-                        staking contract to use the tokens
-                      </p>
-                      <v-row>
-                        <v-col cols="10"
-                          ><v-btn
-                            :loading="btnLoading"
-                            @click="approve"
-                            elevation="0"
-                            block
-                            color="primary"
-                            >Approve</v-btn
-                          ></v-col
-                        >
-                        <v-col cols="2" class="pl-0"
-                          ><v-btn
-                            @click="checkApproved"
-                            block
-                            color="gray"
-                            elevation="0"
-                          >
-                            <v-icon color="black" class="gray rounded-lg">
-                              mdi-refresh
-                            </v-icon>
-                          </v-btn></v-col
-                        >
-                      </v-row>
-                    </div>
-                  </v-col>
-                  <v-col v-if="e1 === steps.addNode" cols="12">
-                    <div class="lightInfo rounded-lg px-1 mt-2">
-                      <v-row>
-                        <v-col align-self="center" cols="2">
-                          <v-icon color="info" class="text-h3">
-                            mdi-alert-box
-                          </v-icon>
-                        </v-col>
-                        <v-col align-self="center" class="pl-6">
-                          <p class="mb-0 text-caption font-weight-bold">
-                            While adding your node. you will automatically stake
-                            1000 ALICE tokens
-                          </p>
-                        </v-col>
-                      </v-row>
-                    </div>
-                    <v-row>
-                      <v-col cols="12" class="mt-15">
-                        <span>Node IP</span>
+                            <v-icon color="black" class="gray rounded-lg"
+                              >mdi-refresh</v-icon
+                            >
+                          </v-btn>
+                        </p>
+                        <p class="mt-10">Token amount (min: 1000)</p>
                         <v-text-field
-                          v-model="nodeIPInput"
                           solo
                           flat
+                          :disabled="!isConnected || !isCorrectChain"
+                          v-model="mintAmount"
+                          :rules="minMint"
                           class="rounded-lg"
                           name="name"
-                          label="Enter your node IP"
+                          label="Enter Amount you wish to mint"
                           id="id"
                           background-color="gray"
                         ></v-text-field>
-                      </v-col>
-                    </v-row>
-                    <v-row class="mt-8">
-                      <v-col cols="3">
-                        <v-tooltip bottom>
-                          <template v-slot:activator="{ on, attrs }">
+                        <v-row v-if="isConnected && isCorrectChain">
+                          <v-col cols="9">
                             <v-btn
-                              v-bind="attrs"
-                              v-on="on"
-                              @click="($event) => (e1 = steps.mint)"
+                              block
+                              large
+                              :loading="btnLoading"
+                              :disabled="mintAmount > 1000 || mintAmount < 1"
+                              @click="mint"
+                              color="primary"
+                              elevation="0"
+                              class="rounded-lg"
+                              >Mint ALICE</v-btn
+                            >
+                          </v-col>
+                          <v-col cols="3">
+                            <v-tooltip bottom>
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-btn
+                                  v-bind="attrs"
+                                  v-on="on"
+                                  @click="($event) => (e1 = steps.approve)"
+                                  block
+                                  large
+                                  color="gray"
+                                  elevation="0"
+                                  :disabled="!haveEnoughTokenTEst"
+                                >
+                                  <v-icon color="black" class="gray rounded-lg">
+                                    mdi-arrow-right-top-bold
+                                  </v-icon>
+                                </v-btn>
+                              </template>
+                              <span>Next Step</span>
+                            </v-tooltip>
+                          </v-col>
+                        </v-row>
+                        <v-row v-else>
+                          <v-col>
+                            <v-btn
+                              v-if="!isCorrectChain"
+                              @click="switchToCorrectChain"
+                              block
+                              large
+                              color="primary"
+                              >switch network</v-btn
+                            >
+                            <v-btn
+                              v-else
+                              @click="connectToMetamask"
+                              block
+                              large
+                              color="primary"
+                              >connect wallet</v-btn
+                            >
+                          </v-col>
+                        </v-row>
+                      </div>
+                    </v-col>
+                    <v-col
+                      v-if="e1 === steps.approve"
+                      align-self="end"
+                      cols="12"
+                    >
+                      <div class="">
+                        <lottie-vue-player
+                          ref="anim"
+                          src="https://lottie.host/868900ff-6aee-4393-a1e8-b60ad88620b1/T2cHITcdet.json"
+                          :autoplay="true"
+                        />
+                        <p
+                          class="text-center mb-10 font-weight-medium text-subtitle-2"
+                        >
+                          Now you need to approve the <br />
+                          staking contract to use the tokens
+                        </p>
+                        <v-row>
+                          <v-col cols="9"
+                            ><v-btn
+                              :loading="btnLoading"
+                              @click="approve"
+                              elevation="0"
+                              block
+                              large
+                              color="primary"
+                              >Approve</v-btn
+                            ></v-col
+                          >
+                          <v-col cols="3" class="pl-0"
+                            ><v-btn
+                              @click="checkApproved"
                               block
                               large
                               color="gray"
                               elevation="0"
                             >
                               <v-icon color="black" class="gray rounded-lg">
-                                mdi-arrow-left-top-bold
+                                mdi-refresh
                               </v-icon>
-                            </v-btn>
-                          </template>
-                          <span>Back to mint</span>
-                        </v-tooltip>
-                      </v-col>
-                      <v-col cols="9" class="">
-                        <v-btn
-                          :loading="btnLoading"
-                          elevation="0"
-                          block
-                          large
-                          color="primary"
-                          class="font-weight-bold"
-                        >
-                          Add node
-                        </v-btn>
-                      </v-col>
-                    </v-row>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card>
+                            </v-btn></v-col
+                          >
+                        </v-row>
+                      </div>
+                    </v-col>
+                    <v-col v-if="e1 === steps.addNode" cols="12">
+                      <div class="lightInfo rounded-lg px-1 mt-2">
+                        <v-row>
+                          <v-col align-self="center" cols="2">
+                            <v-icon color="info" class="text-h3">
+                              mdi-alert-box
+                            </v-icon>
+                          </v-col>
+                          <v-col align-self="center" class="pl-6">
+                            <p class="mb-0 text-caption font-weight-bold">
+                              While adding your node. you will automatically
+                              stake 1000 ALICE tokens
+                            </p>
+                          </v-col>
+                        </v-row>
+                      </div>
+                      <v-row>
+                        <v-col cols="12" class="mt-15">
+                          <span>Node IP</span>
+                          <v-text-field
+                            v-model="nodeIPInput"
+                            @input="getNodeAddressPeerIdByIP(nodeIPInput)"
+                            solo
+                            flat
+                            class="rounded-lg"
+                            name="name"
+                            label="Enter your node IP"
+                            id="id"
+                            background-color="gray"
+                          ></v-text-field>
+                          <v-row justify="center" v-if="ipCheckLoading">
+                            <v-col cols="8">
+                              <lottie-vue-player
+                                ref="anim"
+                                src="https://lottie.host/1fb3a319-394b-446d-8fce-824aa4f1787c/xjtL4nMuB2.json"
+                                :autoplay="true"
+                                :loop="true"
+                                height="100px"
+                                class="transparent"
+                              />
+                            </v-col>
+                          </v-row>
+                          <div v-else-if="nodeAddress && peerId">
+                            <v-alert type="success" :value="true">
+                              Node address: {{ addressToShort(nodeAddress) }}
+                              <br />
+                              Peer Id:{{ addressToShort(peerId) }}
+                            </v-alert>
+                          </div>
+                          <div v-else-if="stakerAddress">
+                            <v-alert
+                              type="info"
+                              :value="true"
+                              class="text-caption"
+                            >
+                              This node has already been added to this IP.
+                              <br />
+                              Staker address:
+                              {{ addressToShort(stakerAddress) }}
+                            </v-alert>
+                          </div>
+                          <div v-else-if="!isIPValid && nodeIPInput">
+                            <v-alert type="error" :value="true">
+                              the node is not reachable</v-alert
+                            >
+                          </div>
+                        </v-col>
+                      </v-row>
+                      <v-row class="mt-8">
+                        <v-col cols="3">
+                          <v-tooltip bottom>
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-btn
+                                v-bind="attrs"
+                                v-on="on"
+                                @click="($event) => (e1 = steps.mint)"
+                                block
+                                large
+                                color="gray"
+                                elevation="0"
+                              >
+                                <v-icon color="black" class="gray rounded-lg">
+                                  mdi-arrow-left-top-bold
+                                </v-icon>
+                              </v-btn>
+                            </template>
+                            <span>Back to mint</span>
+                          </v-tooltip>
+                        </v-col>
+                        <v-col cols="9" class="">
+                          <v-btn
+                            :disabled="!isIPValid || stakerAddress"
+                            @click="getNodeAddressPeerIdByIP(nodeIPInput)"
+                            :loading="btnLoading"
+                            elevation="0"
+                            block
+                            large
+                            color="primary"
+                            class="font-weight-bold"
+                          >
+                            Add node
+                          </v-btn>
+                        </v-col>
+                      </v-row>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card>
+            </v-expand-transition>
           </v-col>
         </v-row>
         <v-row
@@ -357,13 +428,12 @@
               <v-card
                 v-show="!cardLoading && e1 >= steps.newNode"
                 width="100%"
-                height="500px"
                 transition="slide-x-transition"
                 elevation="0"
                 class="px-2 rounded-lg"
               >
                 <v-row justify="center" v-if="e1 === steps.newNode">
-                  <v-col md="4" class="text-center" align-self="end">
+                  <v-col md="6" class="text-center" align-self="end">
                     <lottie-vue-player
                       ref="anim"
                       src="https://lottie.host/d93bca6a-cfea-4e40-a6b9-4d191832b2ef/uWgbTRaCzm.json"
@@ -571,6 +641,7 @@
                 <v-row justify="end" class="mt-10">
                   <v-col align-self="center" class="text-right">
                     <v-btn
+                      disabled
                       elevation="0"
                       color="rgba(81, 88, 246, 0.1)"
                       class="primary--text font-weight-bold"
@@ -598,11 +669,12 @@
                 <v-row justify="end" class="mt-10">
                   <v-col align-self="center" class="text-right">
                     <v-btn
+                      disabled
                       elevation="0"
                       color="#FEEFE9"
                       class="primaryOrange--text font-weight-bold text-subtitle-2"
                     >
-                      Withdraw and exit
+                      Withdraw
                     </v-btn>
                   </v-col>
                 </v-row>
@@ -647,7 +719,8 @@
       <v-row justify="end">
         <v-col cols="5">
           <v-alert
-            v-for="value in nodeInfo.messages"
+            v-for="(value, i) in nodeInfo.messages"
+            :key="i"
             dismissible
             :type="value.type"
           >
@@ -747,6 +820,9 @@ export default {
     checkHaveNodeInterval: Object,
     dialogContext: { text: String },
     nodeDetailsDialogModel: false,
+    stakerAddress: "",
+    isIPValid: true,
+    ipCheckLoading: false,
     minMint: [
       (value) => !!value || "Required.",
       (value) => (value && value <= 1000 && value > 0) || "min:1 , max:1000",
@@ -758,6 +834,11 @@ export default {
     ],
   }),
   watch: {
+    haveNode(newState, oldState) {
+      if (!newState) {
+        this.e1 = this.steps.mint;
+      }
+    },
     themeIsDark(newState, oldState) {
       this.$vuetify.theme.dark = newState;
       localStorage.themeIsDark = newState;
@@ -856,6 +937,7 @@ export default {
       mint(this.account, this.web3, this.mintAmount)
         .then((res) => {
           this.getTokenTestBalance();
+          this.e1 = this.steps.approve;
         })
         .finally(() => {
           this.btnLoading = false;
@@ -974,11 +1056,10 @@ export default {
                   }
                 }
                 this.nodeInfo["downNodeTimes"] = messages;
-                console.log(this.downNodeTimes);
-                console.log(this.nodeInfo);
               }
             } else if (res === "node not found") {
               this.haveNode = false;
+              this.e1 = this.steps.mint;
             } else {
               this.haveNode = "error";
             }
@@ -988,43 +1069,53 @@ export default {
           });
       }
     },
+    getNodeAddressPeerIdByIP(ip) {
+      this.ipCheckLoading = true;
+      let temp = ip.split("http://");
+      console.log(temp);
+      if (temp.length > 1) {
+        ip = temp[1].split("/")[0];
+      }
+      checkIP(ip)
+        .then((res) => {
+          if (res.success) {
+            if ("staker" in res.result) {
+              console.log("yes");
+              this.stakerAddress = res.result.staker;
+              this.nodeAddress = "";
+              this.peerId = "";
+            } else {
+              this.nodeAddress = res.result.nodeAddress;
+              this.peerId = res.result.peerId;
+              this.stakerAddress = "";
+              this.isIPValid = true;
+            }
+          } else {
+            this.isIPValid = false;
+            this.nodeAddress = "";
+            this.peerId = "";
+            this.stakerAddress = "";
+          }
+        })
+        .finally(() => {
+          this.ipCheckLoading = false;
+        });
+    },
     addNode() {
       this.btnLoading = true;
-      checkIP(this.nodeIPInput).then((res) => {
-        if (res && res.success) {
-          newAddNode(
-            this.account,
-            this.web3,
-            res.result.nodeAddress,
-            res.result.peerId
-          )
-            .then(() => {
-              this.checkHaveNode();
-              this.getTokenTestBalance();
-            })
-            .catch((err) => {
-              console.log(err);
-            })
-            .finally(() => {
-              this.btnLoading = true;
-            });
-        } else if (res) {
-          this.dialogContext.text = `
-          <h4
-                  class="myFont blackText--text text-h6 mt-10 underlite_dialog"
-                >
-                  wrong!
-                </h4>
-                <p class="myFont blackText--text text-center mt-5">
-                  ${res.result.message}
-                </p>
-          `;
-          this.dialog = true;
-          this.btnLoading = false;
-        } else {
-          this.haveNode = "error";
-        }
-      });
+
+      newAddNode(this.account, this.web3, this.nodeAddress, this.peerId)
+        .then(() => {
+          this.checkHaveNode();
+          this.getTokenTestBalance();
+          this.e1 = this.steps.newNode;
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          this.btnLoading = true;
+        });
     },
     stake() {
       stake(this.account, this.web3, this.stakeAmount);
@@ -1122,7 +1213,6 @@ export default {
     },
   },
   created() {
-    console.log("v1.0.2");
     document.title = "Join ALICE network";
     this.web3 = new Web3(window.ethereum);
     this.getChainId();
@@ -1389,5 +1479,8 @@ h3 {
   stroke: #5158f6;
   stroke-width: 2px;
   filter: drop-shadow(0px 0px 1px #5158f6);
+}
+.v-btn .v-progress-circular__overlay {
+  stroke: white;
 }
 </style>
