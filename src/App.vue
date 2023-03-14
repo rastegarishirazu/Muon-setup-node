@@ -612,6 +612,7 @@
                   <b class="info--text text-h6 font-weight-bold">{{
                     nodeIsActive
                   }}</b>
+                  <br />
                   <v-btn
                     elevation="0"
                     color="rgba(81, 88, 246, 0.1)"
