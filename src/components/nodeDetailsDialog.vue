@@ -20,6 +20,15 @@
             </v-expansion-panel-header>
             <v-divider></v-divider>
           </v-expansion-panel>
+          <v-expansion-panel v-if="nodeInfo.endTime" readonly>
+            <v-expansion-panel-header
+              >Exited at <v-spacer></v-spacer>{{ nodeInfo.endTime }}
+              <template v-slot:actions>
+                <v-icon color="primary"> </v-icon>
+              </template>
+            </v-expansion-panel-header>
+            <v-divider></v-divider>
+          </v-expansion-panel>
 
           <v-expansion-panel>
             <v-expansion-panel-header

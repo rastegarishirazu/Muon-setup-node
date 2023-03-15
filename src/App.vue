@@ -590,6 +590,7 @@
                   <h6 class="text-subtitle-2 font-weight-medium">Uptime</h6>
                   <div class="mt-2">
                     <v-progress-circular
+                      v-if="nodeIsActive == 'Active'"
                       :rotate="-180"
                       :size="100"
                       :width="15"
@@ -603,6 +604,9 @@
                         {{ nodeInfo.onlinePercent }}
                       </v-avatar>
                     </v-progress-circular>
+                    <v-icon class="text-h2" color="primary" v-else
+                      >mdi-exit-run</v-icon
+                    >
                   </div>
                 </v-col>
                 <v-col>
@@ -971,7 +975,7 @@ export default {
       if (this.account) {
         this.cardLoading = true;
         getNodeInfo(this.account)
-          // getNodeInfo(9099)
+          // getNodeInfo(28)
           .then((res) => {
             res = res["result"];
             if (res && res != "node not found") {
@@ -992,14 +996,18 @@ export default {
               this.nodeInfo["nodeAddress"] = res["node"]["nodeAddress"];
               this.nodeInfo["id"] = res["node"]["id"];
               this.nodeInfo["peerId"] = res["node"]["peerId"];
-              this.nodeInfo["startTime"] = new Date(
+              this.nodeInfo["startTime"] = moment(
                 res["node"]["startTime"] * 1000
-              )
-                .toISOString()
-                .split("T")[0];
-              this.nodeInfo["entTime"] = new Date(res["node"]["endTime"] * 1000)
-                .toISOString()
-                .split("T")[0];
+              );
+              if (res["node"]["endTime"]) {
+                this.nodeInfo["endTime"] = moment(
+                  res["node"]["endTime"] * 1000
+                );
+                this.nodeIsActive = "Exited";
+              } else {
+                this.nodeInfo["endTime"] = false;
+              }
+
               if (this.nodeInfo["active"]) {
                 this.nodeIsActive = this.nodeInfo.isNew
                   ? "Your node has been added to the network successfully. Its initialization will take a few minutes."
