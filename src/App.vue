@@ -350,14 +350,14 @@
                               />
                             </v-col>
                           </v-row>
-                          <div v-else-if="nodeAddress && peerId">
+                          <div v-else-if="nodeIpStatus === 'success'">
                             <v-alert type="success" :value="true">
                               Node address: {{ addressToShort(nodeAddress) }}
                               <br />
                               Peer Id:{{ addressToShort(peerId) }}
                             </v-alert>
                           </div>
-                          <div v-else-if="stakerAddress">
+                          <div v-else-if="nodeIpStatus === 'info'">
                             <v-alert
                               type="info"
                               :value="true"
@@ -369,7 +369,7 @@
                               {{ addressToShort(stakerAddress) }}
                             </v-alert>
                           </div>
-                          <div v-else-if="!isIPValid && nodeIPInput">
+                          <div v-else-if="nodeIpStatus === 'error'">
                             <v-alert type="error" :value="true">
                               the node is not reachable</v-alert
                             >
@@ -775,7 +775,7 @@ import moment from "moment";
 import Header from "@/components/Header.vue";
 import nodeDetailsDialog from "@/components/nodeDetailsDialog.vue";
 import detectEthereumProvider from "@metamask/detect-provider";
-
+import { ValidateIPaddress } from "@/utils/formatChecker";
 const mainChainId = 0x61;
 const STEPS = {
   mint: 1,
@@ -793,6 +793,7 @@ export default {
 
   data: () => ({
     provider: null,
+    nodeIpStatus: "",
     testEl: 1, // remove it befor build
     cardLoading: true,
     copySnackbar: false,
@@ -1084,36 +1085,47 @@ export default {
       if (ip === "aji maji la taraji") {
         this.e1 = 4;
       } else {
-        this.ipCheckLoading = true;
         let temp = ip.split("http://");
         console.log(temp);
         if (temp.length > 1) {
           ip = temp[1].split("/")[0];
+          ip = ip.split(":")[0];
+          console.log(ip);
         }
-        checkIP(ip)
-          .then((res) => {
-            if (res.success) {
-              if ("staker" in res.result) {
-                console.log("yes");
-                this.stakerAddress = res.result.staker;
+        if (ValidateIPaddress(ip)) {
+          this.ipCheckLoading = true;
+          checkIP(ip)
+            .then((res) => {
+              if (res.success) {
+                if ("staker" in res.result) {
+                  this.stakerAddress = res.result.staker;
+                  this.nodeAddress = "";
+                  this.peerId = "";
+                  this.nodeIpStatus = "info";
+                } else {
+                  this.nodeAddress = res.result.address;
+                  this.peerId = res.result.peerId;
+                  this.stakerAddress = false;
+                  this.isIPValid = true;
+                  this.nodeIpStatus = "success";
+                  console.log("shod");
+                }
+              } else {
+                this.isIPValid = false;
                 this.nodeAddress = "";
                 this.peerId = "";
-              } else {
-                this.nodeAddress = res.result.nodeAddress;
-                this.peerId = res.result.peerId;
                 this.stakerAddress = "";
-                this.isIPValid = true;
+                this.nodeIpStatus = "error";
+                console.log("bad");
               }
-            } else {
-              this.isIPValid = false;
-              this.nodeAddress = "";
-              this.peerId = "";
-              this.stakerAddress = "";
-            }
-          })
-          .finally(() => {
-            this.ipCheckLoading = false;
-          });
+            })
+            .finally(() => {
+              this.ipCheckLoading = false;
+            });
+        } else {
+          this.nodeIpStatus = "";
+          this.ipCheckLoading = false;
+        }
       }
     },
     addNode() {
