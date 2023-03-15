@@ -30,7 +30,7 @@
             <v-divider></v-divider>
           </v-expansion-panel>
 
-          <v-expansion-panel>
+          <v-expansion-panel v-if="nodeInfo.downNodeTimes">
             <v-expansion-panel-header
               >Down times <v-spacer></v-spacer>
               {{ nodeInfo.downNodeTimes.length }} time(s)

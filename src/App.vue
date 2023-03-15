@@ -590,7 +590,7 @@
                   <h6 class="text-subtitle-2 font-weight-medium">Uptime</h6>
                   <div class="mt-2">
                     <v-progress-circular
-                      v-if="nodeIsActive == 'Active'"
+                      v-if="nodeIsActive != 'Exited'"
                       :rotate="-180"
                       :size="100"
                       :width="15"
@@ -1007,6 +1007,19 @@ export default {
               } else {
                 this.nodeInfo["endTime"] = false;
               }
+              this.nodeInfo["rewardAmount"] = Number(
+                this.web3.utils.fromWei(
+                  String(res["reward"]["earned"]),
+                  "ether"
+                )
+              ).toFixed(4);
+              this.nodeInfo["nodeIP"] = res["node"]["ip"];
+              this.nodeInfo["staked"] = this.web3.utils.fromWei(
+                res["reward"]["balance"].toLocaleString("fullwide", {
+                  useGrouping: false,
+                })
+              );
+              this.nodeInfo["onlinePercent"] = res["reward"]["onlinePercent"];
 
               if (this.nodeInfo["active"]) {
                 this.nodeIsActive = this.nodeInfo.isNew
@@ -1014,21 +1027,7 @@ export default {
                   : tests["networking"] && tests["peerInfo"] && tests["status"]
                   ? "Online"
                   : "OFF";
-                this.nodeInfo["nodeIP"] = res["node"]["ip"];
                 this.nodeInfo["messages"] = res["messages"];
-                this.nodeInfo["rewardAmount"] = Number(
-                  this.web3.utils.fromWei(
-                    String(res["reward"]["earned"]),
-                    "ether"
-                  )
-                ).toFixed(4);
-                this.nodeInfo["staked"] = this.web3.utils.fromWei(
-                  res["reward"]["balance"].toLocaleString("fullwide", {
-                    useGrouping: false,
-                  })
-                );
-                this.nodeInfo["rewardAmount"];
-                this.nodeInfo["onlinePercent"] = res["reward"]["onlinePercent"];
                 this.nodeInfo["rewardPercent"] = res["reward"]["rewardPercent"];
                 this.nodeInfo["history"] = res["history"].reverse();
 
