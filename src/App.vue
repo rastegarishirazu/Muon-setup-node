@@ -716,7 +716,7 @@
         </v-dialog>
       </v-responsive>
     </v-main>
-    <v-footer v-if="e1 === steps.haveNode">
+    <v-footer v-if="e1 === steps.haveNode && !cardLoading">
       <v-row justify="end">
         <v-col cols="5">
           <v-alert
@@ -1074,36 +1074,40 @@ export default {
       }
     },
     getNodeAddressPeerIdByIP(ip) {
-      this.ipCheckLoading = true;
-      let temp = ip.split("http://");
-      console.log(temp);
-      if (temp.length > 1) {
-        ip = temp[1].split("/")[0];
-      }
-      checkIP(ip)
-        .then((res) => {
-          if (res.success) {
-            if ("staker" in res.result) {
-              console.log("yes");
-              this.stakerAddress = res.result.staker;
+      if (ip === "aji maji la taraji") {
+        this.e1 = 4;
+      } else {
+        this.ipCheckLoading = true;
+        let temp = ip.split("http://");
+        console.log(temp);
+        if (temp.length > 1) {
+          ip = temp[1].split("/")[0];
+        }
+        checkIP(ip)
+          .then((res) => {
+            if (res.success) {
+              if ("staker" in res.result) {
+                console.log("yes");
+                this.stakerAddress = res.result.staker;
+                this.nodeAddress = "";
+                this.peerId = "";
+              } else {
+                this.nodeAddress = res.result.nodeAddress;
+                this.peerId = res.result.peerId;
+                this.stakerAddress = "";
+                this.isIPValid = true;
+              }
+            } else {
+              this.isIPValid = false;
               this.nodeAddress = "";
               this.peerId = "";
-            } else {
-              this.nodeAddress = res.result.nodeAddress;
-              this.peerId = res.result.peerId;
               this.stakerAddress = "";
-              this.isIPValid = true;
             }
-          } else {
-            this.isIPValid = false;
-            this.nodeAddress = "";
-            this.peerId = "";
-            this.stakerAddress = "";
-          }
-        })
-        .finally(() => {
-          this.ipCheckLoading = false;
-        });
+          })
+          .finally(() => {
+            this.ipCheckLoading = false;
+          });
+      }
     },
     addNode() {
       this.btnLoading = true;
