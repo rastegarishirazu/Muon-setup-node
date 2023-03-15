@@ -770,6 +770,8 @@ import particles from "@/components/Particles";
 import moment from "moment";
 import Header from "@/components/Header.vue";
 import nodeDetailsDialog from "@/components/nodeDetailsDialog.vue";
+import detectEthereumProvider from "@metamask/detect-provider";
+
 const mainChainId = 0x61;
 const STEPS = {
   mint: 1,
@@ -786,6 +788,7 @@ export default {
   components: { Header, particles, nodeDetailsDialog },
 
   data: () => ({
+    provider: null,
     testEl: 1, // remove it befor build
     cardLoading: true,
     copySnackbar: false,
@@ -1133,8 +1136,10 @@ export default {
         this.isCorrectChain = true;
         ethereum
           .request({ method: "eth_accounts" })
-          .then((res) => {
-            if (res.length && this.isCorrectChain) {
+          .then((accounts) => {
+            if (accounts.length === 0) {
+              console.log("Please connect to MetaMask.");
+            } else if (accounts.length && this.isCorrectChain) {
               this.connectToMetamask();
             }
           })
@@ -1191,12 +1196,23 @@ export default {
         })
         .then((res) => {
           // this.cardLoading = true;
-          const account = res[0];
-          this.account = account;
-          this.checkApproved();
-          this.getNativeBalance();
-          this.checkHaveNode();
-          this.getTokenTestBalance();
+          if (res.length === 0) {
+            console.log("Please connect to MetaMask.");
+          } else {
+            const account = res[0];
+            this.account = account;
+            this.checkApproved();
+            this.getNativeBalance();
+            this.checkHaveNode();
+            this.getTokenTestBalance();
+          }
+        })
+        .catch((err) => {
+          if (err.code === 4001) {
+            console.log("Plase connect to MetaMask");
+          } else {
+            console.error(err);
+          }
         });
     },
     async getChainId() {
@@ -1212,9 +1228,23 @@ export default {
         console.log("Cannot copy");
       }
     },
+    startApp(provider) {
+      // If the provider returned by detectEthereumProvider is not the same as
+      // window.ethereum, something is overwriting it, perhaps another wallet.
+      if (provider !== window.ethereum) {
+        console.error("Do you have multiple wallets installed?");
+      }
+      // Access the decentralized web!
+    },
   },
-  created() {
+  async created() {
     document.title = "Join ALICE network";
+    this.provider = await detectEthereumProvider();
+    if (this.provider) {
+      this.startApp(this.provider); // Initialize your app
+    } else {
+      console.log("Please install MetaMask!");
+    }
     this.web3 = new Web3(window.ethereum);
     this.getChainId();
   },
@@ -1238,18 +1268,23 @@ export default {
   },
   mounted() {
     ethereum.on("accountsChanged", async (accounts) => {
-      const address = accounts[0];
-      this.account = address;
-      this.checkApproved();
-      this.getTokenTestBalance();
-      this.getNativeBalance();
-      this.checkHaveNode();
+      if (accounts.length === 0) {
+        console.log("Please connect to MetaMask.");
+      } else {
+        const address = accounts[0];
+        this.account = address;
+        this.checkApproved();
+        this.getTokenTestBalance();
+        this.getNativeBalance();
+        this.checkHaveNode();
+      }
     });
 
     ethereum.on("disconnect", () => {
       this.isConnected = false;
     });
     ethereum.on("chainChanged", (chainId) => {
+      window.location.reload();
       this.currntIdChain = chainId;
     });
     this.checkNetwork();
