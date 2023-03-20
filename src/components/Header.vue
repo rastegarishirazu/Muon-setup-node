@@ -7,6 +7,7 @@
       <v-col offset-md="4" md="4" sm="4" cols="6">
         <div
           :class="[
+            'float-right',
             'card',
             'px-2',
             'py-5',
@@ -15,7 +16,7 @@
             isConnected ? 'isConnected' : '',
           ]"
         >
-          <div>
+          <v-responsive max-width="100px">
             <img
               src="../assets/header/Muon-token-icon.svg"
               width="24px"
@@ -26,7 +27,7 @@
             <span class="balance_title text-caption ml-2 blackText--text">
               Balance:
             </span>
-          </div>
+          </v-responsive>
           <div>
             <span class="balance_amount mx-1">{{ aliceBalance }}</span>
             <span class="alice">ALICE</span>
@@ -82,6 +83,7 @@ export default {
   background-color: #fff;
 }
 .card {
+  width: fit-content;
   height: 30px;
   background: #ff58f61a;
   border-radius: 8px;
@@ -139,5 +141,8 @@ export default {
   /* Primary */
 
   color: #5158f6;
+}
+.float-right {
+  float: right;
 }
 </style>
