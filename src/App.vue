@@ -52,6 +52,7 @@
               <v-col md="3" class="text-center">
                 <div
                   :class="[
+                    'steps_title',
                     'setp_box',
                     'height-step-box',
                     'text-center',
@@ -74,6 +75,7 @@
                 </div>
                 <div
                   :class="[
+                    'steps_title',
                     'setp_box',
                     'height-step-box',
                     'text-center',
@@ -95,6 +97,7 @@
                 </div>
                 <div
                   :class="[
+                    'steps_title',
                     'setp_box',
                     'height-step-box',
                     'text-center',
@@ -111,25 +114,25 @@
                 <div class="height-step-box">
                   <h4
                     :class="[
-                      'text-subtitle-1',
-                      { 'font-weight-black': e1 === steps.mint },
+                      'steps_title',
+                      { steps_title_active: e1 === steps.mint },
                     ]"
                   >
                     Mint 1000 Alice Tokens
                   </h4>
-                  <h5 class="font-weight-regular">to your wallet</h5>
+                  <h5 class="steps_sub_title">to your wallet</h5>
                 </div>
                 <div class="height-steps"></div>
                 <div class="height-step-box">
                   <h4
                     :class="[
-                      'text-subtitle-1',
-                      { 'font-weight-black': e1 == steps.approve },
+                      'steps_title',
+                      { steps_title_active: e1 == steps.approve },
                     ]"
                   >
                     Approve the Staking Contract
                   </h4>
-                  <h5 class="font-weight-regular">
+                  <h5 class="steps_sub_title">
                     to be able to deposit your tokens
                   </h5>
                 </div>
@@ -137,13 +140,13 @@
                 <div class="height-step-box">
                   <h4
                     :class="[
-                      'text-subtitle-1',
-                      { 'font-weight-black': e1 == steps.addNode },
+                      'steps_title',
+                      { steps_title_active: e1 == steps.addNode },
                     ]"
                   >
                     Add your Node to the Network
                   </h4>
-                  <h5 class="font-weight-regular">
+                  <h5 class="steps_sub_title">
                     and start securing the network!
                   </h5>
                 </div>
@@ -1541,5 +1544,18 @@ h3 {
 }
 .v-btn .v-progress-circular__overlay {
   stroke: white;
+}
+.steps_title {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+}
+.steps_sub_title {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+}
+.steps_title_active {
+  font-weight: 600;
 }
 </style>

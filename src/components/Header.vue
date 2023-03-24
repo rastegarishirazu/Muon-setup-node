@@ -1,10 +1,10 @@
 <template>
   <div class="header">
     <v-row class="px-10 pb-md-0 py-3">
-      <v-col md="2" sm="5" cols="12" class="text-center">
+      <v-col md="2" sm="3" cols="12" class="text-left">
         <img src="../assets/muon-logo1.svg" width="120px" alt="" />
       </v-col>
-      <v-col offset-md="4" md="4" sm="4" cols="6">
+      <v-col offset-md="4" md="4" sm="6" cols="7">
         <div
           :class="[
             'float-right',
@@ -34,7 +34,7 @@
           </div>
         </div>
       </v-col>
-      <v-col md="2" sm="3" cols="6">
+      <v-col md="2" sm="3" cols="5">
         <v-btn
           v-if="!isCorrectChain"
           block
