@@ -319,7 +319,7 @@
                               mdi-alert-box
                             </v-icon>
                           </v-col>
-                          <v-col align-self="center" class="pl-6">
+                          <v-col align-self="center" class="pl-1">
                             <p class="mb-0 text-caption font-weight-bold">
                               While adding your node. you will automatically
                               stake 1000 ALICE tokens
