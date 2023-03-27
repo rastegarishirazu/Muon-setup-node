@@ -402,8 +402,8 @@
                         </v-col>
                         <v-col cols="9" class="">
                           <v-btn
-                            :disabled="!isIPValid || stakerAddress"
-                            @click="getNodeAddressPeerIdByIP(nodeIPInput)"
+                            :disabled="nodeIpStatus != 'success'"
+                            @click="addNode"
                             :loading="btnLoading"
                             elevation="0"
                             block
