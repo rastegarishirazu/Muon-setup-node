@@ -357,7 +357,7 @@
                             <v-alert type="success" :value="true">
                               Node address: {{ addressToShort(nodeAddress) }}
                               <br />
-                              Peer Id:{{ addressToShort(peerId) }}
+                              Peer Id: {{ addressToShort(peerId) }}
                             </v-alert>
                           </div>
                           <div v-else-if="nodeIpStatus === 'info'">
