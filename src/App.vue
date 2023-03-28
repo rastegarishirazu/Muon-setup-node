@@ -451,50 +451,58 @@
                     <v-row justify="center">
                       <v-col
                         cols="9"
-                        class="text-right pr-0"
+                        class="text-center pr-0"
                         align-self="center"
                       >
-                        <h5 class="primary--text text-body-1">
-                          Preparing your dashboard
-                        </h5>
-                      </v-col>
-                      <v-col cols="3" class="text-left pl-0">
+                        <div>
+                          <b class="primary--text text-body-1">
+                            Preparing your dashboard
+                          </b>
+                        </div>
+
                         <lottie-vue-player
                           ref="anim"
                           src="https://lottie.host/1fb3a319-394b-446d-8fce-824aa4f1787c/xjtL4nMuB2.json"
                           :autoplay="true"
                           :loop="true"
-                          class="transparent ml-n2"
+                          playerSize="minimal"
+                          height="50px"
+                          :style="{ width: '100%', heigh: '50px' }"
+                          class="transparent ml-n2 width_contant"
                         />
                       </v-col>
                     </v-row>
                   </v-col>
                 </v-row>
-                <v-row
+                <v-responsive
                   v-if="e1 === steps.beforHaveNode"
-                  class="full-height"
-                  justify="center"
+                  class="mt-10"
+                  height="70vh"
                 >
-                  <v-col
-                    md="4"
-                    align-self="center"
-                    height="500px"
-                    class="text-center"
-                  >
-                    <h5 class="info--text text-body-1">
-                      Your dashboard is ready!
-                      <v-icon color="green">mdi-check</v-icon>
-                    </h5>
-                    <v-btn
-                      block
-                      large
-                      color="primary"
-                      class="mt-5 font-weight-bold rounded-lg"
-                      elevation="0"
-                      >Launch my dashboard</v-btn
+                  <v-row class="full-height" justify="center">
+                    <v-col
+                      cols="4"
+                      md="4"
+                      align-self="center"
+                      height="500px"
+                      class="text-center"
                     >
-                  </v-col>
-                </v-row>
+                      <h5 class="info--text text-body-1">
+                        Your dashboard is ready!
+                        <v-icon color="green">mdi-check</v-icon>
+                      </h5>
+                      <v-btn
+                        block
+                        large
+                        @click="e1 = steps.haveNode"
+                        color="primary"
+                        class="mt-5 font-weight-bold rounded-lg"
+                        elevation="0"
+                        >Launch my dashboard</v-btn
+                      >
+                    </v-col>
+                  </v-row>
+                </v-responsive>
               </v-card>
             </v-scroll-x-reverse-transition>
           </v-col>
@@ -896,7 +904,7 @@ export default {
       if (newE1 === this.steps.newNode) {
         this.checkHaveNodeInterval = setInterval(
           this.checkHaveNode,
-          3 * 60 * 1000
+          1 * 60 * 1000
         );
       } else {
         clearInterval(this.checkHaveNodeInterval);
@@ -911,7 +919,7 @@ export default {
       return (
         address.slice(0, 4) +
         "..." +
-        address.slice(this.account.length - 4, this.account.length)
+        address.slice(address.length - 4, address.length)
       );
     },
     changeTheme() {
@@ -1089,15 +1097,18 @@ export default {
         this.e1 = 4;
       } else {
         let temp = ip.split("http://");
-        console.log(temp);
-        if (temp.length > 1) {
-          ip = temp[1].split("/")[0];
-          ip = ip.split(":")[0];
-          console.log(ip);
+        ip = temp.length > 1 ? temp[1].split("/")[0] : temp[0].split("/")[0];
+        let port = ip.split(":");
+        if (port.length) {
+          ip = port[0];
+          port = ":" + port[1];
+        } else {
+          port = "";
         }
         if (ValidateIPaddress(ip)) {
           this.ipCheckLoading = true;
-          checkIP(ip)
+          console.log(ip + port);
+          checkIP(ip + port)
             .then((res) => {
               if (res.success) {
                 if ("staker" in res.result) {
@@ -1111,7 +1122,6 @@ export default {
                   this.stakerAddress = false;
                   this.isIPValid = true;
                   this.nodeIpStatus = "success";
-                  console.log("shod");
                 }
               } else {
                 this.isIPValid = false;
@@ -1126,7 +1136,7 @@ export default {
               this.ipCheckLoading = false;
             });
         } else {
-          this.nodeIpStatus = "";
+          this.nodeIpStatus = "invalidIp";
           this.ipCheckLoading = false;
         }
       }
@@ -1557,5 +1567,9 @@ h3 {
 }
 .steps_title_active {
   font-weight: 600;
+}
+.width_contant {
+  width: fit-content !important;
+  display: inline-block;
 }
 </style>
