@@ -14,7 +14,7 @@
       :isConnected="isConnected"
     ></Header>
 
-    <v-main class="pb-10">
+    <v-main class="">
       <h2 v-if="this.haveNode === 'error'" class="text-center mt-5">
         something went wrong. please try again later.
       </h2>
@@ -32,11 +32,11 @@
         v-else-if="haveNode != 'error'"
         width="100%"
         overflow-hidden
-        class="overflow-hidden px-5 mt-4"
+        class="overflow-hidden px-5"
       >
         <v-row
           v-if="e1 < steps.newNode || e1 === steps.newNode"
-          class="mt-2"
+          class=""
           justify="center"
         >
           <v-col md="4">
@@ -55,7 +55,7 @@
         <v-row v-if="e1 <= steps.addNode" justify="center" class="mt-10">
           <v-col md="5" xl="3" align-self="center">
             <v-row>
-              <v-col md="2" class="text-center">
+              <v-col md="3" class="text-center">
                 <div
                   :class="[
                     'steps_title',
@@ -67,7 +67,6 @@
                     'primaryOrange',
                     'white--text',
                   ]"
-                  width="100%"
                 >
                   Step 1
                 </div>
@@ -918,7 +917,7 @@ export default {
       }
       if (newE1 === this.steps.newNode) {
         this.checkHaveNodeInterval = setInterval(
-          // this.checkHaveNode,
+          this.checkHaveNode,
           1 * 60 * 1000
         );
       } else {
@@ -1373,8 +1372,11 @@ h3 {
   background-color: #313144 !important;
 }
 .backgorundpic_light {
+  overflow-x: hidden;
+  overflow-y: hidden;
   background-color: #f5f5f5 !important;
   background-image: url("@/assets/Blur.svg") !important;
+  background-size: cover !important;
   background-repeat: no-repeat !important;
   background-attachment: fixed !important;
   background-position: center !important;
@@ -1531,13 +1533,14 @@ h3 {
   border-left: 3px solid #f59569;
 }
 .border-dashed {
-  border-left: 3px dashed #e9eff6;
+  border-left: 3px dashed #b1b1b1;
 }
 .height-steps {
   height: 60px;
 }
 .setp_box {
   max-height: 50px;
+  max-width: 105px;
 }
 .height-step-box {
   height: 50px;
