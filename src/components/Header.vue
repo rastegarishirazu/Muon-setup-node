@@ -4,7 +4,7 @@
       <v-col md="2" sm="3" cols="12" class="text-left">
         <img src="../assets/muon-logo1.svg" width="120px" alt="" />
       </v-col>
-      <v-col offset-md="6" md="4" sm="6" cols="7" class="d-flex justify-end">
+      <v-col offset-md="4" md="6" sm="6" cols="7" class="d-flex justify-end">
         <div
           :class="[
             'float-right',

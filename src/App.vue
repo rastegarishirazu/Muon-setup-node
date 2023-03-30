@@ -28,19 +28,18 @@
           class="transparent"
         />
       </v-row>
-      <v-responsive
-        v-else-if="haveNode != 'error'"
-        width="100%"
-        overflow-hidden
-        class="overflow-hidden px-5"
-      >
+      <v-responsive v-else-if="haveNode != 'error'" width="100%" class="px-5">
         <v-row
           v-if="e1 < steps.newNode || e1 === steps.newNode"
           class=""
           justify="center"
         >
-          <v-col md="4">
-            <div class="d-flex justify-center" width="100%">
+          <v-col
+            md="4"
+            class="text-center d-flex justify-center"
+            justify-center
+          >
+            <div class="d-flex justify-center title_card">
               <div class="title_card_box text-center py-5 mt-1">
                 <h2 class="title_card_box_font text-h4 font-weight-600">
                   Adding a Node
@@ -58,6 +57,7 @@
               <v-col md="3" class="text-center">
                 <div
                   :class="[
+                    'center_margin_auto',
                     'steps_title',
                     'setp_box',
                     'height-step-box',
@@ -80,6 +80,7 @@
                 </div>
                 <div
                   :class="[
+                    'center_margin_auto',
                     'steps_title',
                     'setp_box',
                     'height-step-box',
@@ -102,6 +103,7 @@
                 </div>
                 <div
                   :class="[
+                    'center_margin_auto',
                     'steps_title',
                     'setp_box',
                     'height-step-box',
@@ -1604,5 +1606,12 @@ h3 {
 .gray-filter {
   filter: invert(59%) sepia(5%) saturate(924%) hue-rotate(174deg)
     brightness(96%) contrast(83%);
+}
+.center_margin_auto {
+  margin: 0 auto;
+}
+.title_card {
+  min-width: 380px;
+  max-width: 400px;
 }
 </style>
