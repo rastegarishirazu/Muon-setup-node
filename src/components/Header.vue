@@ -1,10 +1,10 @@
 <template>
-  <div class="header">
+  <div>
     <v-row class="px-10 pb-md-0 py-3">
       <v-col md="2" sm="3" cols="12" class="text-left">
         <img src="../assets/muon-logo1.svg" width="120px" alt="" />
       </v-col>
-      <v-col offset-md="4" md="4" sm="6" cols="7">
+      <v-col offset-md="6" md="4" sm="6" cols="7" class="d-flex justify-end">
         <div
           :class="[
             'float-right',
@@ -12,6 +12,7 @@
             'px-2',
             'py-5',
             'mb-3',
+            'mr-4',
             'align-center',
             isConnected ? 'isConnected' : '',
           ]"
@@ -33,11 +34,10 @@
             <span class="alice">ALICE</span>
           </div>
         </div>
-      </v-col>
-      <v-col md="2" sm="3" cols="5">
+
         <v-btn
           v-if="!isCorrectChain"
-          block
+          width="fit-content"
           small
           color="#ff58f61a"
           class="py-5"
@@ -48,10 +48,17 @@
         </v-btn>
         <v-btn
           v-else
-          block
+          width="fit-content"
           small
           color="#ff58f61a"
-          :class="[isConnected ? 'isConnected' : '', 'py-5']"
+          :class="[
+            isConnected ? 'isConnected' : '',
+            'py-5',
+            'primary--text',
+            'rounded-lg',
+            'px-4',
+            'text-body-2',
+          ]"
           elevation="0"
           @click="connectWallet"
         >
@@ -79,9 +86,6 @@ export default {
 </script>
 
 <style scoped>
-.header {
-  background-color: #fff;
-}
 .card {
   width: fit-content;
   height: 30px;
@@ -91,7 +95,8 @@ export default {
   justify-content: space-between;
 }
 .isConnected {
-  background: #5e58ff3e !important;
+  background: rgba(81, 88, 246, 0.1) !important;
+  font-weight: 500;
 }
 .token_logo {
   float: left;

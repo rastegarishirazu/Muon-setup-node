@@ -4,7 +4,7 @@
       $vuetify.theme.dark ? 'backgorundpic_dark' : 'backgorundpic_light',
     ]"
   >
-    <particles></particles>
+    <!-- <particles></particles> -->
     <Header
       :addressShow="addressShow"
       :aliceBalance="muonTestTokenShow"
@@ -34,12 +34,18 @@
         overflow-hidden
         class="overflow-hidden px-5 mt-4"
       >
-        <v-row v-if="e1 < steps.newNode" class="mt-2" justify="center">
-          <v-col md="5">
+        <v-row
+          v-if="e1 < steps.newNode || e1 === steps.newNode"
+          class="mt-2"
+          justify="center"
+        >
+          <v-col md="4">
             <div class="d-flex justify-center" width="100%">
               <div class="title_card_box text-center py-5 mt-1">
-                <h2 class="title_card_box_font text-h4">Adding a Node</h2>
-                <h3 class="subtitle_card_box_font text-h6">
+                <h2 class="title_card_box_font text-h4 font-weight-600">
+                  Adding a Node
+                </h2>
+                <h3 class="subtitle_card_box_font text-h6 font-weight-medium">
                   To the ALICE Network
                 </h3>
               </div>
@@ -49,7 +55,7 @@
         <v-row v-if="e1 <= steps.addNode" justify="center" class="mt-10">
           <v-col md="5" xl="3" align-self="center">
             <v-row>
-              <v-col md="3" class="text-center">
+              <v-col md="2" class="text-center">
                 <div
                   :class="[
                     'steps_title',
@@ -153,9 +159,10 @@
               </v-col>
             </v-row>
           </v-col>
-          <v-col md="5" xl="3">
+          <v-col md="4" xl="3">
             <v-expand-transition>
               <v-card
+                width="423"
                 elevation="0"
                 class="px-2 rounded-lg input-card-min-height"
               >
@@ -174,7 +181,7 @@
                               </v-icon>
                             </v-col>
                             <v-col>
-                              <p class="mb-0">
+                              <p class="mb-0 font-weight-medium text-body-2">
                                 You don't have enough tokens. You need at least
                                 <b> 1000 ALICE</b>
                               </p>
@@ -208,8 +215,11 @@
                           id="id"
                           background-color="gray"
                         ></v-text-field>
-                        <v-row v-if="isConnected && isCorrectChain">
-                          <v-col cols="9">
+                        <v-row
+                          v-if="isConnected && isCorrectChain"
+                          class="pr-3"
+                        >
+                          <v-col cols="10">
                             <v-btn
                               block
                               large
@@ -218,11 +228,11 @@
                               @click="mint"
                               color="primary"
                               elevation="0"
-                              class="rounded-lg"
+                              class="rounded-lg text-capitalize font-weight-600 text-h6 py-7"
                               >Mint ALICE</v-btn
                             >
                           </v-col>
-                          <v-col cols="3">
+                          <v-col cols="2" class="pl-0">
                             <v-tooltip bottom>
                               <template v-slot:activator="{ on, attrs }">
                                 <v-btn
@@ -233,11 +243,15 @@
                                   large
                                   color="gray"
                                   elevation="0"
+                                  class="py-7 rounded-lg"
                                   :disabled="!haveEnoughTokenTEst"
                                 >
-                                  <v-icon color="black" class="gray rounded-lg">
-                                    mdi-arrow-right-top-bold
-                                  </v-icon>
+                                  <v-img
+                                    :class="{
+                                      'gray-filter': !haveEnoughTokenTEst,
+                                    }"
+                                    src="@/assets/card/right-flash.svg"
+                                  ></v-img>
                                 </v-btn>
                               </template>
                               <span>Next Step</span>
@@ -320,9 +334,9 @@
                             </v-icon>
                           </v-col>
                           <v-col align-self="center" class="pl-1">
-                            <p class="mb-0 text-caption font-weight-bold">
-                              While adding your node. you will automatically
-                              stake 1000 ALICE tokens
+                            <p class="mb-0 text-body-2 font-weight-medium">
+                              While adding your node. you will <br />
+                              automatically stake 1000 ALICE tokens
                             </p>
                           </v-col>
                         </v-row>
@@ -380,7 +394,7 @@
                         </v-col>
                       </v-row>
                       <v-row class="mt-8">
-                        <v-col cols="3">
+                        <v-col cols="2">
                           <v-tooltip bottom>
                             <template v-slot:activator="{ on, attrs }">
                               <v-btn
@@ -390,17 +404,18 @@
                                 block
                                 large
                                 color="gray"
+                                class="rounded-lg py-7"
                                 elevation="0"
                               >
-                                <v-icon color="black" class="gray rounded-lg">
-                                  mdi-arrow-left-top-bold
-                                </v-icon>
+                                <v-img
+                                  src="@/assets/card/left-flash.svg"
+                                ></v-img>
                               </v-btn>
                             </template>
                             <span>Back to mint</span>
                           </v-tooltip>
                         </v-col>
-                        <v-col cols="9" class="">
+                        <v-col cols="10" class="pl-6">
                           <v-btn
                             :disabled="nodeIpStatus != 'success'"
                             @click="addNode"
@@ -409,7 +424,7 @@
                             block
                             large
                             color="primary"
-                            class="font-weight-bold"
+                            class="text-capitalize font-weight-600 text-h6 py-7 rounded-lg"
                           >
                             Add node
                           </v-btn>
@@ -426,14 +441,15 @@
           v-if="e1 > steps.addNode && e1 < steps.haveNode"
           justify="center"
         >
-          <v-col md="10" cols="12">
+          <v-col md="8" cols="12">
             <v-scroll-x-reverse-transition>
               <v-card
                 v-show="!cardLoading && e1 >= steps.newNode"
                 width="100%"
+                height="386px"
                 transition="slide-x-transition"
                 elevation="0"
-                class="px-2 rounded-lg"
+                class="px-2 rounded-lg mt-5"
               >
                 <v-row justify="center" v-if="e1 === steps.newNode">
                   <v-col md="6" class="text-center" align-self="end">
@@ -441,39 +457,38 @@
                       ref="anim"
                       src="https://lottie.host/d93bca6a-cfea-4e40-a6b9-4d191832b2ef/uWgbTRaCzm.json"
                       :autoplay="true"
-                      height="200"
+                      height="290px"
                       class="transparent"
                     />
-                    <h3 class="blackText--text font-weight-bold">
+                    <h3 class="blackText--text font-weight-bold mt-n15">
                       Your node has been added <br />
                       to Alice network
                     </h3>
-                    <v-row justify="center">
-                      <v-col
-                        cols="9"
-                        class="text-center pr-0"
-                        align-self="center"
-                      >
-                        <div>
+                    <v-row justify="center" class="mt-2">
+                      <div class="d-flex justify-center mr-n4">
+                        <div class="mt-3">
                           <b class="primary--text text-body-1">
                             Preparing your dashboard
                           </b>
                         </div>
-
-                        <lottie-vue-player
-                          ref="anim"
-                          src="https://lottie.host/1fb3a319-394b-446d-8fce-824aa4f1787c/xjtL4nMuB2.json"
-                          :autoplay="true"
-                          :loop="true"
-                          playerSize="minimal"
-                          height="50px"
-                          :style="{ width: '100%', heigh: '50px' }"
-                          class="transparent ml-n2 width_contant"
-                        />
-                      </v-col>
+                        <div>
+                          <lottie-vue-player
+                            ref="anim"
+                            src="https://lottie.host/1fb3a319-394b-446d-8fce-824aa4f1787c/xjtL4nMuB2.json"
+                            :autoplay="true"
+                            :loop="true"
+                            playerSize="minimal"
+                            height="50px"
+                            :style="{ width: '100%', heigh: '50px' }"
+                            class="transparent ml-n1 width_contant"
+                          />
+                        </div>
+                      </div>
                     </v-row>
                   </v-col>
                 </v-row>
+              </v-card>
+              <v-card>
                 <v-responsive
                   v-if="e1 === steps.beforHaveNode"
                   class="mt-10"
@@ -903,7 +918,7 @@ export default {
       }
       if (newE1 === this.steps.newNode) {
         this.checkHaveNodeInterval = setInterval(
-          this.checkHaveNode,
+          // this.checkHaveNode,
           1 * 60 * 1000
         );
       } else {
@@ -1099,7 +1114,7 @@ export default {
         let temp = ip.split("http://");
         ip = temp.length > 1 ? temp[1].split("/")[0] : temp[0].split("/")[0];
         let port = ip.split(":");
-        if (port.length) {
+        if (port[1]) {
           ip = port[0];
           port = ":" + port[1];
         } else {
@@ -1336,6 +1351,10 @@ export default {
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap");
 
+html {
+  overflow-y: auto;
+}
+
 #particles-js {
   max-height: 98%;
 }
@@ -1355,6 +1374,10 @@ h3 {
 }
 .backgorundpic_light {
   background-color: #f5f5f5 !important;
+  background-image: url("@/assets/Blur.svg") !important;
+  background-repeat: no-repeat !important;
+  background-attachment: fixed !important;
+  background-position: center !important;
 }
 .full-width {
   width: 100% !important;
@@ -1557,7 +1580,7 @@ h3 {
 }
 .steps_title {
   font-style: normal;
-  font-weight: 400;
+  font-weight: 500;
   font-size: 20px;
 }
 .steps_sub_title {
@@ -1566,10 +1589,17 @@ h3 {
   font-size: 14px;
 }
 .steps_title_active {
-  font-weight: 600;
+  font-weight: 500;
 }
 .width_contant {
   width: fit-content !important;
   display: inline-block;
+}
+.font-weight-600 {
+  font-weight: 600 !important;
+}
+.gray-filter {
+  filter: invert(59%) sepia(5%) saturate(924%) hue-rotate(174deg)
+    brightness(96%) contrast(83%);
 }
 </style>
