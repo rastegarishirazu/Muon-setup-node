@@ -1,2 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700;800;900&display=swap');
 $body-font-family: "Montserrat", sans-serif !important;
+$btn-border-radius: 12px;
+
+$rounded: (
+  'sm': 8px,
+  'md':12px,
+  'lg': 18px
+);
+.theme--light.v-application code {
+    background-color: #6f7787 !important;
+    color: white;
+  }

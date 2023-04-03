@@ -62,7 +62,6 @@
                     'setp_box',
                     'height-step-box',
                     'text-center',
-                    'rounded-lg',
                     'py-3',
                     'primaryOrange',
                     'white--text',
@@ -85,7 +84,6 @@
                     'setp_box',
                     'height-step-box',
                     'text-center',
-                    'rounded-lg',
                     'py-3',
                     e1 > steps.mint ? 'primaryOrange white--text' : 'gray',
                   ]"
@@ -108,7 +106,6 @@
                     'setp_box',
                     'height-step-box',
                     'text-center',
-                    'rounded-lg',
                     'py-3',
                     e1 > steps.approve ? 'primaryOrange white--text' : 'gray',
                   ]"
@@ -173,7 +170,7 @@
                       <div class="mint-level">
                         <div
                           v-if="!haveEnoughTokenTEst"
-                          class="lightPrimaryOrange rounded-lg px-2 mt-5"
+                          class="lightPrimaryOrange rounded-sm px-2 mt-5"
                         >
                           <v-row>
                             <v-col cols="2">
@@ -194,11 +191,11 @@
                           <b>{{ muonTestTokenShow }}</b>
                           <v-btn
                             @click="getTokenTestBalance"
-                            class="ml-2"
+                            class="ml-2 rounded-sm"
                             icon
                             color="success"
                           >
-                            <v-icon color="black" class="gray rounded-lg"
+                            <v-icon color="black" class="gray rounded-sm"
                               >mdi-refresh</v-icon
                             >
                           </v-btn>
@@ -210,7 +207,7 @@
                           :disabled="!isConnected || !isCorrectChain"
                           v-model="mintAmount"
                           :rules="minMint"
-                          class="rounded-lg"
+                          class="rounded-md"
                           name="name"
                           label="Enter Amount you wish to mint"
                           id="id"
@@ -229,7 +226,7 @@
                               @click="mint"
                               color="primary"
                               elevation="0"
-                              class="rounded-lg text-capitalize font-weight-600 text-h6 py-7"
+                              class="text-capitalize font-weight-600 text-h6 py-7"
                               >Mint ALICE</v-btn
                             >
                           </v-col>
@@ -244,7 +241,7 @@
                                   large
                                   color="gray"
                                   elevation="0"
-                                  class="py-7 rounded-lg"
+                                  class="py-7"
                                   :disabled="!haveEnoughTokenTEst"
                                 >
                                   <v-img
@@ -293,7 +290,7 @@
                           :autoplay="true"
                         />
                         <p
-                          class="text-center mb-10 font-weight-medium text-subtitle-2"
+                          class="text-center mb-10 font-weight-medium text-subtitle-1"
                         >
                           Now you need to approve the <br />
                           staking contract to use the tokens
@@ -315,10 +312,11 @@
                               @click="checkApproved"
                               block
                               large
+                              class="rounded-md"
                               color="gray"
                               elevation="0"
                             >
-                              <v-icon color="black" class="gray rounded-lg">
+                              <v-icon color="black" class="gray rounded-md">
                                 mdi-refresh
                               </v-icon>
                             </v-btn></v-col
@@ -327,7 +325,7 @@
                       </div>
                     </v-col>
                     <v-col v-if="e1 === steps.addNode" cols="12">
-                      <div class="lightInfo rounded-lg px-1 mt-2">
+                      <div class="lightInfo rounded-sm px-1 mt-8">
                         <v-row>
                           <v-col align-self="center" cols="2">
                             <v-icon color="info" class="text-h3">
@@ -335,7 +333,7 @@
                             </v-icon>
                           </v-col>
                           <v-col align-self="center" class="pl-1">
-                            <p class="mb-0 text-body-2 font-weight-medium">
+                            <p class="text-body-2 font-weight-medium">
                               While adding your node. you will <br />
                               automatically stake 1000 ALICE tokens
                             </p>
@@ -350,7 +348,7 @@
                             @input="getNodeAddressPeerIdByIP(nodeIPInput)"
                             solo
                             flat
-                            class="rounded-lg"
+                            class="rounded-md"
                             name="name"
                             label="Enter your node IP"
                             id="id"
@@ -405,7 +403,7 @@
                                 block
                                 large
                                 color="gray"
-                                class="rounded-lg py-7"
+                                class="py-7"
                                 elevation="0"
                               >
                                 <v-img
@@ -425,7 +423,7 @@
                             block
                             large
                             color="primary"
-                            class="text-capitalize font-weight-600 text-h6 py-7 rounded-lg"
+                            class="text-capitalize font-weight-600 text-h6 py-7"
                           >
                             Add node
                           </v-btn>
@@ -512,7 +510,7 @@
                         large
                         @click="e1 = steps.haveNode"
                         color="primary"
-                        class="mt-5 font-weight-bold rounded-lg"
+                        class="mt-5 font-weight-bold"
                         elevation="0"
                         >Launch my dashboard</v-btn
                       >
@@ -527,10 +525,10 @@
           <v-col md="3">
             <v-card
               color="rgba(81, 88, 246, 0.1)"
-              class="node_id_card px-2 py-4 rounded-lg"
+              class="node_id_card px-5 py-4 rounded-lg"
               elevation="0"
             >
-              <h6 class="textGray--text text-subtitle-2 font-weight-bold">
+              <h6 class="textGray--text text-subtitle-1 font-weight-bold">
                 IP Address
               </h6>
               <v-row justify="end" class="mt-2">
@@ -546,10 +544,10 @@
           <v-col md="3">
             <v-card
               color="rgba(81, 88, 246, 0.1)"
-              class="node_id_card px-2 py-4 rounded-lg"
+              class="node_id_card px-5 py-4 rounded-lg"
               elevation="0"
             >
-              <h6 class="textGray--text text-subtitle-2 font-weight-bold">
+              <h6 class="textGray--text text-subtitle-1 font-weight-bold">
                 Node ID
               </h6>
               <v-row justify="end" class="mt-2">
@@ -567,10 +565,10 @@
           <v-col md="3">
             <v-card
               color="rgba(81, 88, 246, 0.1)"
-              class="node_id_card px-2 py-4 rounded-lg"
+              class="node_id_card px-5 py-4 rounded-lg"
               elevation="0"
             >
-              <h6 class="textGray--text text-subtitle-2 font-weight-bold">
+              <h6 class="textGray--text text-subtitle-1 font-weight-bold">
                 Node address
               </h6>
               <v-row justify="end" class="mt-2">
@@ -588,10 +586,10 @@
           <v-col md="3">
             <v-card
               color="rgba(81, 88, 246, 0.1)"
-              class="node_id_card px-2 py-4 rounded-lg"
+              class="node_id_card px-5 py-4 rounded-lg"
               elevation="0"
             >
-              <h6 class="textGray--text text-subtitle-2 font-weight-bold">
+              <h6 class="textGray--text text-subtitle-1 font-weight-bold">
                 peer ID
               </h6>
               <v-row justify="end" class="mt-2">
@@ -614,7 +612,7 @@
             >
               <v-row>
                 <v-col>
-                  <h6 class="text-subtitle-2 font-weight-medium">Uptime</h6>
+                  <h6 class="text-subtitle-1 font-weight-medium">Uptime</h6>
                   <div class="mt-2">
                     <v-progress-circular
                       v-if="nodeIsActive != 'Exited'"
@@ -638,7 +636,7 @@
                 </v-col>
                 <v-col>
                   <div>
-                    <h6 class="text-subtitle-2 font-weight-medium">Status</h6>
+                    <h6 class="text-subtitle-1 font-weight-medium">Status</h6>
                   </div>
                   <b class="info--text text-h6 font-weight-bold">{{
                     nodeIsActive
@@ -658,12 +656,12 @@
           <v-col md="4">
             <v-card
               color="rgba(81, 88, 246, 0.1)"
-              class="full-height node_id_card px-2 py-4 rounded-lg"
+              class="full-height node_id_card px-5 py-4 rounded-lg"
               elevation="0"
             >
               <v-row justify="spase-between">
                 <v-col cols="8">
-                  <h6 class="black--text text-h6">Staked MUON</h6>
+                  <h6 class="black--text text-h6">Staked ALICE</h6>
                 </v-col>
                 <v-col class="text-right">
                   <b>{{ nodeInfo.staked }}</b>
@@ -686,7 +684,7 @@
           </v-col>
           <v-col md="4">
             <v-card
-              class="full-height node_id_card px-2 py-4 rounded-lg reward_background"
+              class="full-height node_id_card px-5 py-4 rounded-lg reward_background"
               elevation="0"
             >
               <v-row justify="spase-between">
@@ -694,7 +692,7 @@
                   <h6 class="black--text text-h6">Reward</h6>
                 </v-col>
                 <v-col class="text-right">
-                  <b>{{ nodeInfo.rewardAmount }} MUON</b> <br />
+                  <b>{{ nodeInfo.rewardAmount }} ALICE</b> <br />
                 </v-col>
               </v-row>
               <v-card-actions>
@@ -704,7 +702,7 @@
                       disabled
                       elevation="0"
                       color="#FEEFE9"
-                      class="primaryOrange--text font-weight-bold text-subtitle-2"
+                      class="primaryOrange--text font-weight-bold text-subtitle-1"
                     >
                       Withdraw
                     </v-btn>
@@ -747,17 +745,17 @@
         </v-dialog>
       </v-responsive>
     </v-main>
-    <v-footer v-if="e1 === steps.haveNode && !cardLoading">
+    <v-footer
+      class="mt-10 transparent"
+      v-if="e1 === steps.haveNode && !cardLoading"
+    >
       <v-row justify="end">
         <v-col cols="5">
-          <v-alert
+          <AllertCard
+            class="mt-5"
             v-for="(value, i) in nodeInfo.messages"
-            :key="i"
-            dismissible
-            :type="value.type"
-          >
-            <p class="text-caption" v-html="value.message"></p>
-          </v-alert>
+            :message="value.message"
+          ></AllertCard>
         </v-col>
       </v-row>
     </v-footer>
@@ -803,6 +801,7 @@ import Header from "@/components/Header.vue";
 import nodeDetailsDialog from "@/components/nodeDetailsDialog.vue";
 import detectEthereumProvider from "@metamask/detect-provider";
 import { ValidateIPaddress } from "@/utils/formatChecker";
+import AllertCard from "./components/AllertCard.vue";
 const mainChainId = 0x61;
 const STEPS = {
   mint: 1,
@@ -816,7 +815,7 @@ const STEPS = {
 export default {
   name: "App",
 
-  components: { Header, particles, nodeDetailsDialog },
+  components: { Header, particles, nodeDetailsDialog, AllertCard },
 
   data: () => ({
     provider: null,
@@ -1451,7 +1450,7 @@ h3 {
   background-clip: text;
 }
 .title_card_box {
-  width: 80%;
+  width: 100%;
   height: 100px;
   margin-top: -50px;
   border-radius: 18px;
@@ -1460,7 +1459,7 @@ h3 {
   background-image: url("@/assets/presale-header.svg");
   background-repeat: no-repeat;
   background-position: center;
-  box-shadow: 0 0 10px 1px #5159f66e;
+  filter: drop-shadow(0px 8px 18px rgba(81, 88, 246, 0.15));
 }
 .title_card_box_font {
   font-family: "Montserrat";
@@ -1541,6 +1540,7 @@ h3 {
   height: 60px;
 }
 .setp_box {
+  border-radius: 8px;
   max-height: 50px;
   max-width: 105px;
 }
@@ -1611,7 +1611,7 @@ h3 {
   margin: 0 auto;
 }
 .title_card {
-  min-width: 380px;
-  max-width: 400px;
+  min-width: 320px;
+  max-width: 350px;
 }
 </style>
