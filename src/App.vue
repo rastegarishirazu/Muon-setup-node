@@ -1099,10 +1099,12 @@ export default {
                 this.nodeInfo["downNodeTimes"] = messages;
               }
             } else if (res === "node not found") {
-              this.haveNode = false;
-              this.e1 = this.steps.mint;
+              if (cardLoadingRefresh) {
+                this.haveNode = false;
+                this.e1 = this.steps.mint;
+              }
             } else {
-              this.haveNode = "error";
+              if (cardLoadingRefresh) this.haveNode = "error";
             }
           })
           .finally(() => {
