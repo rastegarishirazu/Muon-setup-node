@@ -7,6 +7,7 @@
       <v-col offset-md="4" md="6" sm="6" cols="7" class="d-flex justify-end">
         <div
           :class="[
+            'rounded-sm',
             'float-right',
             'card',
             'px-2',
@@ -40,7 +41,7 @@
           width="fit-content"
           small
           color="#ff58f61a"
-          class="py-5"
+          class="py-5 'rounded-sm'"
           elevation="0"
           @click="switchNetwork"
         >
@@ -55,7 +56,7 @@
             isConnected ? 'isConnected' : '',
             'py-5',
             'primary--text',
-            'rounded-lg',
+            'rounded-sm',
             'px-4',
             'text-body-2',
           ]"

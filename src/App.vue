@@ -484,21 +484,22 @@
                         </div>
                       </div>
                     </v-row>
+                    <p class="blackText--text text-caption">
+                      It can take up to 10 minutes.
+                    </p>
                   </v-col>
                 </v-row>
-              </v-card>
-              <v-card>
                 <v-responsive
                   v-if="e1 === steps.beforHaveNode"
                   class="mt-10"
-                  height="70vh"
+                  height="386px"
                 >
                   <v-row class="full-height" justify="center">
                     <v-col
                       cols="4"
                       md="4"
                       align-self="center"
-                      height="500px"
+                      height="386px"
                       class="text-center"
                     >
                       <h5 class="info--text text-body-1">
@@ -508,9 +509,9 @@
                       <v-btn
                         block
                         large
-                        @click="e1 = steps.haveNode"
+                        @click="checkHaveNode"
                         color="primary"
-                        class="mt-5 font-weight-bold"
+                        class="mt-5 font-weight-bold rounded-md"
                         elevation="0"
                         >Launch my dashboard</v-btn
                       >
@@ -916,10 +917,10 @@ export default {
       if (newE1 === this.steps.approve && this.isApproved) {
         this.e1 = this.steps.addNode;
       }
-      if (newE1 === this.steps.newNode) {
+      if (newE1 === this.steps.newNode || newE1 === this.steps.haveNode) {
         this.checkHaveNodeInterval = setInterval(
-          this.checkHaveNode,
-          1 * 60 * 1000
+          this.checkHaveNode(false),
+          15 * 1000
         );
       } else {
         clearInterval(this.checkHaveNodeInterval);
@@ -998,9 +999,11 @@ export default {
         }, 15000);
       }
     },
-    checkHaveNode() {
+    checkHaveNode(cardLoadingRefresh = true) {
       if (this.account) {
-        this.cardLoading = true;
+        if (cardLoadingRefresh) {
+          this.cardLoading = true;
+        }
         getNodeInfo(this.account)
           // getNodeInfo(28)
           .then((res) => {
