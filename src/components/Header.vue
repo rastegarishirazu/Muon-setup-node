@@ -1,14 +1,18 @@
 <template>
   <div>
-    <v-row class="px-10 pb-md-0 py-3">
+    <v-row
+      class="px-10 pb-md-0 py-3"
+      justify="space-between"
+      justify-space-between
+    >
       <v-col md="2" sm="3" cols="12" class="text-left">
         <img src="../assets/muon-logo1.svg" width="120px" alt="" />
       </v-col>
-      <v-col offset-md="4" md="6" sm="6" cols="7" class="d-flex justify-end">
+      <v-col md="6" sm="9" cols="12" class="d-flex justify-end">
         <div
           :class="[
             'rounded-sm',
-            'float-right',
+
             'card',
             'px-2',
             'py-5',

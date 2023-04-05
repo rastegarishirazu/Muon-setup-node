@@ -41,7 +41,7 @@
           >
             <div class="d-flex justify-center title_card">
               <div class="title_card_box text-center py-5 mt-1">
-                <h2 class="title_card_box_font text-h4 font-weight-600">
+                <h2 class="title_card_box_font font-weight-600">
                   Adding a Node
                 </h2>
                 <h3 class="subtitle_card_box_font text-h6 font-weight-medium">
@@ -523,7 +523,7 @@
           </v-col>
         </v-row>
         <v-row v-if="e1 === steps.haveNode" justify="center" class="mt-15 px-5">
-          <v-col md="3">
+          <v-col md="3" cols="12">
             <v-card
               color="rgba(81, 88, 246, 0.1)"
               class="node_id_card px-5 py-4 rounded-lg"
@@ -542,7 +542,7 @@
               </v-row>
             </v-card>
           </v-col>
-          <v-col md="3">
+          <v-col md="3" cols="12">
             <v-card
               color="rgba(81, 88, 246, 0.1)"
               class="node_id_card px-5 py-4 rounded-lg"
@@ -563,7 +563,7 @@
               </v-row>
             </v-card>
           </v-col>
-          <v-col md="3">
+          <v-col md="3" cols="12">
             <v-card
               color="rgba(81, 88, 246, 0.1)"
               class="node_id_card px-5 py-4 rounded-lg"
@@ -584,7 +584,7 @@
               </v-row>
             </v-card>
           </v-col>
-          <v-col md="3">
+          <v-col md="3" cols="12">
             <v-card
               color="rgba(81, 88, 246, 0.1)"
               class="node_id_card px-5 py-4 rounded-lg"
@@ -605,7 +605,7 @@
           </v-col>
         </v-row>
         <v-row v-if="e1 === steps.haveNode" justify="center" class="px-5">
-          <v-col md="4">
+          <v-col md="4" cols="12">
             <v-card
               color="rgba(81, 88, 246, 0.1)"
               class="full-height node_id_card px-2 py-4 rounded-lg text-center"
@@ -654,7 +654,7 @@
               </v-row>
             </v-card>
           </v-col>
-          <v-col md="4">
+          <v-col md="4" cols="12">
             <v-card
               color="rgba(81, 88, 246, 0.1)"
               class="full-height node_id_card px-5 py-4 rounded-lg"
@@ -683,7 +683,7 @@
               </v-card-actions>
             </v-card>
           </v-col>
-          <v-col md="4">
+          <v-col md="4" cols="12">
             <v-card
               class="full-height node_id_card px-5 py-4 rounded-lg reward_background"
               elevation="0"
@@ -751,11 +751,12 @@
       v-if="e1 === steps.haveNode && !cardLoading"
     >
       <v-row justify="end">
-        <v-col cols="5">
+        <v-col md="5" cols="12">
           <AllertCard
             class="mt-5"
             v-for="(value, i) in nodeInfo.messages"
             :message="value.message"
+            :key="i"
           ></AllertCard>
         </v-col>
       </v-row>
@@ -922,6 +923,7 @@ export default {
           this.checkHaveNode(false),
           15 * 1000
         );
+        console.log(this.checkHaveNodeInterval);
       } else {
         clearInterval(this.checkHaveNodeInterval);
       }
@@ -1467,6 +1469,7 @@ h3 {
   filter: drop-shadow(0px 8px 18px rgba(81, 88, 246, 0.15));
 }
 .title_card_box_font {
+  font-size: 32px;
   font-family: "Montserrat";
   font-style: normal;
   font-weight: 600;
