@@ -18,7 +18,7 @@
       <h2 v-if="this.haveNode === 'error'" class="text-center mt-5">
         something went wrong. please try again later.
       </h2>
-      <v-row v-if="cardLoading && isConnected" justify="center">
+      <v-row v-if="cardLoading" justify="center">
         <lottie-vue-player
           ref="anim"
           src="https://lottie.host/1fb3a319-394b-446d-8fce-824aa4f1787c/xjtL4nMuB2.json"
@@ -1005,6 +1005,7 @@ export default {
       if (this.account) {
         if (cardLoadingRefresh) {
           this.cardLoading = true;
+          console.log("card loading on");
         }
         getNodeInfo(this.account)
           // getNodeInfo(28)
@@ -1197,6 +1198,7 @@ export default {
           .then((accounts) => {
             if (accounts.length === 0) {
               console.log("Please connect to MetaMask.");
+              this.cardLoading = false;
             } else if (accounts.length && this.isCorrectChain) {
               this.connectToMetamask();
             }
@@ -1253,9 +1255,10 @@ export default {
           method: "eth_requestAccounts",
         })
         .then((res) => {
-          // this.cardLoading = true;
           if (res.length === 0) {
             console.log("Please connect to MetaMask.");
+            this.cardLoading = false;
+            console.log(this.cardLoading);
           } else {
             const account = res[0];
             this.account = account;
@@ -1266,6 +1269,7 @@ export default {
           }
         })
         .catch((err) => {
+          this.cardLoading = false;
           if (err.code === 4001) {
             console.log("Plase connect to MetaMask");
           } else {
@@ -1302,6 +1306,7 @@ export default {
       this.startApp(this.provider); // Initialize your app
     } else {
       console.log("Please install MetaMask!");
+      this.cardLoading = false;
     }
     this.web3 = new Web3(window.ethereum);
     this.getChainId();
@@ -1328,6 +1333,7 @@ export default {
     ethereum.on("accountsChanged", async (accounts) => {
       if (accounts.length === 0) {
         console.log("Please connect to MetaMask.");
+        this.cardLoading = false;
       } else {
         const address = accounts[0];
         this.account = address;
