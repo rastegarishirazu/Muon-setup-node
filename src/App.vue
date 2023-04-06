@@ -1205,6 +1205,7 @@ export default {
     checkNetwork() {
       if (this.currntIdChain != mainChainId) {
         this.isCorrectChain = false;
+        this.cardLoading = false;
       } else {
         this.isCorrectChain = true;
         ethereum
