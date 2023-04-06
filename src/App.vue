@@ -18,17 +18,25 @@
       <h2 v-if="this.haveNode === 'error'" class="text-center mt-5">
         something went wrong. please try again later.
       </h2>
-      <v-row v-if="cardLoading" justify="center">
-        <lottie-vue-player
-          ref="anim"
-          src="https://lottie.host/1fb3a319-394b-446d-8fce-824aa4f1787c/xjtL4nMuB2.json"
-          :autoplay="true"
-          :loop="true"
-          height="200px"
-          class="transparent"
-        />
-      </v-row>
-      <v-responsive v-else-if="haveNode != 'error'" width="100%" class="px-5">
+
+      <v-responsive v-if="cardLoading" height="80vh">
+        <v-row v-if="cardLoading" justify="center" style="height: 100%">
+          <v-col align-self="center"></v-col>
+          <lottie-vue-player
+            ref="anim"
+            src="https://lottie.host/1fb3a319-394b-446d-8fce-824aa4f1787c/xjtL4nMuB2.json"
+            :autoplay="true"
+            :loop="true"
+            height="200px"
+            class="transparent"
+          />
+        </v-row>
+      </v-responsive>
+      <v-responsive
+        v-else-if="haveNode != 'error'"
+        width="100%"
+        class="px-5 overflow-visible"
+      >
         <v-row
           v-if="e1 < steps.newNode || e1 === steps.newNode"
           class=""
@@ -40,7 +48,7 @@
             justify-center
           >
             <div class="d-flex justify-center title_card">
-              <div class="title_card_box text-center py-5 mt-1">
+              <div class="title_card_box text-center pt-2 mt-1">
                 <h2 class="title_card_box_font font-weight-600">
                   Adding a Node
                 </h2>
@@ -52,7 +60,7 @@
           </v-col>
         </v-row>
         <v-row v-if="e1 <= steps.addNode" justify="center" class="mt-10">
-          <v-col md="5" xl="3" align-self="center">
+          <v-col md="5" xl="3">
             <v-row>
               <v-col md="3" class="text-center">
                 <div
@@ -85,7 +93,9 @@
                     'height-step-box',
                     'text-center',
                     'py-3',
-                    e1 > steps.mint ? 'primaryOrange white--text' : 'gray',
+                    e1 > steps.mint
+                      ? 'primaryOrange white--text'
+                      : 'step_deactive',
                   ]"
                   width="100%"
                 >
@@ -107,7 +117,9 @@
                     'height-step-box',
                     'text-center',
                     'py-3',
-                    e1 > steps.approve ? 'primaryOrange white--text' : 'gray',
+                    e1 > steps.approve
+                      ? 'primaryOrange white--text'
+                      : 'step_deactive',
                   ]"
                   width="100%"
                 >
@@ -115,7 +127,7 @@
                 </div>
               </v-col>
               <v-col>
-                <div class="height-step-box">
+                <div class="">
                   <h4
                     :class="[
                       'steps_title',
@@ -127,7 +139,7 @@
                   <h5 class="steps_sub_title">to your wallet</h5>
                 </div>
                 <div class="height-steps"></div>
-                <div class="height-step-box">
+                <div class="">
                   <h4
                     :class="[
                       'steps_title',
@@ -141,7 +153,7 @@
                   </h5>
                 </div>
                 <div class="height-steps"></div>
-                <div class="height-step-box">
+                <div class="">
                   <h4
                     :class="[
                       'steps_title',
@@ -162,7 +174,7 @@
               <v-card
                 width="423"
                 elevation="0"
-                class="px-2 rounded-lg input-card-min-height"
+                class="px-2 rounded-lg input-card-min-height pb-4 pt-6"
               >
                 <v-container class="full-height">
                   <v-row class="input-card-min-height d-flex">
@@ -170,7 +182,7 @@
                       <div class="mint-level">
                         <div
                           v-if="!haveEnoughTokenTEst"
-                          class="lightPrimaryOrange rounded-sm px-2 mt-5"
+                          class="lightPrimaryOrange rounded-sm px-2"
                         >
                           <v-row>
                             <v-col cols="2">
@@ -207,6 +219,7 @@
                           :disabled="!isConnected || !isCorrectChain"
                           v-model="mintAmount"
                           :rules="minMint"
+                          height="56px"
                           class="rounded-md"
                           name="name"
                           label="Enter Amount you wish to mint"
@@ -325,7 +338,7 @@
                       </div>
                     </v-col>
                     <v-col v-if="e1 === steps.addNode" cols="12">
-                      <div class="lightInfo rounded-sm px-1 mt-8">
+                      <div class="lightInfo rounded-sm px-1">
                         <v-row>
                           <v-col align-self="center" cols="2">
                             <v-icon color="info" class="text-h3">
@@ -348,6 +361,7 @@
                             @input="getNodeAddressPeerIdByIP(nodeIPInput)"
                             solo
                             flat
+                            height="56px"
                             class="rounded-md"
                             name="name"
                             label="Enter your node IP"
@@ -1388,7 +1402,7 @@ h3 {
 .backgorundpic_light {
   overflow-x: hidden;
   overflow-y: hidden;
-  background-color: #f5f5f5 !important;
+  background-color: #f8faff !important;
   background-image: url("@/assets/Blur.svg") !important;
   background-size: cover !important;
   background-repeat: no-repeat !important;
@@ -1552,6 +1566,9 @@ h3 {
 }
 .height-steps {
   height: 60px;
+}
+.step_deactive {
+  background-color: #d9e2ed;
 }
 .setp_box {
   border-radius: 8px;
