@@ -1,3 +1,5 @@
+const endPoint = "https://monitor1.muon.net/";
+// const endPoint = "https://alice.muon.net/test-proxy"
 const helpFunction = async (url) => {
   const controller = new AbortController();
   const id = setTimeout(() => {
@@ -28,7 +30,7 @@ const helpFunction = async (url) => {
     });
 };
 const getNodeInfo = async (nodeId) => {
-  const listOfNodes = ["https://alice.muon.net/test-proxy/nodes"];
+  const listOfNodes = [`${endPoint}/nodes`];
   let tryed = 0;
   let res;
   var flag = false;
@@ -48,7 +50,7 @@ const getNodeInfo = async (nodeId) => {
 };
 
 const checkIP = async (ip) => {
-  const listOfNodes = ["https://alice.muon.net/test-proxy/status"];
+  const listOfNodes = [`${endPoint}/status`];
   let tryed = 0;
   let res;
   var flag = false;
