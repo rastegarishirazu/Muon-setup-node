@@ -1,6 +1,6 @@
 <template>
-  <v-dialog width="700px" v-model="dialog">
-    <v-card class="rounded-xl">
+  <v-dialog content-class="rounded-xl" width="700px" v-model="dialog">
+    <v-card>
       <v-card-title class="text-h5 lighten-2">
         Node Details
         <v-spacer></v-spacer>

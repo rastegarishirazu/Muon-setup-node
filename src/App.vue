@@ -6,6 +6,7 @@
   >
     <!-- <particles></particles> -->
     <Header
+      v-if="!cardLoading"
       :addressShow="addressShow"
       :aliceBalance="muonTestTokenShow"
       :connectWallet="connectToMetamask"
@@ -20,7 +21,7 @@
       </h2>
 
       <v-responsive v-if="cardLoading" height="80vh">
-        <v-row v-if="cardLoading" justify="center" style="height: 100%">
+        <v-row justify="center" style="height: 100%">
           <v-col align-self="center"></v-col>
           <lottie-vue-player
             ref="anim"
@@ -52,9 +53,7 @@
                 <h2 class="title_card_box_font font-weight-600">
                   Adding a Node
                 </h2>
-                <h3 class="subtitle_card_box_font text-h6 font-weight-medium">
-                  To the ALICE Network
-                </h3>
+                <h3 class="subtitle_card_box_font">To the ALICE Network</h3>
               </div>
             </div>
           </v-col>
@@ -653,14 +652,20 @@
                   <div>
                     <h6 class="text-subtitle-1 font-weight-medium">Status</h6>
                   </div>
-                  <b class="info--text text-h6 font-weight-bold">{{
-                    nodeIsActive
-                  }}</b>
+                  <b
+                    :class="[
+                      'info--text',
+                      'text-h5',
+                      'font-weight-medium',
+                      { 'gray3--text': nodeIsActive === 'Offline' },
+                    ]"
+                    >{{ nodeIsActive }}</b
+                  >
                   <br />
                   <v-btn
                     elevation="0"
                     color="rgba(81, 88, 246, 0.1)"
-                    class="mt-9 primary--text font-weight-bold"
+                    class="mt-9 primary--text rounded-sm font-weight-medium"
                     @click="setnodeDetailsDialogModel(true)"
                     >Details</v-btn
                   >
@@ -682,14 +687,14 @@
                   <b>{{ nodeInfo.staked }}</b>
                 </v-col>
               </v-row>
-              <v-card-actions>
+              <v-card-actions class="px-0">
                 <v-row justify="end" class="mt-10">
                   <v-col align-self="center" class="text-right">
                     <v-btn
                       disabled
                       elevation="0"
                       color="rgba(81, 88, 246, 0.1)"
-                      class="primary--text font-weight-bold"
+                      class="primary--text font-weight-medium rounded-sm"
                       >Stake more</v-btn
                     >
                   </v-col>
@@ -710,14 +715,14 @@
                   <b>{{ nodeInfo.rewardAmount }} ALICE</b> <br />
                 </v-col>
               </v-row>
-              <v-card-actions>
+              <v-card-actions class="px-0">
                 <v-row justify="end" class="mt-10">
                   <v-col align-self="center" class="text-right">
                     <v-btn
                       disabled
                       elevation="0"
                       color="#FEEFE9"
-                      class="primaryOrange--text font-weight-bold text-subtitle-1"
+                      class="primaryOrange--text rounded-sm font-weight-medium text-subtitle-1"
                     >
                       Withdraw
                     </v-btn>
@@ -1073,7 +1078,7 @@ export default {
                   ? "Your node has been added to the network successfully. Its initialization will take a few minutes."
                   : tests["networking"] && tests["peerInfo"] && tests["status"]
                   ? "Online"
-                  : "OFF";
+                  : "Offline";
                 this.nodeInfo["messages"] = res["messages"];
                 this.nodeInfo["rewardPercent"] = res["reward"]["rewardPercent"];
                 this.nodeInfo["history"] = res["history"].reverse();
@@ -1365,8 +1370,8 @@ export default {
     ethereum.on("chainChanged", (chainId) => {
       window.location.reload();
       this.currntIdChain = chainId;
+      this.checkNetwork();
     });
-    this.checkNetwork();
 
     if (localStorage.themeIsDark === "true") {
       this.themeIsDark = true;
@@ -1490,7 +1495,7 @@ h3 {
   filter: drop-shadow(0px 8px 18px rgba(81, 88, 246, 0.15));
 }
 .title_card_box_font {
-  font-size: 32px;
+  font-size: 24px;
   font-family: "Montserrat";
   font-style: normal;
   font-weight: 600;
@@ -1504,8 +1509,8 @@ h3 {
 .subtitle_card_box_font {
   font-family: "Montserrat";
   font-style: normal;
-  font-weight: 500;
-  font-size: 24px;
+  font-weight: 500 !important;
+  font-size: 14px;
   line-height: 29px;
   text-align: center;
 
@@ -1595,7 +1600,7 @@ h3 {
   background: none;
 }
 .node_id_card {
-  background: rgba(81, 88, 246, 0.1);
+  background: rgba(81, 88, 246, 0.13);
 }
 .reward_background {
   background: linear-gradient(
