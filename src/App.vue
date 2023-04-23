@@ -823,6 +823,8 @@ import nodeDetailsDialog from "@/components/nodeDetailsDialog.vue";
 import detectEthereumProvider from "@metamask/detect-provider";
 import { ValidateIPaddress } from "@/utils/formatChecker";
 import AllertCard from "./components/AllertCard.vue";
+import { mapState } from "pinia";
+import { useTestStore } from "./stores/teststore";
 const mainChainId = 0x61;
 const STEPS = {
   mint: 1,
@@ -1332,6 +1334,7 @@ export default {
     this.getChainId();
   },
   computed: {
+    ...mapState(useTestStore, ["jafarTest"]),
     haveNativeToken() {
       const balance = Number(this.nativeTokenBalance);
       if (balance) return true;
