@@ -275,6 +275,7 @@
                               @click="switchToCorrectChain"
                               block
                               large
+                              elevation="0"
                               color="primary"
                               >switch network</v-btn
                             >
@@ -283,6 +284,7 @@
                               @click="connectToMetamask"
                               block
                               large
+                              elevation="0"
                               color="primary"
                               >connect wallet</v-btn
                             >
@@ -808,14 +810,7 @@
         </v-col>
       </v-row>
     </v-footer>
-    <v-footer padless color="rgba(0,0,0,0)">
-      <v-col cols="12" class="text-center myFont">
-        <div class="d-flex align-center text-center justify-center">
-          <span class="mx-2 myFont">Powered by</span>
-          <img src="@/assets/muon-logo1.svg" alt="" />
-        </div>
-      </v-col>
-    </v-footer>
+
     <v-snackbar
       text
       top
@@ -1437,14 +1432,7 @@ h3 {
   background-color: #313144 !important;
 }
 .backgorundpic_light {
-  overflow-x: hidden;
-  overflow-y: hidden;
-  background-color: #f8faff !important;
-  background-image: url("@/assets/Blur.svg") !important;
-  background-size: cover !important;
-  background-repeat: no-repeat !important;
-  background-attachment: fixed !important;
-  background-position: center !important;
+  background: none !important;
 }
 .full-width {
   width: 100% !important;

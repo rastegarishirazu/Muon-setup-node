@@ -7,7 +7,24 @@ $rounded: (
   'md':12px,
   'lg': 18px
 );
+$material-light:(
+  'text':('primary':#323245)
+);
 .theme--light.v-application code {
     background-color: #6f7787 !important;
     color: white;
   }
+html{
+  background-color: #f8faff !important;
+  background-image: url("@/assets/Blur.svg") !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+  background-attachment: fixed !important;
+  background-position: center !important;
+}
+.text-18{
+  font-size: 18px;
+}
+.full-height{
+  height: 100% !important;
+}
