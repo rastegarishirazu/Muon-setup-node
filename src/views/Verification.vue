@@ -1,5 +1,5 @@
 <template>
-  <div class="px-15 mt-10">
+  <div class="padding-verification mt-10">
     <v-row>
       <v-col md="8" cols="12">
         <v-row justify="space-between">
@@ -12,6 +12,7 @@
           <v-col class="text-right">
             <v-btn
               text
+              @click="$router.push('/')"
               class="primary--text text-capitalize text-decoration-underline"
             >
               <img
@@ -227,8 +228,18 @@
 </template>
 
 <script>
+import { useDashboardStore } from "@/stores/dashboardStore";
+import { mapWritableState } from "pinia";
+
 export default {
   name: "verification",
+
+  created() {
+    this.cardLoading = false;
+  },
+  computed: {
+    ...mapWritableState(useDashboardStore, ["cardLoading"]),
+  },
 };
 </script>
 
@@ -251,5 +262,10 @@ export default {
 }
 .gold {
   color: #c9b037;
+}
+.padding-verification {
+  padding-left: 124px;
+  padding-right: 124px;
+  padding-bottom: 70px;
 }
 </style>

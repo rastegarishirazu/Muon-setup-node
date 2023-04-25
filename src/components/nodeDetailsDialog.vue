@@ -1,10 +1,14 @@
 <template>
-  <v-dialog content-class="rounded-xl" width="700px" v-model="dialog">
+  <v-dialog
+    content-class="rounded-xl"
+    width="700px"
+    v-model="nodeDetailsDialogModel"
+  >
     <v-card>
       <v-card-title class="text-h5 lighten-2">
         Node Details
         <v-spacer></v-spacer>
-        <v-btn @click="sampleDialogModelSeter(false)" icon>
+        <v-btn @click="nodeDetailsDialogModel = false" icon>
           <v-icon color="black">mdi-close</v-icon>
         </v-btn>
       </v-card-title>
@@ -50,24 +54,16 @@
 </template>
 
 <script>
+import { useDashboardStore } from "@/stores/dashboardStore";
+import { mapState, mapWritableState } from "pinia";
+
 export default {
-  props: {
-    sampleDialogModel: Boolean,
-    sampleDialogModelSeter: { type: Function },
-    nodeInfo: Object,
-  },
-  data() {
-    return {
-      dialog: false,
-    };
-  },
-  watch: {
-    sampleDialogModel(newValue, oldValue) {
-      this.dialog = newValue;
-    },
-    dialog(newV, oldV) {
-      this.sampleDialogModelSeter(newV);
-    },
+  data: () => ({}),
+  methods: {},
+
+  computed: {
+    ...mapState(useDashboardStore, ["nodeInfo"]),
+    ...mapWritableState(useDashboardStore, ["nodeDetailsDialogModel"]),
   },
 };
 </script>

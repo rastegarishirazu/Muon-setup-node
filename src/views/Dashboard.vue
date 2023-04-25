@@ -1,25 +1,12 @@
 <template>
-  <v-app
+  <div
     :class="[
       $vuetify.theme.dark ? 'backgorundpic_dark' : 'backgorundpic_light',
     ]"
   >
     <!-- <particles></particles> -->
-    <Header
-      v-if="!cardLoading"
-      :addressShow="addressShow"
-      :aliceBalance="muonTestTokenShow"
-      :connectWallet="connectToMetamask"
-      :switchNetwork="switchToCorrectChain"
-      :isCorrectChain="isCorrectChain"
-      :isConnected="isConnected"
-    ></Header>
 
     <v-main class="">
-      <h2 v-if="this.haveNode === 'error'" class="text-center mt-5">
-        something went wrong. please try again later.
-      </h2>
-
       <v-responsive v-if="cardLoading" height="80vh">
         <v-row justify="center" style="height: 100%">
           <v-col align-self="center"></v-col>
@@ -34,9 +21,9 @@
         </v-row>
       </v-responsive>
       <v-responsive
-        v-else-if="haveNode != 'error'"
+        v-else-if="haveNode != 'error' && e1 < steps.newNode"
         width="100%"
-        class="px-5 overflow-visible"
+        class="px-5 overflow-visible pb-10"
       >
         <v-row
           v-if="e1 < steps.newNode || e1 === steps.newNode"
@@ -211,7 +198,7 @@
                             >
                           </v-btn>
                         </p>
-                        <p class="mt-10">Token amount (min: 1000)</p>
+                        <p class="mt-8">Token amount (min: 1000)</p>
                         <v-text-field
                           solo
                           flat
@@ -297,46 +284,49 @@
                       align-self="end"
                       cols="12"
                     >
-                      <div class="">
-                        <lottie-vue-player
-                          ref="anim"
-                          src="https://lottie.host/868900ff-6aee-4393-a1e8-b60ad88620b1/T2cHITcdet.json"
-                          :autoplay="true"
-                        />
-                        <p
-                          class="text-center mb-10 font-weight-medium text-subtitle-1"
+                      <v-row>
+                        <v-col class="d-flex justify-center">
+                          <lottie-vue-player
+                            ref="anim"
+                            style="width: 200px"
+                            src="https://lottie.host/868900ff-6aee-4393-a1e8-b60ad88620b1/T2cHITcdet.json"
+                            :autoplay="true"
+                          />
+                        </v-col>
+                      </v-row>
+                      <p
+                        class="text-center mb-10 font-weight-medium text-subtitle-1"
+                      >
+                        Now you need to approve the <br />
+                        staking contract to use the tokens
+                      </p>
+                      <v-row>
+                        <v-col cols="9"
+                          ><v-btn
+                            :loading="btnLoading"
+                            @click="approve"
+                            elevation="0"
+                            block
+                            large
+                            color="primary"
+                            >Approve</v-btn
+                          ></v-col
                         >
-                          Now you need to approve the <br />
-                          staking contract to use the tokens
-                        </p>
-                        <v-row>
-                          <v-col cols="9"
-                            ><v-btn
-                              :loading="btnLoading"
-                              @click="approve"
-                              elevation="0"
-                              block
-                              large
-                              color="primary"
-                              >Approve</v-btn
-                            ></v-col
+                        <v-col cols="3" class="pl-0"
+                          ><v-btn
+                            @click="checkApproved"
+                            block
+                            large
+                            class="rounded-md"
+                            color="gray"
+                            elevation="0"
                           >
-                          <v-col cols="3" class="pl-0"
-                            ><v-btn
-                              @click="checkApproved"
-                              block
-                              large
-                              class="rounded-md"
-                              color="gray"
-                              elevation="0"
-                            >
-                              <v-icon color="black" class="gray rounded-md">
-                                mdi-refresh
-                              </v-icon>
-                            </v-btn></v-col
-                          >
-                        </v-row>
-                      </div>
+                            <v-icon color="black" class="gray rounded-md">
+                              mdi-refresh
+                            </v-icon>
+                          </v-btn></v-col
+                        >
+                      </v-row>
                     </v-col>
                     <v-col v-if="e1 === steps.addNode" cols="12">
                       <div class="lightInfo rounded-sm px-1">
@@ -355,7 +345,7 @@
                         </v-row>
                       </div>
                       <v-row>
-                        <v-col cols="12" class="mt-15">
+                        <v-col cols="12" class="mt-10">
                           <span>Node IP</span>
                           <v-text-field
                             v-model="nodeIPInput"
@@ -537,238 +527,268 @@
             </v-scroll-x-reverse-transition>
           </v-col>
         </v-row>
-        <v-row v-if="e1 === steps.haveNode" justify="center" class="mt-15 px-5">
-          <v-col cols="12">
-            <v-card
-              color="rgba(81, 88, 246, 0.1)"
-              class="node_id_card px-5 py-4 rounded-lg"
-              elevation="0"
-            >
-              <v-row>
-                <v-col class="d-inline-flex align-center">
-                  <img width="43px" src="@/assets/dashboard/WalletCheck.svg" />
-                  <h5 class="pl-5 text-h6 font-weight-regular">
-                    Uniqueness Verification:
-                  </h5>
-                </v-col>
-                <v-col cols="7" class="d-inline-flex align-center justify-end">
-                  <h5 class="mr-8 text-h6 font-weight-600">
-                    Muon presale Participation
-                  </h5>
-                  <v-btn
-                    elevation="0"
-                    color="rgba(81, 88, 246, 0.1)"
-                    class="primary--text rounded-sm font-weight-medium text-body-2 text-capitalize"
-                  >
-                    Go to verification center
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </v-card>
-          </v-col>
-          <v-col md="3" cols="12">
-            <v-card
-              color="rgba(81, 88, 246, 0.1)"
-              class="node_id_card px-5 py-4 rounded-lg"
-              elevation="0"
-            >
-              <h6 class="textGray--text text-subtitle-1 font-weight-bold">
-                IP Address
-              </h6>
-              <v-row justify="end" class="mt-2">
-                <v-col align-self="center" class="text-right">
-                  <b class="mr-2">{{ nodeInfo.nodeIP }}</b>
-                  <v-btn @click="copyURL(nodeInfo.nodeIP)" icon>
-                    <v-img src="@/assets/dashboard/Copy.svg"></v-img>
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </v-card>
-          </v-col>
-          <v-col md="3" cols="12">
-            <v-card
-              color="rgba(81, 88, 246, 0.1)"
-              class="node_id_card px-5 py-4 rounded-lg"
-              elevation="0"
-            >
-              <h6 class="textGray--text text-subtitle-1 font-weight-bold">
-                Node ID
-              </h6>
-              <v-row justify="end" class="mt-2">
-                <v-col align-self="center" class="text-right">
-                  <b class="mr-2">
-                    {{ nodeInfo.id }}
-                  </b>
-                  <v-btn icon @click="copyURL(nodeInfo.id)">
-                    <v-img src="@/assets/dashboard/Copy.svg"></v-img>
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </v-card>
-          </v-col>
-          <v-col md="3" cols="12">
-            <v-card
-              color="rgba(81, 88, 246, 0.1)"
-              class="node_id_card px-5 py-4 rounded-lg"
-              elevation="0"
-            >
-              <h6 class="textGray--text text-subtitle-1 font-weight-bold">
-                Node address
-              </h6>
-              <v-row justify="end" class="mt-2">
-                <v-col align-self="center" class="text-right">
-                  <b class="mr-2"
-                    >{{ addressToShort(nodeInfo.nodeAddress) }}
-                  </b>
-                  <v-btn icon @click="copyURL(nodeInfo.nodeAddress)">
-                    <v-img src="@/assets/dashboard/Copy.svg"></v-img>
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </v-card>
-          </v-col>
-          <v-col md="3" cols="12">
-            <v-card
-              color="rgba(81, 88, 246, 0.1)"
-              class="node_id_card px-5 py-4 rounded-lg"
-              elevation="0"
-            >
-              <h6 class="textGray--text text-subtitle-1 font-weight-bold">
-                peer ID
-              </h6>
-              <v-row justify="end" class="mt-2">
-                <v-col align-self="center" class="text-right">
-                  <b class="mr-2">{{ addressToShort(nodeInfo.peerId) }}</b>
-                  <v-btn icon @click="copyURL(nodeInfo.peerId)">
-                    <v-img src="@/assets/dashboard/Copy.svg"></v-img>
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </v-card>
-          </v-col>
-        </v-row>
-        <v-row v-if="e1 === steps.haveNode" justify="center" class="px-5">
-          <v-col md="4" cols="12">
-            <v-card
-              color="rgba(81, 88, 246, 0.1)"
-              class="full-height node_id_card px-2 py-4 rounded-lg text-center"
-              elevation="0"
-            >
-              <v-row>
-                <v-col>
-                  <h6 class="text-subtitle-1 font-weight-medium">Uptime</h6>
-                  <div class="mt-2">
-                    <v-progress-circular
-                      v-if="nodeIsActive != 'Exited'"
-                      :rotate="-180"
-                      :size="100"
-                      :width="15"
-                      :value="Number(nodeInfo.onlinePercent.split('%')[0])"
+      </v-responsive>
+      <v-responsive
+        v-else-if="haveNode != 'error' && e1 > steps.addNode"
+        width="100%"
+        min-height="80vh"
+        class="px-5 overflow-visible"
+      >
+        <v-row
+          :class="[{ 'px-240': $vuetify.breakpoint.lgAndUp }, 'full-height']"
+        >
+          <v-col align-self="center">
+            <v-row v-if="e1 === steps.haveNode" justify="center" class="">
+              <v-col cols="12">
+                <v-card
+                  color="rgba(81, 88, 246, 0.1)"
+                  class="node_id_card px-5 py-4 rounded-lg"
+                  elevation="0"
+                >
+                  <v-row>
+                    <v-col class="d-inline-flex align-center">
+                      <img
+                        width="43px"
+                        src="@/assets/dashboard/WalletCheck.svg"
+                      />
+                      <h5 class="pl-5 text-h6 font-weight-regular">
+                        Uniqueness Verification:
+                      </h5>
+                    </v-col>
+                    <v-col
+                      cols="7"
+                      class="d-inline-flex align-center justify-end"
                     >
-                      <v-avatar
-                        color="#5158F666"
-                        size="60"
-                        class="font-weight-bold"
+                      <h5 class="mr-8 text-h6 font-weight-600">
+                        Muon presale Participation
+                      </h5>
+                      <v-btn
+                        elevation="0"
+                        color="rgba(81, 88, 246, 0.1)"
+                        @click="$router.push('/verification')"
+                        class="primary--text rounded-sm font-weight-medium text-body-2 text-capitalize"
                       >
-                        {{ nodeInfo.onlinePercent }}
-                      </v-avatar>
-                    </v-progress-circular>
-                    <v-icon class="text-h2" color="primary" v-else
-                      >mdi-exit-run</v-icon
-                    >
-                  </div>
-                </v-col>
-                <v-col>
-                  <div>
-                    <h6 class="text-subtitle-1 font-weight-medium">Status</h6>
-                  </div>
-                  <b
-                    :class="[
-                      'info--text',
-                      'text-h5',
-                      'font-weight-medium',
-                      { 'gray3--text': nodeIsActive === 'Offline' },
-                    ]"
-                    >{{ nodeIsActive }}</b
-                  >
-                  <br />
-                  <v-btn
-                    elevation="0"
-                    color="rgba(81, 88, 246, 0.1)"
-                    class="mt-9 primary--text rounded-sm font-weight-medium"
-                    @click="setnodeDetailsDialogModel(true)"
-                    >Details</v-btn
-                  >
-                </v-col>
-              </v-row>
-            </v-card>
-          </v-col>
-          <v-col md="4" cols="12">
-            <v-card
-              color="rgba(81, 88, 246, 0.1)"
-              class="full-height node_id_card px-5 py-4 rounded-lg"
-              elevation="0"
-            >
-              <v-row justify="spase-between">
-                <v-col cols="8">
-                  <h6 class="black--text text-h6">Staked ALICE</h6>
-                </v-col>
-                <v-col class="text-right">
-                  <b>{{ nodeInfo.staked }}</b>
-                </v-col>
-              </v-row>
-              <v-card-actions class="px-0">
-                <v-row justify="end" class="mt-10">
-                  <v-col align-self="center" class="text-right">
-                    <v-btn
-                      disabled
-                      elevation="0"
-                      color="rgba(81, 88, 246, 0.1)"
-                      class="primary--text font-weight-medium rounded-sm"
-                      >Stake more</v-btn
-                    >
-                  </v-col>
-                </v-row>
-              </v-card-actions>
-            </v-card>
-          </v-col>
-          <v-col md="4" cols="12">
-            <v-card
-              class="full-height node_id_card px-5 py-4 rounded-lg reward_background"
-              elevation="0"
-            >
-              <v-row justify="spase-between">
-                <v-col cols="5">
-                  <h6 class="black--text text-h6">Reward</h6>
-                </v-col>
-                <v-col class="text-right">
-                  <b>{{ nodeInfo.rewardAmount }} ALICE</b> <br />
-                </v-col>
-              </v-row>
-              <v-card-actions class="px-0">
-                <v-row justify="end" class="mt-10">
-                  <v-col align-self="center" class="text-right">
-                    <v-btn
-                      disabled
-                      elevation="0"
-                      color="#FEEFE9"
-                      class="primaryOrange--text rounded-sm font-weight-medium text-subtitle-1"
-                    >
-                      Withdraw
-                    </v-btn>
-                  </v-col>
-                </v-row>
-              </v-card-actions>
-            </v-card>
+                        Go to verification center
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                </v-card>
+              </v-col>
+              <v-col md="3" cols="12">
+                <v-card
+                  color="rgba(81, 88, 246, 0.1)"
+                  class="node_id_card px-5 py-4 rounded-lg"
+                  elevation="0"
+                >
+                  <h6 class="textGray--text text-subtitle-1 font-weight-medium">
+                    IP Address
+                  </h6>
+                  <v-row justify="end" class="mt-2">
+                    <v-col align-self="center" class="text-right">
+                      <b class="mr-2 font-weight-medium">{{
+                        nodeInfo.nodeIP
+                      }}</b>
+                      <v-btn @click="copyURL(nodeInfo.nodeIP)" icon>
+                        <v-img src="@/assets/dashboard/Copy.svg"></v-img>
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                </v-card>
+              </v-col>
+              <v-col md="3" cols="12">
+                <v-card
+                  color="rgba(81, 88, 246, 0.1)"
+                  class="node_id_card px-5 py-4 rounded-lg full-height"
+                  elevation="0"
+                >
+                  <h6 class="textGray--text text-subtitle-1 font-weight-medium">
+                    Node ID
+                  </h6>
+                  <v-row justify="end" class="mt-2">
+                    <v-col align-self="center" class="text-right">
+                      <b class="mr-2 font-weight-medium">
+                        {{ nodeInfo.id }}
+                      </b>
+                      <v-btn icon @click="copyURL(nodeInfo.id)">
+                        <v-img src="@/assets/dashboard/Copy.svg"></v-img>
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                </v-card>
+              </v-col>
+              <v-col md="3" cols="12">
+                <v-card
+                  color="rgba(81, 88, 246, 0.1)"
+                  class="node_id_card px-5 py-4 rounded-lg"
+                  elevation="0"
+                >
+                  <h6 class="textGray--text text-subtitle-1 font-weight-medium">
+                    Node address
+                  </h6>
+                  <v-row justify="end" class="mt-2">
+                    <v-col align-self="center" class="text-right">
+                      <b class="mr-2 font-weight-medium"
+                        >{{ addressToShort(nodeInfo.nodeAddress) }}
+                      </b>
+                      <v-btn icon @click="copyURL(nodeInfo.nodeAddress)">
+                        <v-img src="@/assets/dashboard/Copy.svg"></v-img>
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                </v-card>
+              </v-col>
+              <v-col md="3" cols="12">
+                <v-card
+                  color="rgba(81, 88, 246, 0.1)"
+                  class="node_id_card px-5 py-4 rounded-lg"
+                  elevation="0"
+                >
+                  <h6 class="textGray--text text-subtitle-1 font-weight-medium">
+                    peer ID
+                  </h6>
+                  <v-row justify="end" class="mt-2">
+                    <v-col align-self="center" class="text-right">
+                      <b class="mr-2 font-weight-medium">{{
+                        addressToShort(nodeInfo.peerId)
+                      }}</b>
+                      <v-btn icon @click="copyURL(nodeInfo.peerId)">
+                        <v-img src="@/assets/dashboard/Copy.svg"></v-img>
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                </v-card>
+              </v-col>
+            </v-row>
+            <v-row v-if="e1 === steps.haveNode" justify="center">
+              <v-col md="4" cols="12">
+                <v-card
+                  color="rgba(81, 88, 246, 0.1)"
+                  class="full-height node_id_card px-2 py-4 rounded-lg text-center"
+                  elevation="0"
+                >
+                  <v-row>
+                    <v-col>
+                      <h6 class="text-subtitle-1 font-weight-regular">
+                        Uptime
+                      </h6>
+                      <div class="mt-2">
+                        <v-progress-circular
+                          v-if="nodeIsActive != 'Exited'"
+                          :rotate="-180"
+                          :size="110"
+                          :width="15"
+                          :value="Number(nodeInfo.onlinePercent.split('%')[0])"
+                        >
+                          <v-avatar color="#5158F666" size="80" class="text-h6">
+                            {{ nodeInfo.onlinePercent }}
+                          </v-avatar>
+                        </v-progress-circular>
+                        <v-icon class="text-h2" color="primary" v-else
+                          >mdi-exit-run</v-icon
+                        >
+                      </div>
+                    </v-col>
+                    <v-col>
+                      <div>
+                        <h6 class="text-subtitle-1 font-weight-regular">
+                          Status
+                        </h6>
+                      </div>
+                      <b
+                        :class="[
+                          'info--text',
+                          'text-h5',
+                          'font-weight-medium',
+                          { 'gray3--text': nodeIsActive === 'Offline' },
+                        ]"
+                        >{{ nodeIsActive }}</b
+                      >
+                      <br />
+                      <v-btn
+                        elevation="0"
+                        color="rgba(81, 88, 246, 0.1)"
+                        class="mt-9 primary--text rounded-sm font-weight-medium"
+                        @click="
+                          nodeDetailsDialogModel = !nodeDetailsDialogModel
+                        "
+                        >Details</v-btn
+                      >
+                    </v-col>
+                  </v-row>
+                </v-card>
+              </v-col>
+              <v-col md="4" cols="12">
+                <v-card
+                  color="rgba(81, 88, 246, 0.1)"
+                  class="full-height node_id_card px-5 py-4 rounded-lg"
+                  elevation="0"
+                >
+                  <v-row justify="spase-between">
+                    <v-col cols="8">
+                      <h6 class="black--text text-h6 font-weight-regular">
+                        Staked ALICE
+                      </h6>
+                    </v-col>
+                    <v-col class="text-right">
+                      <b class="font-weight-medium text-h5">{{
+                        nodeInfo.staked
+                      }}</b>
+                    </v-col>
+                  </v-row>
+                  <v-card-actions class="px-0">
+                    <v-row justify="end" class="mt-10">
+                      <v-col align-self="center" class="text-right">
+                        <v-btn
+                          disabled
+                          elevation="0"
+                          color="rgba(81, 88, 246, 0.1)"
+                          class="primary--text font-weight-medium rounded-sm"
+                          >Stake more</v-btn
+                        >
+                      </v-col>
+                    </v-row>
+                  </v-card-actions>
+                </v-card>
+              </v-col>
+              <v-col md="4" cols="12">
+                <v-card
+                  class="full-height node_id_card px-5 py-4 rounded-lg reward_background"
+                  elevation="0"
+                >
+                  <v-row justify="spase-between">
+                    <v-col cols="5">
+                      <h6 class="black--text text-h6 font-weight-regular">
+                        Reward
+                      </h6>
+                    </v-col>
+                    <v-col class="text-right">
+                      <b class="font-weight-medium text-h5"
+                        >{{ nodeInfo.rewardAmount }} ALICE</b
+                      >
+                      <br />
+                    </v-col>
+                  </v-row>
+                  <v-card-actions class="px-0">
+                    <v-row justify="end" class="mt-10">
+                      <v-col align-self="center" class="text-right">
+                        <v-btn
+                          disabled
+                          elevation="0"
+                          color="#FEEFE9"
+                          class="primaryOrange--text rounded-sm font-weight-medium text-subtitle-1"
+                        >
+                          Withdraw
+                        </v-btn>
+                      </v-col>
+                    </v-row>
+                  </v-card-actions>
+                </v-card>
+              </v-col>
+            </v-row>
           </v-col>
         </v-row>
 
-        <nodeDetailsDialog
-          v-if="e1 === steps.haveNode"
-          :nodeInfo="nodeInfo"
-          :sample-dialog-model="nodeDetailsDialogModel"
-          :sample-dialog-model-seter="setnodeDetailsDialogModel"
-        ></nodeDetailsDialog>
+        <nodeDetailsDialog v-if="e1 === steps.haveNode"></nodeDetailsDialog>
         <v-dialog
           v-if="isCorrectChain && isConnected"
           dark
@@ -795,12 +815,9 @@
         </v-dialog>
       </v-responsive>
     </v-main>
-    <v-footer
-      class="mt-10 transparent"
-      v-if="e1 === steps.haveNode && !cardLoading"
-    >
+    <div class="pr-5" v-if="e1 === steps.haveNode && !cardLoading">
       <v-row justify="end">
-        <v-col md="5" cols="12">
+        <v-col class="warning-message" md="5" cols="12">
           <AllertCard
             class="mt-5"
             v-for="(value, i) in nodeInfo.messages"
@@ -809,7 +826,7 @@
           ></AllertCard>
         </v-col>
       </v-row>
-    </v-footer>
+    </div>
 
     <v-snackbar
       text
@@ -823,7 +840,7 @@
     >
       Copy to clipboard
     </v-snackbar>
-  </v-app>
+  </div>
 </template>
 
 <script>
@@ -846,8 +863,8 @@ import nodeDetailsDialog from "@/components/nodeDetailsDialog.vue";
 import detectEthereumProvider from "@metamask/detect-provider";
 import { ValidateIPaddress } from "@/utils/formatChecker";
 import AllertCard from "@/components/AllertCard.vue";
-import { mapState } from "pinia";
-import { useTestStore } from "@/stores/teststore";
+import { mapWritableState, mapActions, mapState } from "pinia";
+import { useDashboardStore } from "@/stores/dashboardStore";
 const mainChainId = 0x61;
 const STEPS = {
   mint: 1,
@@ -865,54 +882,6 @@ export default {
 
   data: () => ({
     provider: null,
-    nodeIpStatus: "",
-    testEl: 1, // remove it befor build
-    cardLoading: true,
-    copySnackbar: false,
-    TR: true,
-    themeIsDark: false,
-    dialog: false,
-    steps: STEPS,
-    heightSize: Number,
-    account: "",
-    addressShow: "connect Wallet",
-    web3: "",
-    currntIdChain: NaN,
-    isCorrectChain: false,
-    isConnected: false,
-    e1: 1,
-    isApproved: false,
-    stakeAmount: 1000,
-    peerId: "",
-    nodeAddress: "",
-    totalStake: 0,
-    haveNode: false,
-    tokenTestBalance: 0,
-    haveEnoughTokenTEst: false,
-    mintAmount: 1000,
-    nativeTokenBalance: 0,
-    nodeInfo: Object,
-    btnLoading: false,
-    nodeIsActive: "Loading...",
-    nodeUptime: "",
-    rewardAmount: 0,
-    downNodeTimes: [],
-    nodeIPInput: "",
-    checkHaveNodeInterval: Object,
-    dialogContext: { text: String },
-    nodeDetailsDialogModel: false,
-    stakerAddress: "",
-    isIPValid: true,
-    ipCheckLoading: false,
-    minMint: [
-      (value) => !!value || "Required.",
-      (value) => (value && value <= 1000 && value > 0) || "min:1 , max:1000",
-    ],
-    minStakeAmount: [
-      (value) => !!value || "Required.",
-      (value) =>
-        (value && value >= 1000 - totalStake) || "At least 1000 test tokens",
-    ],
   }),
   watch: {
     haveNode(newState, oldState) {
@@ -967,382 +936,37 @@ export default {
           this.checkHaveNode(false),
           15 * 1000
         );
-        console.log(this.checkHaveNodeInterval);
       } else {
         clearInterval(this.checkHaveNodeInterval);
       }
     },
+    haveNode(newValue) {
+      if (newValue === "error") {
+        this.$router.push("/error");
+      }
+    },
   },
   methods: {
-    setnodeDetailsDialogModel(input) {
-      this.nodeDetailsDialogModel = input;
-    },
-    addressToShort(address) {
-      return (
-        address.slice(0, 4) +
-        "..." +
-        address.slice(address.length - 4, address.length)
-      );
-    },
-    changeTheme() {
-      this.themeIsDark = !this.themeIsDark;
-    },
-    getNativeBalance() {
-      this.web3.eth.getBalance(this.account).then((res) => {
-        const balance = this.web3.utils.fromWei(res);
-        this.nativeTokenBalance = Number(balance);
-        if (res === "0") {
-          this.dialog = true;
-          this.dialogContext.text = `
-          <h4
-                  class="myFont blackText--text text-h6 mt-10 underlite_dialog"
-                >
-                  Not enough gas...
-                </h4>
-                <p class="myFont blackText--text text-center mt-5">
-                  You need more TEST BNB as gas tokens to use the dashboard.<br />
-                  Use the following faucet to get some.
-                </p>
-
-                <a
-                  class="primaryOrange--text"
-                  target="_blank"
-                  href="https://testnet.bnbchain.org/faucet-smart"
-                  >BNB Smart Chain Faucet</a
-                >
-          `;
-        }
-      });
-    },
-    mint() {
-      this.btnLoading = true;
-      mint(this.account, this.web3, this.mintAmount)
-        .then((res) => {
-          this.getTokenTestBalance();
-          this.e1 = this.steps.approve;
-        })
-        .finally(() => {
-          this.btnLoading = false;
-        });
-    },
-    getTokenTestBalance() {
-      getBalanceaOfTokenTest(this.account, this.web3).then((res) => {
-        this.tokenTestBalance = res;
-      });
-    },
-    rewardCheck(flag = true) {
-      if (flag) {
-        rewardChecker(this.account, this.web3).then((res) => {
-          this.rewardAmount = Number(res).toFixed(4);
-          this.rewardCheck(false);
-        });
-      } else {
-        setTimeout(() => {
-          rewardChecker(this.account, this.web3).then((res) => {
-            this.rewardAmount = Number(res).toFixed(4);
-          });
-          this.rewardCheck(false);
-        }, 15000);
-      }
-    },
-    checkHaveNode(cardLoadingRefresh = true) {
-      if (this.account) {
-        if (cardLoadingRefresh) {
-          this.cardLoading = true;
-          console.log("card loading on");
-        }
-        getNodeInfo(this.account)
-          // getNodeInfo(28)
-          .then((res) => {
-            res = res["result"];
-            if (res && res != "node not found") {
-              this.haveNode = true;
-              this.nodeIsActive = "Loading...";
-              this.nodeInfo["isNew"] = res["node"]["isNew"];
-              if (this.e1 === this.steps.newNode) {
-                this.e1 = this.nodeInfo["isNew"]
-                  ? this.steps.newNode
-                  : this.steps.beforHaveNode;
-              } else {
-                this.e1 = this.nodeInfo["isNew"]
-                  ? this.steps.newNode
-                  : this.steps.haveNode;
-              }
-              this.nodeInfo["active"] = res["node"]["active"];
-              const tests = res["node"]["tests"];
-              this.nodeInfo["nodeAddress"] = res["node"]["nodeAddress"];
-              this.nodeInfo["id"] = res["node"]["id"];
-              this.nodeInfo["peerId"] = res["node"]["peerId"];
-              this.nodeInfo["startTime"] = moment(
-                res["node"]["startTime"] * 1000
-              );
-              if (res["node"]["endTime"]) {
-                this.nodeInfo["endTime"] = moment(
-                  res["node"]["endTime"] * 1000
-                );
-                this.nodeIsActive = "Exited";
-              } else {
-                this.nodeInfo["endTime"] = false;
-              }
-              this.nodeInfo["rewardAmount"] = Number(
-                this.web3.utils.fromWei(
-                  String(res["reward"]["earned"]),
-                  "ether"
-                )
-              ).toFixed(4);
-              this.nodeInfo["nodeIP"] = res["node"]["ip"];
-              this.nodeInfo["staked"] = this.web3.utils.fromWei(
-                res["reward"]["balance"].toLocaleString("fullwide", {
-                  useGrouping: false,
-                })
-              );
-              this.nodeInfo["onlinePercent"] = res["reward"]["onlinePercent"];
-
-              if (this.nodeInfo["active"]) {
-                this.nodeIsActive = this.nodeInfo.isNew
-                  ? "Your node has been added to the network successfully. Its initialization will take a few minutes."
-                  : tests["networking"] && tests["peerInfo"] && tests["status"]
-                  ? "Online"
-                  : "Offline";
-                this.nodeInfo["messages"] = res["messages"];
-                this.nodeInfo["rewardPercent"] = res["reward"]["rewardPercent"];
-                this.nodeInfo["history"] = res["history"].reverse();
-
-                var messages = [];
-                for (var [i, valueFrom] of this.nodeInfo["history"].entries()) {
-                  if (!valueFrom["isOnline"]) {
-                    var flag = true;
-                    var from = valueFrom;
-                    // var fromDate = new Date(from["timestamp"] * 1000);
-                    var fromDate = moment(from["timestamp"] * 1000);
-                    var fromMoment = moment(fromDate);
-                    for (var [j, valueTo] of this.nodeInfo["history"]
-                      .slice(i)
-                      .entries()) {
-                      if (valueTo["isOnline"]) {
-                        // var toDate = new Date(valueTo["timestamp"] * 1000);
-                        var toDate = moment(valueTo["timestamp"] * 1000);
-                        var toMoment = moment(toDate);
-                        messages.push(
-                          `${fromDate.format(
-                            "YYYY-M-D H:m:s A"
-                          )} until ${toDate.format(
-                            "YYYY-M-D H:m:s A"
-                          )} for ${toMoment.to(fromMoment, true)}`
-                        );
-                        flag = false;
-                        break;
-                      }
-                    }
-                    if (flag) {
-                      messages.push(
-                        `${fromDate.format(
-                          "YYYY-M-D H:m:s A"
-                        )} until now for ${moment().to(fromMoment, true)}`
-                      );
-                    }
-                  }
-                }
-                this.nodeInfo["downNodeTimes"] = messages;
-              }
-            } else if (res === "node not found") {
-              if (cardLoadingRefresh) {
-                this.haveNode = false;
-                this.e1 = this.steps.mint;
-              }
-            } else {
-              if (cardLoadingRefresh) this.haveNode = "error";
-            }
-          })
-          .finally(() => {
-            this.cardLoading = false;
-          });
-      }
-    },
-    getNodeAddressPeerIdByIP(ip) {
-      if (ip === "aji maji la taraji") {
-        this.e1 = 4;
-      } else {
-        let temp = ip.split("http://");
-        ip = temp.length > 1 ? temp[1].split("/")[0] : temp[0].split("/")[0];
-        let port = ip.split(":");
-        if (port[1]) {
-          ip = port[0];
-          port = ":" + port[1];
-        } else {
-          port = "";
-        }
-        if (ValidateIPaddress(ip)) {
-          this.ipCheckLoading = true;
-          console.log(ip + port);
-          checkIP(ip + port)
-            .then((res) => {
-              if (res.success) {
-                if ("staker" in res.result) {
-                  this.stakerAddress = res.result.staker;
-                  this.nodeAddress = "";
-                  this.peerId = "";
-                  this.nodeIpStatus = "info";
-                } else {
-                  this.nodeAddress = res.result.address;
-                  this.peerId = res.result.peerId;
-                  this.stakerAddress = false;
-                  this.isIPValid = true;
-                  this.nodeIpStatus = "success";
-                }
-              } else {
-                this.isIPValid = false;
-                this.nodeAddress = "";
-                this.peerId = "";
-                this.stakerAddress = "";
-                this.nodeIpStatus = "error";
-                console.log("bad");
-              }
-            })
-            .finally(() => {
-              this.ipCheckLoading = false;
-            });
-        } else {
-          this.nodeIpStatus = "invalidIp";
-          this.ipCheckLoading = false;
-        }
-      }
-    },
-    addNode() {
-      this.btnLoading = true;
-
-      newAddNode(this.account, this.web3, this.nodeAddress, this.peerId)
-        .then(() => {
-          this.checkHaveNode();
-          this.getTokenTestBalance();
-          this.e1 = this.steps.newNode;
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-        .finally(() => {
-          this.btnLoading = true;
-        });
-    },
-    stake() {
-      stake(this.account, this.web3, this.stakeAmount);
-    },
-    checkApproved() {
-      checkApproved(this.account, this.web3).then((res) => {
-        this.isApproved = res;
-      });
-    },
-    checkNetwork() {
-      if (this.currntIdChain != mainChainId) {
-        this.isCorrectChain = false;
-        this.cardLoading = false;
-      } else {
-        this.isCorrectChain = true;
-        ethereum
-          .request({ method: "eth_accounts" })
-          .then((accounts) => {
-            if (accounts.length === 0) {
-              console.log("Please connect to MetaMask.");
-              this.cardLoading = false;
-            } else if (accounts.length && this.isCorrectChain) {
-              this.connectToMetamask();
-            }
-          })
-          .catch(console.error);
-      }
-    },
-    async switchToCorrectChain() {
-      try {
-        await window.ethereum
-          .request({
-            method: "wallet_switchEthereumChain",
-            // params: [{ chainId: this.web3.utils.toHex(mainChainId) }],
-            params: [{ chainId: this.web3.utils.toHex(mainChainId) }],
-          })
-          .then(() => {
-            this.checkApproved();
-          });
-      } catch (err) {
-        // This error code indicates that the chain has not been added to MetaMask
-        if (err.code === 4902) {
-          await window.ethereum.request({
-            method: "wallet_addEthereumChain",
-            params: [
-              {
-                chainName: "BNB Smart Chain Testnet",
-                chainId: this.web3.utils.toHex(mainChainId),
-                nativeCurrency: {
-                  name: "tBNB",
-                  decimals: 18,
-                  symbol: "tBNB",
-                },
-                rpcUrls: ["https://bsc-testnet.public.blastapi.io"],
-                blockExplorerUrls: ["https://testnet.bscscan.com/"],
-              },
-            ],
-          });
-        }
-      }
-    },
-    approve() {
-      this.btnLoading = true;
-      approve(this.account, this.web3)
-        .then((res) => {
-          this.checkApproved();
-        })
-        .finally(() => {
-          this.btnLoading = false;
-        });
-    },
-    connectToMetamask() {
-      ethereum
-        .request({
-          method: "eth_requestAccounts",
-        })
-        .then((res) => {
-          if (res.length === 0) {
-            console.log("Please connect to MetaMask.");
-            this.cardLoading = false;
-            console.log(this.cardLoading);
-          } else {
-            const account = res[0];
-            this.account = account;
-            this.checkApproved();
-            this.getNativeBalance();
-            this.checkHaveNode();
-            this.getTokenTestBalance();
-          }
-        })
-        .catch((err) => {
-          this.cardLoading = false;
-          if (err.code === 4001) {
-            console.log("Plase connect to MetaMask");
-          } else {
-            console.error(err);
-          }
-        });
-    },
-    async getChainId() {
-      ethereum.request({ method: "eth_chainId" }).then((res) => {
-        this.currntIdChain = res;
-      });
-    },
-    async copyURL(mytext) {
-      try {
-        await navigator.clipboard.writeText(mytext);
-        this.copySnackbar = true;
-      } catch ($e) {
-        console.log("Cannot copy");
-      }
-    },
-    startApp(provider) {
-      // If the provider returned by detectEthereumProvider is not the same as
-      // window.ethereum, something is overwriting it, perhaps another wallet.
-      if (provider !== window.ethereum) {
-        console.error("Do you have multiple wallets installed?");
-      }
-      // Access the decentralized web!
-    },
+    ...mapActions(useDashboardStore, [
+      "addressToShort",
+      "changeTheme",
+      "getNativeBalance",
+      "mint",
+      "getTokenTestBalance",
+      "rewardCheck",
+      "checkHaveNode",
+      "getNodeAddressPeerIdByIP",
+      "addNode",
+      "stake",
+      "checkApproved",
+      "switchToCorrectChain",
+      "approve",
+      "connectToMetamask",
+      "copyURL",
+      "checkNetwork",
+      "startApp",
+      "getChainId",
+    ]),
   },
   async created() {
     document.title = "Join ALICE network";
@@ -1351,13 +975,72 @@ export default {
       this.startApp(this.provider); // Initialize your app
     } else {
       console.log("Please install MetaMask!");
+
       this.cardLoading = false;
     }
     this.web3 = new Web3(window.ethereum);
     this.getChainId();
   },
   computed: {
-    ...mapState(useTestStore, ["jafarTest"]),
+    ...mapWritableState(useDashboardStore, [
+      "nodeIpStatus",
+      "cardLoading",
+      "copySnackbar",
+      "TR",
+      "themeIsDark",
+      "dialog",
+      "steps",
+      "heightSize",
+      "account",
+      "addressShow",
+      "web3",
+      "currntIdChain",
+      "isCorrectChain",
+      "isConnected",
+      "e1",
+      "isApproved",
+      "stakeAmount",
+      "peerId",
+      "nodeAddress",
+      "totalStake",
+      "haveNode",
+      "tokenTestBalance",
+      "haveEnoughTokenTEst",
+      "mintAmount",
+      "nativeTokenBalance",
+      "nodeInfo",
+      "btnLoading",
+      "nodeIsActive",
+      "nodeUptime",
+      "rewardAmount",
+      "downNodeTimes",
+      "nodeIPInput",
+      "checkHaveNodeInterval",
+      "dialogContext",
+      "nodeDetailsDialogModel",
+      "stakerAddress",
+      "isIPValid",
+      "ipCheckLoading",
+    ]),
+    ...mapState(useDashboardStore, {
+      haveNativeToken(state) {
+        const balance = Number(state.nativeTokenBalance);
+        if (balance) return true;
+        else return false;
+      },
+      getHeightSize() {
+        return window.innerHeight;
+      },
+      muonTestTokenShow(state) {
+        if (this.tokenTestBalance) {
+          const amount = Number(state.tokenTestBalance);
+          return amount.toFixed(2);
+        } else {
+          return "0";
+        }
+      },
+    }),
+
     haveNativeToken() {
       const balance = Number(this.nativeTokenBalance);
       if (balance) return true;
@@ -1669,5 +1352,17 @@ h3 {
 .title_card {
   min-width: 320px;
   max-width: 350px;
+}
+.warning-message {
+  position: absolute;
+  bottom: 60px;
+  max-height: 90vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-radius: 12px;
+}
+.px-240 {
+  padding-right: 240px;
+  padding-left: 240px;
 }
 </style>

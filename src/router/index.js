@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Dashboard from "../views/Dashboard.vue";
 import Verification from "@/views/Verification.vue";
+import WrongPage from "@/views/WrongPage.vue";
 
 Vue.use(VueRouter);
 
@@ -15,6 +16,11 @@ const routes = [
     path: "/verification",
     name: "verification",
     component: Verification,
+  },
+  {
+    path: "/error",
+    name: "error",
+    component: WrongPage,
   },
 ];
 

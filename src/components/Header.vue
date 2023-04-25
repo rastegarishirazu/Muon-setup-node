@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row
-      class="px-10 pb-md-0 py-3"
+      class="px-10 pb-md-0 py-3 pt-8"
       justify="space-between"
       justify-space-between
     >
@@ -35,7 +35,7 @@
             </span>
           </v-responsive>
           <div>
-            <span class="balance_amount mx-1">{{ aliceBalance }}</span>
+            <span class="balance_amount mx-1">{{ muonTestTokenShow }}</span>
             <span class="alice">ALICE</span>
           </div>
         </div>
@@ -47,7 +47,7 @@
           color="#ff58f61a"
           class="py-5 'rounded-sm'"
           elevation="0"
-          @click="switchNetwork"
+          @click="switchToCorrectChain"
         >
           switch network
         </v-btn>
@@ -65,7 +65,7 @@
             'text-body-2',
           ]"
           elevation="0"
-          @click="connectWallet"
+          @click="connectToMetamask"
         >
           {{ addressShow }}
         </v-btn>
@@ -78,14 +78,32 @@
 </template>
 
 <script>
+import { useDashboardStore } from "@/stores/dashboardStore";
+import { mapActions, mapState } from "pinia";
+
 export default {
-  props: {
-    addressShow: String,
-    aliceBalance: String,
-    isCorrectChain: Boolean,
-    isConnected: Boolean,
-    connectWallet: { type: Function },
-    switchNetwork: { type: Function },
+  methods: {
+    ...mapActions(useDashboardStore, [
+      "connectToMetamask",
+      "switchToCorrectChain",
+    ]),
+  },
+  computed: {
+    ...mapState(useDashboardStore, [
+      "addressShow",
+      "isCorrectChain",
+      "isConnected",
+    ]),
+    ...mapState(useDashboardStore, {
+      muonTestTokenShow(store) {
+        if (store.tokenTestBalance) {
+          const amount = Number(store.tokenTestBalance);
+          return amount.toFixed(2);
+        } else {
+          return "0";
+        }
+      },
+    }),
   },
 };
 </script>

@@ -1,14 +1,7 @@
 <template>
   <v-app class="backgorundpic_light">
-    <Header
-      v-if="!cardLoading"
-      :addressShow="addressShow"
-      :aliceBalance="muonTestTokenShow"
-      :connectWallet="connectToMetamask"
-      :switchNetwork="switchToCorrectChain"
-      :isCorrectChain="isCorrectChain"
-      :isConnected="isConnected"
-    ></Header>
+    <Header v-if="!cardLoading"></Header>
+
     <router-view />
     <v-footer app padless color="rgba(0,0,0,0)">
       <v-col cols="12" class="text-center myFont">
@@ -22,11 +15,17 @@
 </template>
 
 <script>
+import { mapState } from "pinia";
 import Header from "./components/Header.vue";
+import { useDashboardStore } from "./stores/dashboardStore";
 
 export default {
   name: "app",
   components: { Header },
+
+  computed: {
+    ...mapState(useDashboardStore, ["cardLoading"]),
+  },
 };
 </script>
 

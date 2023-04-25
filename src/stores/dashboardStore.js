@@ -1,10 +1,31 @@
 import { defineStore } from "pinia";
+import {
+  approve,
+  checkApproved,
+  stake,
+  mint,
+  newAddNode,
+  getBalanceaOfTokenTest,
+  nodeAdressIsValid,
+  rewardChecker,
+} from "@/utils/transactions";
+import { getNodeInfo, checkIP } from "@/utils/fetch";
+import moment from "moment";
+import { ValidateIPaddress } from "@/utils/formatChecker";
+const mainChainId = 0x61;
+
+const STEPS = {
+  mint: 1,
+  approve: 2,
+  addNode: 3,
+  newNode: 4,
+  beforHaveNode: 5,
+  haveNode: 6,
+};
 
 export const useDashboardStore = defineStore("dashboardStore", {
   state: () => ({
-    provider: null,
     nodeIpStatus: "",
-    testEl: 1, // remove it befor build
     cardLoading: true,
     copySnackbar: false,
     TR: true,
@@ -54,30 +75,10 @@ export const useDashboardStore = defineStore("dashboardStore", {
   }),
 
   // computed
-  getters: {
-    haveNativeToken(state) {
-      const balance = Number(state.nativeTokenBalance);
-      if (balance) return true;
-      else return false;
-    },
-    getHeightSize() {
-      return window.innerHeight;
-    },
-    muonTestTokenShow(state) {
-      if (this.tokenTestBalance) {
-        const amount = Number(state.tokenTestBalance);
-        return amount.toFixed(2);
-      } else {
-        return "0";
-      }
-    },
-  },
+  getters: {},
 
   // method
   actions: {
-    setnodeDetailsDialogModel(input) {
-      this.nodeDetailsDialogModel = input;
-    },
     addressToShort(address) {
       return (
         address.slice(0, 4) +
@@ -150,7 +151,6 @@ export const useDashboardStore = defineStore("dashboardStore", {
       if (this.account) {
         if (cardLoadingRefresh) {
           this.cardLoading = true;
-          console.log("card loading on");
         }
         getNodeInfo(this.account)
           // getNodeInfo(28)
@@ -252,7 +252,9 @@ export const useDashboardStore = defineStore("dashboardStore", {
                 this.e1 = this.steps.mint;
               }
             } else {
-              if (cardLoadingRefresh) this.haveNode = "error";
+              if (cardLoadingRefresh) {
+                this.haveNode = "error";
+              }
             }
           })
           .finally(() => {
@@ -333,25 +335,7 @@ export const useDashboardStore = defineStore("dashboardStore", {
         this.isApproved = res;
       });
     },
-    checkNetwork() {
-      if (this.currntIdChain != mainChainId) {
-        this.isCorrectChain = false;
-        this.cardLoading = false;
-      } else {
-        this.isCorrectChain = true;
-        ethereum
-          .request({ method: "eth_accounts" })
-          .then((accounts) => {
-            if (accounts.length === 0) {
-              console.log("Please connect to MetaMask.");
-              this.cardLoading = false;
-            } else if (accounts.length && this.isCorrectChain) {
-              this.connectToMetamask();
-            }
-          })
-          .catch(console.error);
-      }
-    },
+
     async switchToCorrectChain() {
       try {
         await window.ethereum
@@ -423,17 +407,32 @@ export const useDashboardStore = defineStore("dashboardStore", {
           }
         });
     },
-    async getChainId() {
-      ethereum.request({ method: "eth_chainId" }).then((res) => {
-        this.currntIdChain = res;
-      });
-    },
+
     async copyURL(mytext) {
       try {
         await navigator.clipboard.writeText(mytext);
         this.copySnackbar = true;
       } catch ($e) {
         console.log("Cannot copy");
+      }
+    },
+    checkNetwork() {
+      if (this.currntIdChain != mainChainId) {
+        this.isCorrectChain = false;
+        this.cardLoading = false;
+      } else {
+        this.isCorrectChain = true;
+        ethereum
+          .request({ method: "eth_accounts" })
+          .then((accounts) => {
+            if (accounts.length === 0) {
+              console.log("Please connect to MetaMask.");
+              this.cardLoading = false;
+            } else if (accounts.length && this.isCorrectChain) {
+              this.connectToMetamask();
+            }
+          })
+          .catch(console.error);
       }
     },
     startApp(provider) {
@@ -444,5 +443,13 @@ export const useDashboardStore = defineStore("dashboardStore", {
       }
       // Access the decentralized web!
     },
+    async getChainId() {
+      ethereum.request({ method: "eth_chainId" }).then((res) => {
+        this.currntIdChain = res;
+      });
+    },
   },
+  // toWrongPage() {
+  //   this.$router.push("/error");
+  // },
 });
