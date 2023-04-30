@@ -880,9 +880,7 @@ export default {
 
   components: { Header, particles, nodeDetailsDialog, AllertCard },
 
-  data: () => ({
-    provider: null,
-  }),
+  data: () => ({}),
   watch: {
     haveNode(newState, oldState) {
       if (!newState) {
@@ -983,6 +981,7 @@ export default {
   },
   computed: {
     ...mapWritableState(useDashboardStore, [
+      "provider",
       "nodeIpStatus",
       "cardLoading",
       "copySnackbar",
@@ -1021,6 +1020,8 @@ export default {
       "stakerAddress",
       "isIPValid",
       "ipCheckLoading",
+      "minMint",
+      "minStakeAmount",
     ]),
     ...mapState(useDashboardStore, {
       haveNativeToken(state) {

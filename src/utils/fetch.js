@@ -1,3 +1,7 @@
+import axios from "axios";
+
+const BASEURL = "https://alice.muon.net/test-proxy-b";
+
 const helpFunction = async (url) => {
   const controller = new AbortController();
   const id = setTimeout(() => {
@@ -28,7 +32,7 @@ const helpFunction = async (url) => {
     });
 };
 const getNodeInfo = async (nodeId) => {
-  const listOfNodes = ["https://alice.muon.net/test-proxy-b/nodes"];
+  const listOfNodes = [`${BASEURL}/nodes`];
   let tryed = 0;
   let res;
   var flag = false;
@@ -48,7 +52,7 @@ const getNodeInfo = async (nodeId) => {
 };
 
 const checkIP = async (ip) => {
-  const listOfNodes = ["https://alice.muon.net/test-proxy-b/status"];
+  const listOfNodes = [`${BASEURL}/status`];
   let tryed = 0;
   let res;
   var flag = false;
@@ -68,4 +72,11 @@ const checkIP = async (ip) => {
   return res;
 };
 
-export { getNodeInfo, checkIP };
+const verification = async (staker) => {
+  if (staker) {
+    let res = await axios.get(`${BASEURL}/uniqueness/verifications/${staker}`);
+    return res;
+  }
+};
+
+export { getNodeInfo, checkIP, verification };

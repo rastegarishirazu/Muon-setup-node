@@ -25,6 +25,7 @@ const STEPS = {
 
 export const useDashboardStore = defineStore("dashboardStore", {
   state: () => ({
+    provider: null,
     nodeIpStatus: "",
     cardLoading: true,
     copySnackbar: false,
@@ -392,6 +393,7 @@ export const useDashboardStore = defineStore("dashboardStore", {
           } else {
             const account = res[0];
             this.account = account;
+            this.isConnected = true;
             this.checkApproved();
             this.getNativeBalance();
             this.checkHaveNode();

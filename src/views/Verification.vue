@@ -1,5 +1,10 @@
 <template>
-  <div class="padding-verification mt-10">
+  <div
+    :class="[
+      $vuetify.breakpoint.lgAndUp ? 'padding-verification-md' : 'px-10',
+      'mt-10',
+    ]"
+  >
     <v-row>
       <v-col md="8" cols="12">
         <v-row justify="space-between">
@@ -47,7 +52,11 @@
     <v-row>
       <v-col md="4" cols="12"
         ><v-card
-          color="rgba(81, 88, 246, 0.1)"
+          :color="
+            verifications['privateSaleVerified']
+              ? 'rgba(35, 181, 211, 0.3)'
+              : 'rgba(81, 88, 246, 0.1)'
+          "
           class="node_id_card px-5 py-4 rounded-lg full-height"
           elevation="0"
         >
@@ -67,8 +76,22 @@
             <v-col class="text-right" align-self="center"
               ><v-btn
                 elevation="0"
-                color="rgba(81, 88, 246, 0.1)"
-                class="py-6 px-3 primary--text text-subtitle-1 rounded-sm font-weight-medium text-capitalize"
+                :color="
+                  verifications['privateSaleVerified']
+                    ? '#23B5D3'
+                    : 'rgba(81, 88, 246, 0.1)'
+                "
+                :class="[
+                  'py-6',
+                  'px-3',
+                  verifications['privateSaleVerified']
+                    ? 'white--text'
+                    : 'primary--text',
+                  'text-subtitle-1',
+                  'rounded-sm',
+                  'font-weight-medium',
+                  'text-capitalize',
+                ]"
                 @click=""
                 >Pass verification</v-btn
               >
@@ -78,7 +101,11 @@
       </v-col>
       <v-col md="4" cols="12"
         ><v-card
-          color="rgba(81, 88, 246, 0.1)"
+          :color="
+            verifications['presaleVerified']
+              ? 'rgba(35, 181, 211, 0.3)'
+              : 'rgba(81, 88, 246, 0.1)'
+          "
           class="node_id_card px-5 py-4 rounded-lg full-height"
           elevation="0"
         >
@@ -96,8 +123,22 @@
             <v-col class="text-right" align-self="center"
               ><v-btn
                 elevation="0"
-                color="rgba(81, 88, 246, 0.1)"
-                class="py-6 px-3 primary--text text-subtitle-1 rounded-sm font-weight-medium text-capitalize"
+                :color="
+                  verifications['presaleVerified']
+                    ? '#23B5D3'
+                    : 'rgba(81, 88, 246, 0.1)'
+                "
+                :class="[
+                  'py-6',
+                  'px-3',
+                  verifications['presaleVerified']
+                    ? 'white--text'
+                    : 'primary--text',
+                  'text-subtitle-1',
+                  'rounded-sm',
+                  'font-weight-medium',
+                  'text-capitalize',
+                ]"
                 @click=""
                 >Pass verification</v-btn
               >
@@ -107,7 +148,11 @@
       </v-col>
       <v-col md="4" cols="12"
         ><v-card
-          color="rgba(81, 88, 246, 0.1)"
+          :color="
+            verifications['discordVerified']
+              ? 'rgba(35, 181, 211, 0.3)'
+              : 'rgba(81, 88, 246, 0.1)'
+          "
           class="node_id_card px-5 py-4 rounded-lg full-height"
           elevation="0"
         >
@@ -128,8 +173,22 @@
             <v-col class="text-right" align-self="center"
               ><v-btn
                 elevation="0"
-                color="rgba(81, 88, 246, 0.1)"
-                class="py-6 px-3 primary--text text-subtitle-1 rounded-sm font-weight-medium text-capitalize"
+                :color="
+                  verifications['discordVerified']
+                    ? '#23B5D3'
+                    : 'rgba(81, 88, 246, 0.1)'
+                "
+                :class="[
+                  'py-6',
+                  'px-3',
+                  verifications['discordVerified']
+                    ? 'white--text'
+                    : 'primary--text',
+                  'text-subtitle-1',
+                  'rounded-sm',
+                  'font-weight-medium',
+                  'text-capitalize',
+                ]"
                 @click=""
                 >Pass verification</v-btn
               >
@@ -141,7 +200,11 @@
     <v-row>
       <v-col md="8" cols="12"
         ><v-card
-          color="rgba(81, 88, 246, 0.1)"
+          :color="
+            verifications['brightidAuraVerified']
+              ? 'rgba(35, 181, 211, 0.3)'
+              : 'rgba(81, 88, 246, 0.1)'
+          "
           class="node_id_card px-5 py-4 rounded-lg full-height"
           elevation="0"
         >
@@ -152,7 +215,7 @@
             <img class="ml-1" src="@/assets/verification/Info.svg" />
           </div>
           <v-row class="mt-10">
-            <v-col cols="8">
+            <v-col md="9" cols="12">
               <b class="font-weight-regular text-body-2 sub-color"
                 >Tier(s) authorization:</b
               >
@@ -180,8 +243,22 @@
             <v-col class="text-right" align-self="center"
               ><v-btn
                 elevation="0"
-                color="rgba(81, 88, 246, 0.1)"
-                class="py-6 px-3 primary--text text-subtitle-1 rounded-sm font-weight-medium text-capitalize"
+                :color="
+                  verifications['brightidAuraVerified']
+                    ? '#23B5D3'
+                    : 'rgba(81, 88, 246, 0.1)'
+                "
+                :class="[
+                  'py-6',
+                  'px-3',
+                  verifications['brightidAuraVerified']
+                    ? 'white--text'
+                    : 'primary--text',
+                  'text-subtitle-1',
+                  'rounded-sm',
+                  'font-weight-medium',
+                  'text-capitalize',
+                ]"
                 @click=""
                 >Pass verification</v-btn
               >
@@ -191,7 +268,11 @@
       </v-col>
       <v-col md="4" cols="12"
         ><v-card
-          color="rgba(81, 88, 246, 0.1)"
+          :color="
+            verifications['brightidMeetsVerified']
+              ? 'rgba(35, 181, 211, 0.3)'
+              : 'rgba(81, 88, 246, 0.1)'
+          "
           class="node_id_card px-5 py-4 rounded-lg full-height"
           elevation="0"
         >
@@ -214,8 +295,22 @@
             <v-col class="text-right" align-self="center"
               ><v-btn
                 elevation="0"
-                color="rgba(81, 88, 246, 0.1)"
-                class="py-6 px-3 primary--text text-subtitle-1 rounded-sm font-weight-medium text-capitalize"
+                :color="
+                  verifications['brightidMeetsVerified']
+                    ? '#23B5D3'
+                    : 'rgba(81, 88, 246, 0.1)'
+                "
+                :class="[
+                  'py-6',
+                  'px-3',
+                  verifications['brightidMeetsVerified']
+                    ? 'white--text'
+                    : 'primary--text',
+                  'text-subtitle-1',
+                  'rounded-sm',
+                  'font-weight-medium',
+                  'text-capitalize',
+                ]"
                 @click=""
                 >Pass verification</v-btn
               >
@@ -229,17 +324,32 @@
 
 <script>
 import { useDashboardStore } from "@/stores/dashboardStore";
-import { mapWritableState } from "pinia";
+import { useVerificationsStore } from "@/stores/verifications";
+import { verification } from "@/utils/fetch";
+import { mapActions, mapState, mapWritableState } from "pinia";
 
 export default {
   name: "verification",
+  watch: {
+    account(newData) {
+      if (newData) {
+      }
+    },
+  },
+  methods: {
+    ...mapActions(useVerificationsStore, ["getVerificationsStatus"]),
+  },
+  async created() {
+    // this.cardLoading = false;
+    this.getVerificationsStatus(this.account);
+  },
 
-  created() {
-    this.cardLoading = false;
-  },
   computed: {
-    ...mapWritableState(useDashboardStore, ["cardLoading"]),
+    // ...mapWritableState(useDashboardStore, ["cardLoading"]),
+    ...mapState(useDashboardStore, ["account"]),
+    ...mapState(useVerificationsStore, ["verifications"]),
   },
+  mounted() {},
 };
 </script>
 
@@ -263,9 +373,11 @@ export default {
 .gold {
   color: #c9b037;
 }
-.padding-verification {
+.padding-verification-md {
   padding-left: 124px;
   padding-right: 124px;
   padding-bottom: 70px;
+}
+.verified-card {
 }
 </style>
