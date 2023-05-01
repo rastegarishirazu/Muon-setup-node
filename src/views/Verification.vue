@@ -144,7 +144,7 @@
               >
               <vue-telegram-login
                 mode="callback"
-                telegram-login="@rastegariTester_bot"
+                telegram-login="rastegariTester_bot"
                 @callback="yourCallbackFunction"
               />
             </v-col>
