@@ -109,7 +109,7 @@
           class="node_id_card px-5 py-4 rounded-lg full-height"
           elevation="0"
         >
-          <h5 class="text-18 font-weight-medium">Muon Presale Participation</h5>
+          <h5 class="text-18 font-weight-medium">Telegram verification</h5>
           <v-row class="mt-10">
             <v-col>
               <b class="font-weight-regular text-body-2 sub-color"
@@ -142,6 +142,11 @@
                 @click=""
                 >Pass verification</v-btn
               >
+              <vue-telegram-login
+                mode="callback"
+                telegram-login="@rastegariTester_bot"
+                @callback="yourCallbackFunction"
+              />
             </v-col>
           </v-row>
         </v-card>
@@ -327,9 +332,11 @@ import { useDashboardStore } from "@/stores/dashboardStore";
 import { useVerificationsStore } from "@/stores/verifications";
 import { verification } from "@/utils/fetch";
 import { mapActions, mapState, mapWritableState } from "pinia";
+import { vueTelegramLogin } from "vue-telegram-login";
 
 export default {
   name: "verification",
+  components: { vueTelegramLogin },
   watch: {
     verificationLoading(newData) {
       this.cardLoading = false;
