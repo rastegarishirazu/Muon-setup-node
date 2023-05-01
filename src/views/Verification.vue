@@ -331,22 +331,15 @@ import { mapActions, mapState, mapWritableState } from "pinia";
 export default {
   name: "verification",
   watch: {
-    account(newData) {
-      if (newData) {
-      }
+    verificationLoading(newData) {
+      this.cardLoading = false;
     },
   },
-  methods: {
-    ...mapActions(useVerificationsStore, ["getVerificationsStatus"]),
-  },
-  async created() {
-    // this.cardLoading = false;
-    this.getVerificationsStatus(this.account);
-  },
+  methods: {},
+  async created() {},
 
   computed: {
-    // ...mapWritableState(useDashboardStore, ["cardLoading"]),
-    ...mapState(useDashboardStore, ["account"]),
+    ...mapWritableState(useDashboardStore, ["cardLoading"]),
     ...mapState(useVerificationsStore, ["verifications"]),
   },
   mounted() {},

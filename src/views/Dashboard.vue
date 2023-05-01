@@ -865,6 +865,7 @@ import { ValidateIPaddress } from "@/utils/formatChecker";
 import AllertCard from "@/components/AllertCard.vue";
 import { mapWritableState, mapActions, mapState } from "pinia";
 import { useDashboardStore } from "@/stores/dashboardStore";
+import { useVerificationsStore } from "@/stores/verifications";
 const mainChainId = 0x61;
 const STEPS = {
   mint: 1,
@@ -965,19 +966,10 @@ export default {
       "startApp",
       "getChainId",
     ]),
+    ...mapActions(useVerificationsStore, ["getVerificationsStatus"]),
   },
   async created() {
-    document.title = "Join ALICE network";
-    this.provider = await detectEthereumProvider();
-    if (this.provider) {
-      this.startApp(this.provider); // Initialize your app
-    } else {
-      console.log("Please install MetaMask!");
-
-      this.cardLoading = false;
-    }
-    this.web3 = new Web3(window.ethereum);
-    this.getChainId();
+    this.getVerificationsStatus(this.account);
   },
   computed: {
     ...mapWritableState(useDashboardStore, [
@@ -1059,34 +1051,7 @@ export default {
       }
     },
   },
-  mounted() {
-    ethereum.on("accountsChanged", async (accounts) => {
-      if (accounts.length === 0) {
-        console.log("Please connect to MetaMask.");
-        this.cardLoading = false;
-      } else {
-        const address = accounts[0];
-        this.account = address;
-        this.checkApproved();
-        this.getTokenTestBalance();
-        this.getNativeBalance();
-        this.checkHaveNode();
-      }
-    });
-
-    ethereum.on("disconnect", () => {
-      this.isConnected = false;
-    });
-    ethereum.on("chainChanged", (chainId) => {
-      window.location.reload();
-      this.currntIdChain = chainId;
-      this.checkNetwork();
-    });
-
-    if (localStorage.themeIsDark === "true") {
-      this.themeIsDark = true;
-    }
-  },
+  mounted() {},
   updated() {},
 };
 </script>

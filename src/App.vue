@@ -68,7 +68,7 @@ export default {
     ]),
   },
   async created() {
-    this.cardLoading = false;
+    this.cardLoading = true;
     this.provider = await detectEthereumProvider();
     if (this.provider) {
       this.startApp(this.provider); // Initialize your app
