@@ -44,19 +44,16 @@ export const singMessage = async (msg, account) => {
 };
 
 export const saleRequest = async (staker, signer, signature) => {
-  return await axios.post(
-    `${verificationEndPoint}/sale`,
-    {
-      staker: staker,
-      signer: signer,
-      signature: signature,
+  const data = JSON.stringify({
+    staker: staker,
+    signer: signer,
+    signature: signature,
+  });
+  return await axios.post(`${verificationEndPoint}/sale`, data, {
+    headers: {
+      "Content-Type": "application/json",
     },
-    {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
+  });
 };
 
 export const discordRequest = async () => {
@@ -64,16 +61,13 @@ export const discordRequest = async () => {
 };
 
 export const getBrightIdContextId = async (staker, signature) => {
-  return await axios.post(
-    `${verificationEndPoint}/brightid/contextId`,
-    {
-      staker: staker,
-      signature: signature,
+  const data = JSON.stringify({
+    staker: staker,
+    signature: signature,
+  });
+  return await axios.post(`${verificationEndPoint}/brightid/contextId`, data, {
+    headers: {
+      "Content-Type": "application/json",
     },
-    {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
+  });
 };
