@@ -48,11 +48,9 @@ export const useVerificationsStore = defineStore("verificationsStore", {
       // id, first_name, last_name, username,
       // photo_url, auth_date and hash
       console.log(user);
-      telegramVerification(user.id, user.username, user.hash, staker).then(
-        (res) => {
-          console.log(res);
-        }
-      );
+      telegramVerification(user, staker).then((res) => {
+        console.log(res);
+      });
     },
     presaleVerified(staker) {
       this.presaleLoading = true;

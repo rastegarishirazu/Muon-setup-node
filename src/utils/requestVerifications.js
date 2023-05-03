@@ -11,18 +11,8 @@ export const verification = async (staker) => {
   }
 };
 
-export const telegramVerification = async (
-  telegramId,
-  telegramUsername,
-  hash,
-  staker
-) => {
-  const user = {
-    id: telegramId,
-    username: telegramUsername,
-    hash: hash,
-    staker: staker,
-  };
+export const telegramVerification = async (user, staker) => {
+  user.staker = staker;
   return axios.post(`${verificationEndPoint}/telegtam`, JSON.stringify(user), {
     headers: {
       "Content-Type": "application/json",
