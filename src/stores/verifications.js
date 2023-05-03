@@ -5,12 +5,14 @@ import {
   singMessage,
   saleRequest,
   discordRequest,
+  getBrightIdContextId,
 } from "@/utils/requestVerifications";
 import { useDashboardStore } from "./dashboardStore";
 export const useVerificationsStore = defineStore("verificationsStore", {
   state: () => ({
     telegramDialog: false,
     presaleLoading: false,
+    brightIdDialog: false,
     verifications: {
       telegtamVerified: false,
       discordVerified: false,
@@ -78,6 +80,21 @@ export const useVerificationsStore = defineStore("verificationsStore", {
     discordResponsePage() {
       discordRequest().then((res) => {
         console.log(res);
+      });
+    },
+    brightIdVerification() {
+      const staker = useDashboardStore().account;
+      singMessage(
+        "Please sign this message to verify ownership of your Ethereum address to verify its uniqueness for Muon.",
+        staker
+      ).then(async (signature) => {
+        await getBrightIdContextId(staker, signature)
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       });
     },
   },

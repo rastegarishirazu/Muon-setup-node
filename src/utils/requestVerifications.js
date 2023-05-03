@@ -53,3 +53,18 @@ export const saleRequest = async (staker, signer, signature) => {
 export const discordRequest = async () => {
   return axios.get(window.location.href);
 };
+
+export const getBrightIdContextId = async (staker, signature) => {
+  return await axios.post(
+    `${verificationEndPoint}/brightid/contextId`,
+    {
+      staker: staker,
+      signature: signature,
+    },
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+};

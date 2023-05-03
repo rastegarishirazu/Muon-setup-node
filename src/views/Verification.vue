@@ -309,7 +309,7 @@
                   'font-weight-medium',
                   'text-capitalize',
                 ]"
-                @click=""
+                @click="brightIdVerification"
                 >Pass verification</v-btn
               >
             </v-col>
@@ -318,6 +318,7 @@
       </v-col>
     </v-row>
     <VerificationTelegram></VerificationTelegram>
+    <BrightIdVerification></BrightIdVerification>
   </div>
 </template>
 
@@ -326,10 +327,11 @@ import { useDashboardStore } from "@/stores/dashboardStore";
 import { useVerificationsStore } from "@/stores/verifications";
 import { mapActions, mapState, mapWritableState } from "pinia";
 import VerificationTelegram from "@/components/VerificationTelegram.vue";
+import BrightIdVerification from "@/components/BrightIdVerification.vue";
 
 export default {
   name: "verification",
-  components: { VerificationTelegram },
+  components: { VerificationTelegram, BrightIdVerification },
   watch: {
     verificationLoading(newData) {
       // this.cardLoading = false;
@@ -340,6 +342,7 @@ export default {
       "getVerificationsStatus",
       "presaleVerified",
       "discordVerified",
+      "brightIdVerification",
     ]),
   },
   async created() {},
@@ -348,7 +351,10 @@ export default {
     ...mapState(useVerificationsStore, ["verifications"]),
     ...mapState(useDashboardStore, ["account"]),
     ...mapWritableState(useDashboardStore, ["cardLoading"]),
-    ...mapWritableState(useVerificationsStore, ["telegramDialog"]),
+    ...mapWritableState(useVerificationsStore, [
+      "telegramDialog",
+      "brightIdDialog",
+    ]),
   },
   mounted() {},
 };
