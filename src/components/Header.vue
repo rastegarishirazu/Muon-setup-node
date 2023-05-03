@@ -6,7 +6,13 @@
       justify-space-between
     >
       <v-col md="2" sm="3" cols="12" class="text-left">
-        <img src="../assets/muon-logo1.svg" width="120px" alt="" />
+        <img
+          @click="$router.push('/')"
+          src="../assets/muon-logo1.svg"
+          width="120px"
+          alt=""
+          class="cursor-pointer"
+        />
       </v-col>
       <v-col md="6" sm="9" cols="12" class="d-flex justify-end">
         <div

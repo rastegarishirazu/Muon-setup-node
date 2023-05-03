@@ -31,7 +31,9 @@ import Header from "./components/Header.vue";
 import Web3 from "web3";
 import detectEthereumProvider from "@metamask/detect-provider";
 import { useDashboardStore } from "@/stores/dashboardStore";
-import { mapActions, mapWritableState } from "pinia";
+import { mapActions, mapState, mapWritableState } from "pinia";
+import { useVerificationsStore } from "./stores/verifications";
+import { verification } from "./utils/fetch";
 
 export default {
   name: "app",
@@ -57,6 +59,11 @@ export default {
         "..." +
         this.account.slice(this.account.length - 4, this.account.length);
     },
+    $route(to, from) {
+      if (to.path === "/" && from.path === "/error") {
+        this.checkHaveNode();
+      }
+    },
   },
   methods: {
     ...mapActions(useDashboardStore, [
@@ -65,10 +72,15 @@ export default {
       "getChainId",
       "connectToMetamask",
       "checkNetwork",
+      "checkHaveNode",
+      ,
+      "checkApproved",
+      "checkHaveNode",
+      "getTokenTestBalance",
+      "getNativeBalance",
     ]),
   },
   async created() {
-    this.cardLoading = true;
     this.provider = await detectEthereumProvider();
     if (this.provider) {
       this.startApp(this.provider); // Initialize your app
@@ -82,6 +94,7 @@ export default {
   },
 
   computed: {
+    ...mapState(useVerificationsStore, [verification]),
     ...mapWritableState(useDashboardStore, [
       "currntIdChain",
       "addressShow",
@@ -101,10 +114,10 @@ export default {
       } else {
         const address = accounts[0];
         this.account = address;
-        // this.checkApproved();
-        // this.getTokenTestBalance();
-        // this.getNativeBalance();
-        // this.checkHaveNode();
+        this.checkApproved();
+        this.getTokenTestBalance();
+        this.getNativeBalance();
+        this.checkHaveNode();
       }
     });
 

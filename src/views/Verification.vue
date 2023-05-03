@@ -53,16 +53,14 @@
       <v-col md="4" cols="12"
         ><v-card
           :color="
-            verifications['privateSaleVerified']
+            verifications['presaleVerified']
               ? 'rgba(35, 181, 211, 0.3)'
               : 'rgba(81, 88, 246, 0.1)'
           "
           class="node_id_card px-5 py-4 rounded-lg full-height"
           elevation="0"
         >
-          <h5 class="text-18 font-weight-medium">
-            Muon Private sale Participation
-          </h5>
+          <h5 class="text-18 font-weight-medium">Muon Presale Participation</h5>
           <v-row class="mt-10">
             <v-col>
               <b class="font-weight-regular text-body-2 sub-color"
@@ -75,16 +73,17 @@
             </v-col>
             <v-col class="text-right" align-self="center"
               ><v-btn
+                @click="$router.push(`/verification/presale/${account}`)"
                 elevation="0"
                 :color="
-                  verifications['privateSaleVerified']
+                  verifications['presaleVerified']
                     ? '#23B5D3'
                     : 'rgba(81, 88, 246, 0.1)'
                 "
                 :class="[
                   'py-6',
                   'px-3',
-                  verifications['privateSaleVerified']
+                  verifications['presaleVerified']
                     ? 'white--text'
                     : 'primary--text',
                   'text-subtitle-1',
@@ -92,7 +91,6 @@
                   'font-weight-medium',
                   'text-capitalize',
                 ]"
-                @click=""
                 >Pass verification</v-btn
               >
             </v-col>
@@ -102,7 +100,7 @@
       <v-col md="4" cols="12"
         ><v-card
           :color="
-            verifications['presaleVerified']
+            verifications['telegtamVerified']
               ? 'rgba(35, 181, 211, 0.3)'
               : 'rgba(81, 88, 246, 0.1)'
           "
@@ -124,14 +122,14 @@
               ><v-btn
                 elevation="0"
                 :color="
-                  verifications['presaleVerified']
+                  verifications['telegtamVerified']
                     ? '#23B5D3'
                     : 'rgba(81, 88, 246, 0.1)'
                 "
                 :class="[
                   'py-6',
                   'px-3',
-                  verifications['presaleVerified']
+                  verifications['telegtamVerified']
                     ? 'white--text'
                     : 'primary--text',
                   'text-subtitle-1',
@@ -139,14 +137,9 @@
                   'font-weight-medium',
                   'text-capitalize',
                 ]"
-                @click=""
+                @click="telegramDialog = true"
                 >Pass verification</v-btn
               >
-              <vue-telegram-login
-                mode="callback"
-                telegram-login="rastegariTester_bot"
-                @callback="yourCallbackFunction"
-              />
             </v-col>
           </v-row>
         </v-card>
@@ -194,7 +187,7 @@
                   'font-weight-medium',
                   'text-capitalize',
                 ]"
-                @click=""
+                @click="discordVerified"
                 >Pass verification</v-btn
               >
             </v-col>
@@ -324,30 +317,38 @@
         </v-card>
       </v-col>
     </v-row>
+    <VerificationTelegram></VerificationTelegram>
   </div>
 </template>
 
 <script>
 import { useDashboardStore } from "@/stores/dashboardStore";
 import { useVerificationsStore } from "@/stores/verifications";
-import { verification } from "@/utils/fetch";
 import { mapActions, mapState, mapWritableState } from "pinia";
-import { vueTelegramLogin } from "vue-telegram-login";
+import VerificationTelegram from "@/components/VerificationTelegram.vue";
 
 export default {
   name: "verification",
-  components: { vueTelegramLogin },
+  components: { VerificationTelegram },
   watch: {
     verificationLoading(newData) {
-      this.cardLoading = false;
+      // this.cardLoading = false;
     },
   },
-  methods: {},
+  methods: {
+    ...mapActions(useVerificationsStore, [
+      "getVerificationsStatus",
+      "presaleVerified",
+      "discordVerified",
+    ]),
+  },
   async created() {},
 
   computed: {
-    ...mapWritableState(useDashboardStore, ["cardLoading"]),
     ...mapState(useVerificationsStore, ["verifications"]),
+    ...mapState(useDashboardStore, ["account"]),
+    ...mapWritableState(useDashboardStore, ["cardLoading"]),
+    ...mapWritableState(useVerificationsStore, ["telegramDialog"]),
   },
   mounted() {},
 };

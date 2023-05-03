@@ -940,7 +940,7 @@ export default {
       }
     },
     haveNode(newValue) {
-      if (newValue === "error") {
+      if (this.haveNode === "error") {
         this.$router.push("/error");
       }
     },

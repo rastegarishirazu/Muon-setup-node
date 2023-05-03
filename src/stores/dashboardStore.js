@@ -12,6 +12,7 @@ import {
 import { getNodeInfo, checkIP } from "@/utils/fetch";
 import moment from "moment";
 import { ValidateIPaddress } from "@/utils/formatChecker";
+import Vue from "vue";
 const mainChainId = 0x61;
 
 const STEPS = {
@@ -260,6 +261,9 @@ export const useDashboardStore = defineStore("dashboardStore", {
           })
           .finally(() => {
             this.cardLoading = false;
+            if (this.haveNode === "error") {
+              this.router.push("/error");
+            }
           });
       }
     },

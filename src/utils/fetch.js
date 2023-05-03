@@ -79,4 +79,4 @@ const verification = async (staker) => {
   }
 };
 
-export { getNodeInfo, checkIP, verification };
+export { getNodeInfo, checkIP, verification, BASEURL };
