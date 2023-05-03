@@ -1,11 +1,11 @@
 import { defineStore } from "pinia";
-import { verification as verificationStatus } from "@/utils/fetch";
 import {
   telegramVerification,
   singMessage,
   saleRequest,
   discordRequest,
   getBrightIdContextId,
+  verification as verificationStatus,
 } from "@/utils/requestVerifications";
 import { useDashboardStore } from "./dashboardStore";
 export const useVerificationsStore = defineStore("verificationsStore", {
@@ -30,6 +30,7 @@ export const useVerificationsStore = defineStore("verificationsStore", {
     getVerificationsStatus(staker) {
       verificationStatus(staker).then((response) => {
         const data = response.data;
+        console.log(data);
         for (const [key, value] of Object.entries(this.verifications)) {
           this.verifications[key] = false;
         }

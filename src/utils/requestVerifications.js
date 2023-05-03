@@ -1,6 +1,15 @@
 import axios from "axios";
 import { BASEURL } from "./fetch";
-const verificationEndPoint = BASEURL + "/uniqueness/verifications";
+const verificationEndPoint = BASEURL + "/uniqueness";
+
+export const verification = async (staker) => {
+  if (staker) {
+    let res = await axios.get(
+      `${verificationEndPoint}/verifications/${staker}`
+    );
+    return res;
+  }
+};
 
 export const telegramVerification = async (
   telegramId,

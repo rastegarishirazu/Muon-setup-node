@@ -72,11 +72,4 @@ const checkIP = async (ip) => {
   return res;
 };
 
-const verification = async (staker) => {
-  if (staker) {
-    let res = await axios.get(`${BASEURL}/uniqueness/verifications/${staker}`);
-    return res;
-  }
-};
-
-export { getNodeInfo, checkIP, verification, BASEURL };
+export { getNodeInfo, checkIP, BASEURL };
