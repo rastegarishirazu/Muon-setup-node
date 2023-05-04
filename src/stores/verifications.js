@@ -158,6 +158,7 @@ export const useVerificationsStore = defineStore("verificationsStore", {
             this.verifications.brightidAuraVerified =
               response.result.brightidAuraVerified;
             window.clearInterval(this.brighitIdIntervalRequest);
+
             this.brightIdDialog = false;
             this.brigthIdLoading = false;
           } else {
@@ -186,6 +187,7 @@ export const useVerificationsStore = defineStore("verificationsStore", {
         this.brigthReq(),
         5000
       );
+      console.log(this.brighitIdIntervalRequest);
     },
     getCodeAndStakerFromRoute(string) {
       this.discordStatus = "...Waiting";
