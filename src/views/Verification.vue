@@ -389,7 +389,9 @@ export default {
       "brightIdVerification",
     ]),
   },
-  async created() {},
+  async created() {
+    this.getVerificationsStatus(this.account);
+  },
 
   computed: {
     ...mapState(useVerificationsStore, ["verifications"]),
