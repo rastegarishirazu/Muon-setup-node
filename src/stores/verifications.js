@@ -171,6 +171,7 @@ export const useVerificationsStore = defineStore("verificationsStore", {
     },
     getCodeAndStakerFromRoute(string) {
       this.discordStatus = "...Waiting";
+      console.log(string);
       const code = string.split("code=")[1].split("&")[0];
       const staker = string.split("state")[1];
       this.discordResponse.code = code;
