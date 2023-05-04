@@ -173,7 +173,7 @@ export const useVerificationsStore = defineStore("verificationsStore", {
       this.discordStatus = "...Waiting";
       console.log(string);
       const code = string.split("code=")[1].split("&")[0];
-      const staker = string.split("state")[1];
+      const staker = string.split("state=")[1];
       this.discordResponse.code = code;
       this.discordResponse.staker = staker;
       console.log(code);
