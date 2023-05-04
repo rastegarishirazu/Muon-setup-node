@@ -46,10 +46,6 @@ export const saleRequest = async (staker, signer, signature) => {
   });
 };
 
-export const discordRequest = async () => {
-  return axios.get(window.location.href);
-};
-
 export const getBrightIdContextId = async (staker, signature) => {
   const data = JSON.stringify({
     staker: staker,
@@ -76,4 +72,17 @@ export const sponsorBrightIdRequest = async (staker) => {
 
 export const checkBrightIdConnection = async (staker) => {
   return await axios.get(`${verificationEndPoint}/brightid?staker=${staker}`);
+};
+
+export const discordRequest = async (code, staker) => {
+  const data = JSON.stringify({
+    code: code,
+    state: staker,
+  });
+
+  return await axios.post(`${verificationEndPoint}/discord`, data, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 };

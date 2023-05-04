@@ -23,6 +23,10 @@ export const useVerificationsStore = defineStore("verificationsStore", {
       brightidMeetsVerified: false,
       brightidAuraVerified: false,
     },
+    discordResponse: {
+      code: "",
+      staker: "",
+    },
     discord: {
       success: "",
       msg: "",
@@ -32,6 +36,7 @@ export const useVerificationsStore = defineStore("verificationsStore", {
     snackbarErorr: false,
     snackbarErorrMsg: "",
     brigthIdLoading: false,
+    discordStatus: "...Loading",
   }),
 
   actions: {
@@ -97,7 +102,7 @@ export const useVerificationsStore = defineStore("verificationsStore", {
     },
     discordVerified() {
       const staker = useDashboardStore().account;
-      const URL = `https://discord.com/api/oauth2/authorize?client_id=1086713207541989428&redirect_uri=https%3A%2F%2Fmonitor1.muon.net%2Funiqueness%2Fdiscord&response_type=code&scope=identify&state=${staker}`;
+      const URL = `https://discord.com/api/oauth2/authorize?client_id=1086713207541989428&redirect_uri=https%3A%2F%2Falice.muon.net%2Ftest%2FdiscordVerification%2Fdata&response_type=code&scope=identify&state=${staker}`;
       window.open(
         URL,
         "targetWindow",
@@ -110,11 +115,6 @@ export const useVerificationsStore = defineStore("verificationsStore", {
        width=400,
        height=900`
       );
-    },
-    discordResponsePage() {
-      discordRequest().then((res) => {
-        console.log(res);
-      });
     },
     brightIdVerification() {
       const staker = useDashboardStore().account;
@@ -168,6 +168,27 @@ export const useVerificationsStore = defineStore("verificationsStore", {
           }),
         20 * 1000
       );
+    },
+    getCodeAndStakerFromRoute(string) {
+      this.discordStatus = "...Waiting";
+      const code = string.split("code=")[1].split("&")[0];
+      const staker = string.split("state")[1];
+      this.discordResponse.code = code;
+      this.discordResponse.staker = staker;
+      console.log(code);
+      console.log(staker);
+      discordRequest(code, staker)
+        .then((res) => {
+          if (res.data.success) {
+            this.discordStatus = "success";
+          } else {
+            this.discordStatus = res.data.message;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          this.discordStatus = "problem in server";
+        });
     },
   },
 });

@@ -37,10 +37,7 @@ export default {
   name: "verificationTelegram",
   components: { "qr-code": VueQRCodeComponent },
   methods: {
-    ...mapActions(useVerificationsStore, [
-      "telegramCallbackFunction",
-      "checkBrightIdStatus",
-    ]),
+    ...mapActions(useVerificationsStore, ["checkBrightIdStatus"]),
   },
   computed: {
     ...mapWritableState(useVerificationsStore, ["brightIdDialog"]),
