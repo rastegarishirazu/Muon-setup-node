@@ -1,8 +1,8 @@
 <template>
   <v-main>
     <v-row justify="center" style="height: 100%">
-      <v-col align-self="center" class="text-center">
-        <h1>{{ discordStatus }}</h1>
+      <v-col cols="10" align-self="center" class="text-center">
+        <h1 class="text-body-2">{{ discordStatus }}</h1>
       </v-col>
     </v-row>
   </v-main>

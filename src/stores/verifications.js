@@ -112,7 +112,7 @@ export const useVerificationsStore = defineStore("verificationsStore", {
        menubar=no,
        scrollbars=yes,
        resizable=yes,
-       width=400,
+       width=450,
        height=900`
       );
     },
