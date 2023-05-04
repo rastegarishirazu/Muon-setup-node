@@ -138,36 +138,38 @@ export const useVerificationsStore = defineStore("verificationsStore", {
           });
       });
     },
+
+    brigthReq() {
+      const staker = useDashboardStore().account;
+      checkBrightIdConnection(staker)
+        .then((res) => {
+          console.log(res);
+          if (res.data.success) {
+            this.verifications.brightidMeetsVerified = true;
+            clearInterval(this.brighitIdIntervalRequest);
+            this.brigthIdLoading = false;
+          } else {
+            this.brightidTryed++;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          if (this.brightidTryed > 12 * 3) {
+            this.snackbarErorrMsg =
+              "Unfortunately, the connection was not successful. Please try again.";
+            this.snackbarErorr = true;
+            clearInterval(this.brighitIdIntervalRequest);
+            this.brigthIdLoading = false;
+          }
+        });
+    },
+
     checkBrightIdStatus() {
       this.brigthIdLoading = true;
-      const staker = useDashboardStore().account;
       this.brightidTryed = 0;
-      this.brighitIdIntervalRequest = setInterval(
-        checkBrightIdConnection(staker)
-          .then((res) => {
-            console.log(res);
-            if (res.data.success) {
-              this.verifications.brightidMeetsVerified = true;
-              clearInterval(this.brighitIdIntervalRequest);
-              this.brigthIdLoading = false;
-            } else {
-              this.brightidTryed++;
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          })
-          .finally(() => {
-            if (this.brightidTryed > 12 * 3) {
-              this.snackbarErorrMsg =
-                "Unfortunately, the connection was not successful. Please try again.";
-              this.snackbarErorr = true;
-              clearInterval(this.brighitIdIntervalRequest);
-              this.brigthIdLoading = false;
-            }
-          }),
-        5 * 1000
-      );
+      this.brighitIdIntervalRequest = setInterval(this.brigthReq(), 5 * 1000);
     },
     getCodeAndStakerFromRoute(string) {
       this.discordStatus = "...Waiting";
