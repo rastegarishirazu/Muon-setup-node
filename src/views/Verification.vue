@@ -90,8 +90,16 @@
                   'rounded-sm',
                   'font-weight-medium',
                   'text-capitalize',
+                  {
+                    'disable-events': verifications['presaleVerified'],
+                  },
                 ]"
-                >Pass verification</v-btn
+                exact
+                >{{
+                  verifications["presaleVerified"]
+                    ? `Verification passed!`
+                    : `Pass verification`
+                }}</v-btn
               >
             </v-col>
           </v-row>
@@ -136,10 +144,18 @@
                   'rounded-sm',
                   'font-weight-medium',
                   'text-capitalize',
+                  {
+                    'disable-events': verifications['telegtamVerified'],
+                  },
                 ]"
                 @click="telegramDialog = true"
-                >Pass verification</v-btn
               >
+                {{
+                  verifications["telegtamVerified"]
+                    ? `Verification passed!`
+                    : `Pass verification`
+                }}
+              </v-btn>
             </v-col>
           </v-row>
         </v-card>
@@ -186,9 +202,16 @@
                   'rounded-sm',
                   'font-weight-medium',
                   'text-capitalize',
+                  {
+                    'disable-events': verifications['discordVerified'],
+                  },
                 ]"
                 @click="discordVerified"
-                >Pass verification</v-btn
+                >{{
+                  verifications["discordVerified"]
+                    ? `Verification passed!`
+                    : `Pass verification`
+                }}</v-btn
               >
             </v-col>
           </v-row>
@@ -256,9 +279,16 @@
                   'rounded-sm',
                   'font-weight-medium',
                   'text-capitalize',
+                  {
+                    'disable-events': verifications['brightidAuraVerified'],
+                  },
                 ]"
                 @click=""
-                >Pass verification</v-btn
+                >{{
+                  verifications["brightidAuraVerified"]
+                    ? `Verification passed!`
+                    : `Pass verification`
+                }}</v-btn
               >
             </v-col>
           </v-row>
@@ -308,9 +338,16 @@
                   'rounded-sm',
                   'font-weight-medium',
                   'text-capitalize',
+                  {
+                    'disable-events': verifications['brightidMeetsVerified'],
+                  },
                 ]"
                 @click="brightIdVerification"
-                >Pass verification</v-btn
+                >{{
+                  verifications["brightidMeetsVerified"]
+                    ? `Verification passed!`
+                    : `Pass verification`
+                }}</v-btn
               >
             </v-col>
           </v-row>
@@ -356,7 +393,9 @@ export default {
       "brightIdDialog",
     ]),
   },
-  mounted() {},
+  mounted() {
+    this.getVerificationsStatus();
+  },
 };
 </script>
 
@@ -386,5 +425,8 @@ export default {
   padding-bottom: 70px;
 }
 .verified-card {
+}
+.disable-events {
+  pointer-events: none;
 }
 </style>

@@ -8,14 +8,14 @@
       <v-card-text>
         plase connect to telegram
 
-        <qr-code :text="qrText"></qr-code>
+        <qr-code :text="brightIdContextId"></qr-code>
       </v-card-text>
 
       <v-divider></v-divider>
 
       <v-card-actions>
         <v-spacer></v-spacer>
-
+        <v-btn color="success">I made the connection.</v-btn>
         <v-spacer></v-spacer>
       </v-card-actions>
     </v-card>
@@ -36,12 +36,7 @@ export default {
   },
   computed: {
     ...mapWritableState(useVerificationsStore, ["brightIdDialog"]),
-    ...mapState(useDashboardStore, {
-      qrText(store) {
-        const staker = store.account;
-        return `https://app.brightid.org/link-verification/http:%2F%2Fbrightid2.idealmoney.io/Muon/${staker}`;
-      },
-    }),
+    ...mapState(useVerificationsStore, ["brightIdContextId"]),
   },
 };
 </script>

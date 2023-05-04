@@ -61,3 +61,19 @@ export const getBrightIdContextId = async (staker, signature) => {
     },
   });
 };
+
+export const sponsorBrightIdRequest = async (staker) => {
+  return await axios.post(
+    `${verificationEndPoint}/brightid/sponsor`,
+    JSON.stringify({ staker: staker }),
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+};
+
+export const checkBrightIdConnection = async (staker) => {
+  return await axios.get(`${verificationEndPoint}/brightid?staker=${staker}`);
+};

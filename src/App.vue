@@ -33,7 +33,7 @@ import detectEthereumProvider from "@metamask/detect-provider";
 import { useDashboardStore } from "@/stores/dashboardStore";
 import { mapActions, mapState, mapWritableState } from "pinia";
 import { useVerificationsStore } from "./stores/verifications";
-import { verification } from "./utils/fetch";
+import { verification } from "./utils/requestVerifications";
 
 export default {
   name: "app",
