@@ -128,7 +128,7 @@ export const useVerificationsStore = defineStore("verificationsStore", {
             await sponsorBrightIdRequest(staker).then((sponsorRes) => {
               console.log(sponsorRes);
               if (sponsorRes.data.success) {
-                this.brightIdContextId = sponsorRes.data.result.contextId;
+                this.brightIdContextId = res.data.result.contextId;
                 this.brightIdDialog = true;
               } else {
                 this.snackbarErorrMsg = sponsorRes.data.message;
