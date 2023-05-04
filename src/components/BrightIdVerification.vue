@@ -15,7 +15,11 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn :loading="brigthIdLoading" color="success">
+        <v-btn
+          :loading="brigthIdLoading"
+          @click="checkBrightIdStatus"
+          color="success"
+        >
           I made the connection.
         </v-btn>
         <v-spacer></v-spacer>
@@ -33,7 +37,10 @@ export default {
   name: "verificationTelegram",
   components: { "qr-code": VueQRCodeComponent },
   methods: {
-    ...mapActions(useVerificationsStore, ["telegramCallbackFunction"]),
+    ...mapActions(useVerificationsStore, [
+      "telegramCallbackFunction",
+      "checkBrightIdStatus",
+    ]),
   },
   computed: {
     ...mapWritableState(useVerificationsStore, ["brightIdDialog"]),
