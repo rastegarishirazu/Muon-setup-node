@@ -356,6 +356,15 @@
     </v-row>
     <VerificationTelegram></VerificationTelegram>
     <BrightIdVerification></BrightIdVerification>
+    <v-snackbar v-model="snackbarErorr">
+      {{ snackbarErorrMsg }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </div>
 </template>
 
@@ -391,6 +400,8 @@ export default {
     ...mapWritableState(useVerificationsStore, [
       "telegramDialog",
       "brightIdDialog",
+      "snackbarErorr",
+      "snackbarErorrMsg",
     ]),
   },
   mounted() {

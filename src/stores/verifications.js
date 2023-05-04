@@ -29,6 +29,8 @@ export const useVerificationsStore = defineStore("verificationsStore", {
     },
     brighitIdIntervalRequest: null,
     brigIdTryed: 0,
+    snackbarErorr: false,
+    snackbarErorrMsg: "",
   }),
 
   actions: {
@@ -57,6 +59,10 @@ export const useVerificationsStore = defineStore("verificationsStore", {
         console.log(res);
         if (res.data.success) {
           this.verifications.telegtamVerified = true;
+          this.telegramDialog = false;
+        } else {
+          this.snackbarErorrMsg = res.data.message;
+          this.snackbarErorr = true;
         }
       });
     },
@@ -70,8 +76,11 @@ export const useVerificationsStore = defineStore("verificationsStore", {
         await saleRequest(staker, signer, signature)
           .then((res) => {
             console.log(res);
-            if (res.data.success) {
+            if (res.success) {
               this.verifications.presaleVerified = true;
+            } else {
+              this.snackbarErorrMsg = res.data.message;
+              this.snackbarErorr = true;
             }
           })
           .catch((err) => {
@@ -144,6 +153,10 @@ export const useVerificationsStore = defineStore("verificationsStore", {
           })
           .finally(() => {
             if (this.brigIdTryed > 5) {
+              this.snackbarErorrMsg =
+                "Unfortunately, the connection was not successful. Please try again.";
+              this.snackbarErorr = true;
+
               clearInterval(this.brighitIdIntervalRequest);
             }
           }),
