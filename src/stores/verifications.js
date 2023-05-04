@@ -155,6 +155,7 @@ export const useVerificationsStore = defineStore("verificationsStore", {
             this.verifications.brightidAuraVerified =
               response.result.brightidAuraVerified;
             clearInterval(this.brighitIdIntervalRequest);
+            this.brightIdDialog = false;
             this.brigthIdLoading = false;
           } else {
             this.brightidTryed++;
@@ -169,6 +170,7 @@ export const useVerificationsStore = defineStore("verificationsStore", {
               "Unfortunately, the connection was not successful. Please try again.";
             this.snackbarErorr = true;
             clearInterval(this.brighitIdIntervalRequest);
+            this.brightIdDialog = false;
             this.brigthIdLoading = false;
           }
         });
