@@ -28,9 +28,10 @@ export const useVerificationsStore = defineStore("verificationsStore", {
       msg: "",
     },
     brighitIdIntervalRequest: null,
-    brigIdTryed: 0,
+    brightidTryed: 0,
     snackbarErorr: false,
     snackbarErorrMsg: "",
+    brigthIdLoading: false,
   }),
 
   actions: {
@@ -55,16 +56,19 @@ export const useVerificationsStore = defineStore("verificationsStore", {
       // id, first_name, last_name, username,
       // photo_url, auth_date and hash
       console.log(user);
-      telegramVerification(user, staker).then((res) => {
-        console.log(res);
-        if (res.data.success) {
-          this.verifications.telegtamVerified = true;
+      telegramVerification(user, staker)
+        .then((res) => {
+          console.log(res);
+          if (res.data.success) {
+            this.verifications.telegtamVerified = true;
+          } else {
+            this.snackbarErorrMsg = res.data.message;
+            this.snackbarErorr = true;
+          }
+        })
+        .finally(() => {
           this.telegramDialog = false;
-        } else {
-          this.snackbarErorrMsg = res.data.message;
-          this.snackbarErorr = true;
-        }
-      });
+        });
     },
     presaleVerified(staker) {
       this.presaleLoading = true;
@@ -135,8 +139,9 @@ export const useVerificationsStore = defineStore("verificationsStore", {
       });
     },
     checkBrightIdStatus() {
+      this.brigthIdLoading = true;
       const staker = useDashboardStore().account;
-      this.brigIdTryed = 0;
+      this.brightidTryed = 0;
       this.brighitIdIntervalRequest = setInterval(
         checkBrightIdConnection(staker)
           .then((res) => {
@@ -144,20 +149,21 @@ export const useVerificationsStore = defineStore("verificationsStore", {
             if (res.data.success) {
               this.verifications.brightidMeetsVerified = true;
               clearInterval(this.brighitIdIntervalRequest);
+              this.brigthIdLoading = false;
             } else {
-              this.brigIdTryed++;
+              this.brightidTryed++;
             }
           })
           .catch((err) => {
             console.log(err);
           })
           .finally(() => {
-            if (this.brigIdTryed > 5) {
+            if (this.brightidTryed > 5) {
               this.snackbarErorrMsg =
                 "Unfortunately, the connection was not successful. Please try again.";
               this.snackbarErorr = true;
-
               clearInterval(this.brighitIdIntervalRequest);
+              this.brigthIdLoading = false;
             }
           }),
         20 * 1000

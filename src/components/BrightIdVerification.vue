@@ -1,6 +1,6 @@
 <template>
   <v-dialog width="500px" v-model="brightIdDialog">
-    <v-card>
+    <v-card :loading="brigthIdLoading">
       <v-card-title class="text-h5 grey lighten-2">
         Scan by BrightId app
       </v-card-title>
@@ -15,7 +15,9 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="success">I made the connection.</v-btn>
+        <v-btn :loading="brigthIdLoading" color="success">
+          I made the connection.
+        </v-btn>
         <v-spacer></v-spacer>
       </v-card-actions>
     </v-card>
@@ -23,7 +25,6 @@
 </template>
 
 <script>
-import { useDashboardStore } from "@/stores/dashboardStore";
 import { useVerificationsStore } from "@/stores/verifications";
 import { mapActions, mapWritableState, mapState } from "pinia";
 import VueQRCodeComponent from "vue-qrcode-component";
@@ -36,7 +37,10 @@ export default {
   },
   computed: {
     ...mapWritableState(useVerificationsStore, ["brightIdDialog"]),
-    ...mapState(useVerificationsStore, ["brightIdContextId"]),
+    ...mapState(useVerificationsStore, [
+      "brightIdContextId",
+      "brigthIdLoading",
+    ]),
   },
 };
 </script>
