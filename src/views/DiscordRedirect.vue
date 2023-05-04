@@ -2,7 +2,7 @@
   <v-main>
     <v-row justify="center" style="height: 100%">
       <v-col cols="10" align-self="center" class="text-center">
-        <h1 class="text-body-2">{{ discordStatus }}</h1>
+        <h1 class="text-body-2">{{ discordStatus.split("=")[1] }}</h1>
       </v-col>
     </v-row>
   </v-main>

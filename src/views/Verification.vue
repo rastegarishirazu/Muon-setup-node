@@ -115,7 +115,9 @@
           class="node_id_card px-5 py-4 rounded-lg full-height"
           elevation="0"
         >
-          <h5 class="text-18 font-weight-medium">Telegram verification</h5>
+          <h5 class="text-18 font-weight-medium">
+            Active Community Member (Telegram)
+          </h5>
           <v-row class="mt-10">
             <v-col>
               <b class="font-weight-regular text-body-2 sub-color"
@@ -171,7 +173,9 @@
           elevation="0"
         >
           <div class="d-inline-flex align-center">
-            <h5 class="text-18 font-weight-medium">Active discord users</h5>
+            <h5 class="text-18 font-weight-medium">
+              Active Community Member (Discord)
+            </h5>
             <img class="ml-1" src="@/assets/verification/Info.svg" />
           </div>
           <v-row class="mt-10">
@@ -244,19 +248,13 @@
                 <div>
                   <v-icon color="#414141">mdi-circle-medium</v-icon>
                   <b class="font-weight-regular">
-                    Alice Starter: <span class="boronze">Boronze</span>
+                    Alice Pro: <span class="boronze">Boronze</span>
                   </b>
                 </div>
                 <div class="ml-5">
                   <v-icon color="#414141">mdi-circle-medium</v-icon>
                   <b class="font-weight-regular">
-                    Alice Starter: <span class="silver">Silver</span>
-                  </b>
-                </div>
-                <div class="ml-5">
-                  <v-icon color="#414141">mdi-circle-medium</v-icon>
-                  <b class="font-weight-regular">
-                    Alice Starter: <span class="gold">Gold</span>
+                    Alice Master: <span class="silver">Silver</span>
                   </b>
                 </div>
               </div>

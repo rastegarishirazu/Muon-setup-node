@@ -6,9 +6,11 @@
       </v-card-title>
 
       <v-card-text>
-        plase connect to telegram
+        plase connect to Brightid
 
-        <qr-code :text="brightIdContextId"></qr-code>
+        <qr-code
+          :text="`https://app.brightid.org/link-verification/http:%2F%2Fbrightid2.idealmoney.io/Muon/${brightIdContextId}`"
+        ></qr-code>
       </v-card-text>
 
       <v-divider></v-divider>

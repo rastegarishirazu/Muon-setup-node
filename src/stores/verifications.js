@@ -158,7 +158,7 @@ export const useVerificationsStore = defineStore("verificationsStore", {
             console.log(err);
           })
           .finally(() => {
-            if (this.brightidTryed > 5) {
+            if (this.brightidTryed > 12 * 3) {
               this.snackbarErorrMsg =
                 "Unfortunately, the connection was not successful. Please try again.";
               this.snackbarErorr = true;
@@ -166,7 +166,7 @@ export const useVerificationsStore = defineStore("verificationsStore", {
               this.brigthIdLoading = false;
             }
           }),
-        20 * 1000
+        5 * 1000
       );
     },
     getCodeAndStakerFromRoute(string) {
