@@ -144,8 +144,16 @@ export const useVerificationsStore = defineStore("verificationsStore", {
       checkBrightIdConnection(staker)
         .then((res) => {
           console.log(res);
-          if (res.data.success) {
-            this.verifications.brightidMeetsVerified = true;
+          const response = res.data;
+          if (
+            response.success &&
+            (response.result.brightidAuraVerified ||
+              response.result.brightidMeetsVerified)
+          ) {
+            this.verifications.brightidMeetsVerified =
+              response.result.brightidMeetsVerified;
+            this.verifications.brightidAuraVerified =
+              response.result.brightidAuraVerified;
             clearInterval(this.brighitIdIntervalRequest);
             this.brigthIdLoading = false;
           } else {
