@@ -34,6 +34,8 @@ export const useVerificationsStore = defineStore("verificationsStore", {
     brighitIdIntervalRequest: null,
     brightidTryed: 0,
     brightIdStep: 1,
+    telegramStep: 1,
+    discordStep: 1,
     snackbarErorr: false,
     snackbarErorrMsg: "",
     brigthIdLoading: false,
@@ -62,19 +64,16 @@ export const useVerificationsStore = defineStore("verificationsStore", {
       // id, first_name, last_name, username,
       // photo_url, auth_date and hash
       console.log(user);
-      telegramVerification(user, staker)
-        .then((res) => {
-          console.log(res);
-          if (res.data.success) {
-            this.verifications.telegtamVerified = true;
-          } else {
-            this.snackbarErorrMsg = res.data.message;
-            this.snackbarErorr = true;
-          }
-        })
-        .finally(() => {
-          this.telegramDialog = false;
-        });
+      telegramVerification(user, staker).then((res) => {
+        console.log(res);
+        if (res.data.success) {
+          this.verifications.telegtamVerified = true;
+          this.telegramStep = 2;
+        } else {
+          console.log(res.data.message);
+          this.telegramStep = 3;
+        }
+      });
     },
     presaleVerified(staker) {
       this.presaleLoading = true;
@@ -192,7 +191,7 @@ export const useVerificationsStore = defineStore("verificationsStore", {
       console.log(this.brighitIdIntervalRequest);
     },
     getCodeAndStakerFromRoute(string) {
-      this.discordStatus = "...Waiting";
+      this.discordStep = 1;
       console.log(string);
       const code = string.split("code=")[1].split("&")[0];
       const staker = string.split("state=")[1];
@@ -203,12 +202,14 @@ export const useVerificationsStore = defineStore("verificationsStore", {
       discordRequest(code, staker)
         .then((res) => {
           if (res.data.success) {
-            this.discordStatus = "success";
+            this.discordStep = 2;
           } else {
             this.discordStatus = res.data.message;
+            this.discordStep = 3;
           }
         })
         .catch((err) => {
+          this.discordStep = 3;
           console.log(err);
           this.discordStatus = "problem in server";
         });
