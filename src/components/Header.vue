@@ -1,86 +1,81 @@
 <template>
-  <div>
-    <v-row
-      class="px-10 pb-md-0 py-3 pt-8"
-      justify="space-between"
-      justify-space-between
-    >
-      <v-col md="2" sm="3" cols="12" class="text-left">
-        <img
-          @click="$router.push('/')"
-          src="../assets/muon-logo1.svg"
-          width="120px"
-          alt=""
-          class="cursor-pointer"
-        />
-      </v-col>
-      <v-col md="6" sm="9" cols="12" class="d-flex justify-end">
-        <div
-          :class="[
-            'rounded-sm',
+  <v-app-bar
+    max-height="64px"
+    elevation="0"
+    color="rgba(0,0,0,0)"
+    class="mb-10"
+  >
+    <img
+      @click="$router.push('/')"
+      src="../assets/muon-logo1.svg"
+      width="120px"
+      alt=""
+      class="cursor-pointer"
+    />
+    <v-spacer></v-spacer>
+    <div v-if="$vuetify.breakpoint.mdAndUp" class="d-flex">
+      <div
+        :class="[
+          'rounded-sm',
 
-            'card',
-            'px-2',
-            'py-5',
-            'mb-3',
-            'mr-4',
-            'align-center',
-            isConnected ? 'isConnected' : '',
-          ]"
-        >
-          <v-responsive max-width="100px">
-            <img
-              src="../assets/header/Muon-token-icon.svg"
-              width="24px"
-              height="24px"
-              class="token_logo"
-              alt=""
-            />
-            <span class="balance_title text-caption ml-2 blackText--text">
-              Balance:
-            </span>
-          </v-responsive>
-          <div>
-            <span class="balance_amount mx-1">{{ muonTestTokenShow }}</span>
-            <span class="alice">ALICE</span>
-          </div>
+          'card',
+          'px-2',
+          'py-5',
+          'mr-4',
+          'align-center',
+          isConnected ? 'isConnected' : '',
+        ]"
+      >
+        <v-responsive max-width="100px">
+          <img
+            src="../assets/header/Muon-token-icon.svg"
+            width="24px"
+            height="24px"
+            class="token_logo"
+            alt=""
+          />
+          <span class="balance_title text-caption ml-2 blackText--text">
+            Balance:
+          </span>
+        </v-responsive>
+        <div>
+          <span class="balance_amount mx-1">{{ muonTestTokenShow }}</span>
+          <span class="alice">ALICE</span>
         </div>
+      </div>
 
-        <v-btn
-          v-if="!isCorrectChain"
-          width="fit-content"
-          small
-          color="#ff58f61a"
-          class="py-5 'rounded-sm'"
-          elevation="0"
-          @click="switchToCorrectChain"
-        >
-          switch network
-        </v-btn>
-        <v-btn
-          v-else
-          width="fit-content"
-          small
-          color="#ff58f61a"
-          :class="[
-            isConnected ? 'isConnected' : '',
-            'py-5',
-            'primary--text',
-            'rounded-sm',
-            'px-4',
-            'text-body-2',
-          ]"
-          elevation="0"
-          @click="connectToMetamask"
-        >
-          {{ addressShow }}
-        </v-btn>
-        <!-- <div class="card px-2 py-2 justify-center">
-          <span class="address">{{ addressShow }}</span>
-        </div> -->
-      </v-col>
-    </v-row>
-  </div>
+      <v-btn
+        v-if="!isCorrectChain"
+        width="fit-content"
+        small
+        color="#ff58f61a"
+        class="py-5 'rounded-sm'"
+        elevation="0"
+        @click="switchToCorrectChain"
+      >
+        switch network
+      </v-btn>
+      <v-btn
+        v-else
+        width="fit-content"
+        small
+        color="#ff58f61a"
+        :class="[
+          isConnected ? 'isConnected' : '',
+          'py-5',
+          'primary--text',
+          'rounded-sm',
+          'px-4',
+          'text-body-2',
+        ]"
+        elevation="0"
+        @click="connectToMetamask"
+      >
+        {{ addressShow }}
+      </v-btn>
+    </div>
+    <v-app-bar-nav-icon v-else></v-app-bar-nav-icon>
+  </v-app-bar>
 </template>
 
 <script>

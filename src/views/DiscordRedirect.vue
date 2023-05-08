@@ -2,7 +2,20 @@
   <v-main>
     <v-row justify="center" style="height: 100%">
       <v-col cols="10" align-self="center" class="text-center">
-        <h1 class="text-body-2">{{ discordStatus }}</h1>
+        <v-badge
+          bottom
+          color="red"
+          icon="mdi-close"
+          overlap
+          offset-x="20"
+          offset-y="20"
+        >
+          <img
+            width="84px"
+            src="@/assets/verification/brightIdLogo.svg"
+            alt=""
+          />
+        </v-badge>
       </v-col>
     </v-row>
   </v-main>

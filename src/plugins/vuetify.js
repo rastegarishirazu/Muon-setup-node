@@ -31,4 +31,5 @@ export default new Vuetify({
       },
     },
   },
+  iconfont: "fa",
 });

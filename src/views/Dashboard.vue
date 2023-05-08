@@ -535,9 +535,14 @@
         class="px-5 overflow-visible"
       >
         <v-row
-          :class="[{ 'px-240': $vuetify.breakpoint.lgAndUp }, 'full-height']"
+          justify="center"
+          :class="[
+            { 'px-240': $vuetify.breakpoint.lgAndUp },
+            'px-mdAndDown-10',
+            'full-height',
+          ]"
         >
-          <v-col align-self="center">
+          <v-col align-self="center max-width-1032">
             <v-row v-if="e1 === steps.haveNode" justify="center" class="">
               <v-col cols="12">
                 <v-card
@@ -1327,8 +1332,19 @@ h3 {
   overflow-x: hidden;
   border-radius: 12px;
 }
-.px-240 {
-  padding-right: 240px;
-  padding-left: 240px;
+@media screen and (max-width: 1580px) {
+  .px-240 {
+    padding-right: 100px !important;
+    padding-left: 100px !important;
+  }
+}
+@media screen and (min-width: 1580px) {
+  .px-240 {
+    padding-right: 240px !important;
+    padding-left: 240px !important;
+  }
+}
+.max-width-1032 {
+  max-width: 1180px;
 }
 </style>

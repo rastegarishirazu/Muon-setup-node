@@ -33,6 +33,7 @@ export const useVerificationsStore = defineStore("verificationsStore", {
     },
     brighitIdIntervalRequest: null,
     brightidTryed: 0,
+    brightIdStep: 1,
     snackbarErorr: false,
     snackbarErorrMsg: "",
     brigthIdLoading: false,
@@ -158,8 +159,10 @@ export const useVerificationsStore = defineStore("verificationsStore", {
             this.verifications.brightidAuraVerified =
               response.result.brightidAuraVerified;
             window.clearInterval(this.brighitIdIntervalRequest);
+            console.log("clear interval");
 
-            this.brightIdDialog = false;
+            this.brightIdStep = 3;
+
             this.brigthIdLoading = false;
           } else {
             this.brightidTryed++;
@@ -170,12 +173,10 @@ export const useVerificationsStore = defineStore("verificationsStore", {
         })
         .finally(() => {
           if (this.brightidTryed > 12 * 3) {
-            this.snackbarErorrMsg =
-              "Unfortunately, the connection was not successful. Please try again.";
-            this.snackbarErorr = true;
-            window.clearInterval(this.brighitIdIntervalRequest);
-            this.brightIdDialog = false;
+            this.brightIdStep = 4;
             this.brigthIdLoading = false;
+            window.clearInterval(this.brighitIdIntervalRequest);
+            console.log("clear interval");
           }
         });
     },
@@ -187,6 +188,7 @@ export const useVerificationsStore = defineStore("verificationsStore", {
         this.brigthReq(),
         5000
       );
+      console.log("interval");
       console.log(this.brighitIdIntervalRequest);
     },
     getCodeAndStakerFromRoute(string) {
