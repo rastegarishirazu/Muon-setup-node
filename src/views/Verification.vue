@@ -46,7 +46,11 @@
                 Your verification pass
               </h5>
               <v-card-text class="font-weight-medium px-0 mt-5 text-18">
-                You haven’t passed any of the verifications
+                <b
+                  class="text-18 font-weight-medium"
+                  v-for="title in verificationsPass"
+                  >{{ title }}</b
+                >
               </v-card-text>
             </v-card>
           </v-col>
@@ -411,6 +415,25 @@ export default {
       "snackbarErorr",
       "snackbarErorrMsg",
     ]),
+    ...mapState(useVerificationsStore, {
+      verificationsPass(store) {
+        const verificationTitle = {
+          telegtamVerified: "Active Community Member (Telegram)",
+          discordVerified: "Active Community Member (Discord)",
+          presaleVerified: "Muon Presale Participation",
+          brightidMeetsVerified: "BrightID Meet Verification",
+          brightidAuraVerified: "BrightID Aura Verification",
+        };
+        const verifications = store.verifications;
+        let myList = [];
+        for (const property in verifications) {
+          if (verifications[property]) myList.push(verificationTitle[property]);
+        }
+        if (!myList.length)
+          myList.push("You haven’t passed any of the verifications");
+        return myList;
+      },
+    }),
   },
   mounted() {
     this.getVerificationsStatus();
