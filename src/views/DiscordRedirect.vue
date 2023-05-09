@@ -87,6 +87,11 @@ export default {
 
   methods: {
     ...mapActions(useVerificationsStore, ["getCodeAndStakerFromRoute"]),
+    close() {
+      console.log(window.opener);
+      window.opener.location.reload();
+      self.close();
+    },
   },
   created() {
     this.getCodeAndStakerFromRoute(window.location.href);

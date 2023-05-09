@@ -113,7 +113,8 @@ export const useVerificationsStore = defineStore("verificationsStore", {
        scrollbars=yes,
        resizable=yes,
        width=450,
-       height=900`
+       height=900,
+       left=500`
       );
     },
     brightIdVerification() {
@@ -192,7 +193,11 @@ export const useVerificationsStore = defineStore("verificationsStore", {
     },
     getCodeAndStakerFromRoute(string) {
       this.discordStep = 1;
-      console.log(string);
+      console.log(string.split("code=").length);
+      if (string.split("code=").length < 2) {
+        this.discordStep = 3;
+        return 0;
+      }
       const code = string.split("code=")[1].split("&")[0];
       const staker = string.split("state=")[1];
       this.discordResponse.code = code;
