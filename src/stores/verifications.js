@@ -76,11 +76,6 @@ export const useVerificationsStore = defineStore("verificationsStore", {
         }
       });
     },
-    presaleOpenWindow() {
-      const staker = useDashboardStore().account;
-      const URL = `/verification/presale/${staker}`;
-      window.open(URL, "_blank", "height=900,width=1000,type=panel");
-    },
     presaleVerified(staker) {
       const signer = useDashboardStore().account;
       singMessage(
