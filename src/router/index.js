@@ -3,7 +3,7 @@ import VueRouter from "vue-router";
 import Dashboard from "../views/Dashboard.vue";
 import Verification from "@/views/Verification.vue";
 import WrongPage from "@/views/WrongPage.vue";
-import ApiVerify from "@/views/ApiVerify.vue";
+import Presale from "@/views/Presale.vue";
 import DiscordRedirect from "@/views/DiscordRedirect.vue";
 Vue.use(VueRouter);
 
@@ -24,9 +24,9 @@ const routes = [
     component: WrongPage,
   },
   {
-    path: "/verification/:api/:staker",
+    path: "/verification/presale/:staker",
     name: "apiVerify",
-    component: ApiVerify,
+    component: Presale,
   },
   {
     path: "/discordVerification/:state",

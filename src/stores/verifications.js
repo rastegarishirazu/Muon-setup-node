@@ -36,6 +36,7 @@ export const useVerificationsStore = defineStore("verificationsStore", {
     brightIdStep: 1,
     telegramStep: 1,
     discordStep: 1,
+    preslaeStep: 2,
     snackbarErorr: false,
     snackbarErorrMsg: "",
     brigthIdLoading: false,
@@ -75,8 +76,12 @@ export const useVerificationsStore = defineStore("verificationsStore", {
         }
       });
     },
+    presaleOpenWindow() {
+      const staker = useDashboardStore().account;
+      const URL = `/verification/presale/${staker}`;
+      window.open(URL, "_blank", "height=900,width=1000,type=panel");
+    },
     presaleVerified(staker) {
-      this.presaleLoading = true;
       const signer = useDashboardStore().account;
       singMessage(
         "Please sign this message to verify ownership of your Ethereum address to verify its uniqueness for Muon.",
@@ -86,17 +91,14 @@ export const useVerificationsStore = defineStore("verificationsStore", {
           .then((res) => {
             console.log(res);
             if (res.success) {
-              this.verifications.presaleVerified = true;
+              this.preslaeStep = 4;
             } else {
-              this.snackbarErorrMsg = res.data.message;
-              this.snackbarErorr = true;
+              this.preslaeStep = 5;
             }
           })
           .catch((err) => {
             console.log(err);
-          })
-          .finally(() => {
-            this.presaleLoading = false;
+            this.preslaeStep = 5;
           });
       });
     },
@@ -218,6 +220,11 @@ export const useVerificationsStore = defineStore("verificationsStore", {
           console.log(err);
           this.discordStatus = "problem in server";
         });
+    },
+    closePopup() {
+      console.log(window.opener);
+      window.opener.location.reload();
+      self.close();
     },
   },
 });

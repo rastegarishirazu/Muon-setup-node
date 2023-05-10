@@ -81,7 +81,7 @@
                 </v-col>
                 <v-col class="text-right" align-self="center"
                   ><v-btn
-                    @click="$router.push(`/verification/presale/${account}`)"
+                    @click="presaleOpenWindow"
                     elevation="0"
                     :color="
                       verifications['presaleVerified']
@@ -399,6 +399,7 @@ export default {
       "presaleVerified",
       "discordVerified",
       "brightIdVerification",
+      "presaleOpenWindow",
     ]),
   },
   async created() {
