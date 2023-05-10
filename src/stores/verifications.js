@@ -85,8 +85,9 @@ export const useVerificationsStore = defineStore("verificationsStore", {
         await saleRequest(staker, signer, signature)
           .then((res) => {
             console.log(res);
-            if (res.success) {
+            if (res.data.success) {
               this.preslaeStep = 4;
+              this.verifications.presaleVerified = true;
             } else {
               this.preslaeStep = 5;
             }
