@@ -36,7 +36,7 @@
               elevation="0"
               class="rounded-sm mt-10 py-3 px-6 text-body-1 font-weight-medium primary--text"
               color="#5158F621"
-              @click="close()"
+              @click="closePopup"
             >
               Back to verification center
             </v-btn>
