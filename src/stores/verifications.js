@@ -159,7 +159,7 @@ export const useVerificationsStore = defineStore("verificationsStore", {
             window.clearInterval(this.brighitIdIntervalRequest);
             console.log("clear interval");
 
-            this.brightIdStep = 3;
+            this.brightIdStep = 4;
 
             this.brigthIdLoading = false;
           } else {
@@ -171,7 +171,7 @@ export const useVerificationsStore = defineStore("verificationsStore", {
         })
         .finally(() => {
           if (this.brightidTryed > 12 * 3) {
-            this.brightIdStep = 4;
+            this.brightIdStep = 5;
             this.brigthIdLoading = false;
             window.clearInterval(this.brighitIdIntervalRequest);
             console.log("clear interval");

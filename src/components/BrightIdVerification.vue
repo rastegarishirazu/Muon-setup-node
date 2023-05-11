@@ -89,7 +89,45 @@
           </v-col>
         </v-row>
       </v-card-text>
-      <v-card-text class="text-black" v-if="brightIdStep === 2">
+      <v-card-text v-if="brightIdStep == 2" class="text-black">
+        <v-row>
+          <v-col class="d-flex justify-center mt-9">
+            <img
+              width="84px"
+              src="@/assets/verification/brightIdLogo.svg"
+              alt=""
+            />
+          </v-col>
+        </v-row>
+        <v-row class="mt-10">
+          <v-col cols="2"><b class="text-18 weight-600">Step 3:</b></v-col>
+          <v-col class="px-0"
+            ><p class="text-18 font-weight-regular pr-5">
+              join a verification party at
+              <a href="https:/meet.brightid.org/"> https:/meet.brightid.org/</a>
+              and choose from one of the scheduled meetings that fit your
+              schedule. Once you've successfully participated in a meeting,
+              you'll be granted the Meet Verification badge in your BrightID
+              app. After receiving this badge, you can now proceed to link your
+              BrightID account to Alice (Step 4)
+            </p></v-col
+          >
+        </v-row>
+        <v-row>
+          <v-col class="text-center">
+            <v-btn
+              x-large
+              elevation="0"
+              class="rounded-sm mt-10 py-4 px-15 text-h6"
+              color="primary"
+              @click="brightIdStep = 3"
+            >
+              I have Meet verification Badge
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-card-text>
+      <v-card-text class="text-black" v-if="brightIdStep === 3">
         <v-row>
           <v-col cols="2"><b class="text-18 weight-600">Step 3:</b></v-col>
           <v-col class="px-0"
@@ -130,7 +168,7 @@
           </v-col>
         </v-row>
       </v-card-text>
-      <v-card-text class="text-black" v-if="brightIdStep === 3">
+      <v-card-text class="text-black" v-if="brightIdStep === 4">
         <v-row class="mt-15">
           <v-col class="d-flex justify-center">
             <v-badge
@@ -167,7 +205,7 @@
           </v-col>
         </v-row>
       </v-card-text>
-      <v-card-text class="text-black" v-if="brightIdStep === 4">
+      <v-card-text class="text-black" v-if="brightIdStep === 5">
         <v-row class="mt-15">
           <v-col class="d-flex justify-center">
             <v-badge

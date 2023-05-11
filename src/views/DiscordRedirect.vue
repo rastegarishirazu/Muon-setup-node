@@ -17,7 +17,7 @@
       <v-col cols="10" align-self="center" class="text-center">
         <v-badge
           bottom
-          color="red"
+          color="green"
           icon="mdi-check"
           overlap
           offset-x="20"
