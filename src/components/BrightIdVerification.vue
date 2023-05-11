@@ -163,7 +163,7 @@
               @click="checkBrightIdStatus"
               :loading="brigthIdLoading"
             >
-              Submit connection
+              Verify Link
             </v-btn>
           </v-col>
         </v-row>
