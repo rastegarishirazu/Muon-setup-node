@@ -1,5 +1,5 @@
 <template>
-  <v-main>
+  <v-main class="mb-10">
     <v-responsive v-if="preslaeStep === 'loading'" height="75vh">
       <v-row justify="center" style="height: 100%">
         <v-col align-self="center"></v-col>
@@ -14,7 +14,7 @@
     </v-row>
     <v-row justify="center">
       <v-col class="d-flex justify-center width-570 pt-0">
-        <v-card width="570" min-height="500" elevation="0" class="rounded-lg pb-5" :loading="brigthIdLoading">
+        <v-card width="570" min-height="500" elevation="0" class="rounded-lg pb-5">
           <v-toolbar elevation="0">
             <h5 class="text-18 weight-500">Muon Presale Participation</h5>
           </v-toolbar>
@@ -55,7 +55,7 @@
                       </v-col>
                       <v-col class="pl-0">
                         <p class="text-18 font-weight-regular text-left">
-                          Go to your wallet and select the address you used for
+                          Open your Metamask and select the address you used for
                           the presale. If this is the same address you're
                           currently using for the Alice dashboard, skip this
                           step
@@ -75,6 +75,19 @@
                 <v-row v-else-if="preslaeStep === 3" justify="center">
                   <v-col cols="10" align-self="center" class="text-center">
                     <img width="84px" src="@/assets/verification/Wallet.svg" alt="" />
+                    <v-row class="mt-1">
+                      <v-col cols="2" class="px-0">
+                        <b class="text-18 weight-600">Step 1:</b>
+                      </v-col>
+                      <v-col class="pl-0">
+                        <p class="text-18 font-weight-regular text-left">
+                          Open your Metamask and select the address you used for
+                          the presale. If this is the same address you're
+                          currently using for the Alice dashboard, skip this
+                          step and Sign your wallet signature to verify the address.
+                        </p>
+                      </v-col>
+                    </v-row>
                     <v-row class="mt-5">
                       <v-col>
                         <div class="wallet-connected d-inline-flex justify-space-between align-center px-6">
@@ -89,16 +102,6 @@
                             class="rounded-sm text-body-1 font-weight-medium primary--text"
                             color="#5158F621">Disconnect</v-btn>
                         </div>
-                      </v-col>
-                    </v-row>
-                    <v-row class="mt-5">
-                      <v-col cols="2" class="px-0">
-                        <b class="text-18 weight-600">Step 2:</b>
-                      </v-col>
-                      <v-col class="pl-0">
-                        <p class="text-18 font-weight-regular text-left">
-                          Sign your wallet signature to verify the address
-                        </p>
                       </v-col>
                     </v-row>
                     <v-row>
@@ -174,6 +177,8 @@ export default {
     isConnected(newVal, OldVal) {
       if (!newVal) {
         this.preslaeStep = 1;
+      } else {
+        this.preslaeStep = 3;
       }
     },
   },
@@ -185,9 +190,7 @@ export default {
     if (!this.isConnected) {
       this.preslaeStep = 1;
     } else {
-      if (this.preslaeStep != 3) {
-        this.preslaeStep = 2;
-      }
+      this.preslaeStep = 3;
     }
   },
   computed: {
