@@ -22,57 +22,8 @@
           <v-card-text>
             <v-row justify="center">
               <v-col class="max-width-page">
-                <v-row v-if="preslaeStep === 1" justify="center">
-                  <v-col cols="10" align-self="center" class="text-center">
-                    <img width="84px" src="@/assets/verification/Wallet.svg" alt="" />
-                    <v-row class="mt-5">
-                      <v-col cols="2" class="px-0">
-                        <b class="text-18 weight-600">Step 1:</b>
-                      </v-col>
-                      <v-col>
-                        <p class="text-18 font-weight-regular text-left">
-                          Connect the wallet you used in the presale
-                        </p>
-                      </v-col>
-                    </v-row>
-                    <v-row>
-                      <v-col class="d-flex justify-center">
-                        <v-btn elevation="0" class="rounded-sm mt-2 py-4 text-body-1 font-weight-medium" color="primary"
-                          @click="connectToMetamask">
-                          Connect wallet
-                        </v-btn>
-                      </v-col>
-                    </v-row>
-                  </v-col>
-                </v-row>
-                <v-row v-else-if="preslaeStep === 2" justify="center">
-                  <v-col cols="10" align-self="center" class="text-center">
-                    <img width="84px" src="@/assets/verification/Wallet.svg" alt="" />
 
-                    <v-row class="mt-5">
-                      <v-col cols="2" class="px-0">
-                        <b class="text-18 weight-600">Step 1:</b>
-                      </v-col>
-                      <v-col class="pl-0">
-                        <p class="text-18 font-weight-regular text-left">
-                          Open your Metamask and select the address you used for
-                          the presale. If this is the same address you're
-                          currently using for the Alice dashboard, skip this
-                          step
-                        </p>
-                      </v-col>
-                    </v-row>
-                    <v-row>
-                      <v-col class="d-flex justify-center">
-                        <v-btn elevation="0" class="rounded-sm mt-2 py-4 text-body-1 font-weight-medium" color="primary"
-                          @click="preslaeStep = 3">
-                          Got it! next step
-                        </v-btn>
-                      </v-col>
-                    </v-row>
-                  </v-col>
-                </v-row>
-                <v-row v-else-if="preslaeStep === 3" justify="center">
+                <v-row v-if="preslaeStep === 1" justify="center">
                   <v-col cols="10" align-self="center" class="text-center">
                     <img width="84px" src="@/assets/verification/Wallet.svg" alt="" />
                     <v-row class="mt-1">
@@ -81,14 +32,20 @@
                       </v-col>
                       <v-col class="pl-0">
                         <p class="text-18 font-weight-regular text-left">
-                          Open your Metamask and select the address you used for
-                          the presale. If this is the same address you're
-                          currently using for the Alice dashboard, skip this
-                          step and Sign your wallet signature to verify the address.
+                          Open your Metamask and select the address you used for the presale and use the verify button to
+                          verify the ownership of the address.
                         </p>
                       </v-col>
                     </v-row>
-                    <v-row class="mt-5">
+                    <v-row v-if="!isConnected">
+                      <v-col class="d-flex justify-center">
+                        <v-btn elevation="0" class="rounded-sm mt-2 py-4 text-body-1 font-weight-medium" color="primary"
+                          @click="connectToMetamask">
+                          Connect wallet
+                        </v-btn>
+                      </v-col>
+                    </v-row>
+                    <v-row v-else class="mt-5">
                       <v-col>
                         <div class="wallet-connected d-inline-flex justify-space-between align-center px-6">
                           <div class="text-left">
@@ -106,7 +63,8 @@
                     </v-row>
                     <v-row>
                       <v-col class="d-flex justify-center">
-                        <v-btn elevation="0" class="rounded-sm py-4 text-body-1 font-weight-medium" color="primary"
+                        <v-btn :disabled="!isConnected" elevation="0"
+                          class="rounded-sm py-4 text-body-1 font-weight-medium" color="primary"
                           @click="presaleVerified($route.params.staker)" :loading="presaleLoading">
                           Verify address
                         </v-btn>
@@ -114,7 +72,7 @@
                     </v-row>
                   </v-col>
                 </v-row>
-                <v-row v-else-if="preslaeStep === 4" justify="center">
+                <v-row v-else-if="preslaeStep === 2" justify="center">
                   <v-col cols="10" align-self="center" class="text-center">
                     <v-badge bottom color="green" icon="mdi-check" overlap offset-x="20" offset-y="15">
                       <img width="84px" src="@/assets/verification/Wallet.svg" alt="" />
@@ -133,7 +91,7 @@
                     </v-row>
                   </v-col>
                 </v-row>
-                <v-row v-else-if="preslaeStep === 5" justify="center">
+                <v-row v-else-if="preslaeStep === 3" justify="center">
                   <v-col cols="10" align-self="center" class="text-center">
                     <v-badge bottom color="red" icon="mdi-close" overlap offset-x="20" offset-y="15">
                       <img width="84px" src="@/assets/verification/Wallet.svg" alt="" />
@@ -149,7 +107,7 @@
                       <v-col class="d-flex justify-center">
                         <backToVerification></backToVerification>
                         <v-btn elevation="0" class="rounded-sm text-body-1 font-weight-medium primary--text mx-2"
-                          color="#5158F621" @click="preslaeStep = 2">Try another address</v-btn>
+                          color="#5158F621" @click="preslaeStep = 1">Try another address</v-btn>
                       </v-col>
                     </v-row>
                   </v-col>
@@ -174,24 +132,13 @@ export default {
   name: "apiVerify",
   components: { BackToVerification, StakerAndSignerIsNotSameDialog },
   watch: {
-    isConnected(newVal, OldVal) {
-      if (!newVal) {
-        this.preslaeStep = 1;
-      } else {
-        this.preslaeStep = 3;
-      }
-    },
   },
   methods: {
     ...mapActions(useVerificationsStore, ["presaleVerified", "closePopup"]),
     ...mapActions(useDashboardStore, ["connectToMetamask"]),
   },
   created() {
-    if (!this.isConnected) {
-      this.preslaeStep = 1;
-    } else {
-      this.preslaeStep = 3;
-    }
+    this.preslaeStep = 1;
   },
   computed: {
     ...mapState(useVerificationsStore, ["preslaeStep", 'presaleLoading']),

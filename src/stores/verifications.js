@@ -37,7 +37,7 @@ export const useVerificationsStore = defineStore("verificationsStore", {
     brightIdStep: 1,
     telegramStep: 1,
     discordStep: 1,
-    preslaeStep: 2,
+    preslaeStep: 1,
     snackbarErorr: false,
     snackbarErorrMsg: "",
     brigthIdLoading: false,
@@ -88,10 +88,10 @@ export const useVerificationsStore = defineStore("verificationsStore", {
           .then((res) => {
             console.log(res);
             if (res.data.success) {
-              this.preslaeStep = 4;
+              this.preslaeStep = 2;
               this.verifications.presaleVerified = true;
             } else {
-              this.preslaeStep = 5;
+              this.preslaeStep = 3;
             }
           })
           .catch((err) => {
