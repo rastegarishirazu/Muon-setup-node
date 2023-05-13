@@ -9,7 +9,7 @@
     </v-responsive>
     <v-row justify="center">
       <v-col class="width-570 text-right pt-0">
-        <backToVerification v-if="preslaeStep < 4"></backToVerification>
+        <backToVerification v-if="preslaeStep === 1"></backToVerification>
       </v-col>
     </v-row>
     <v-row justify="center">
@@ -27,9 +27,6 @@
                   <v-col cols="10" align-self="center" class="text-center">
                     <img width="84px" src="@/assets/verification/Wallet.svg" alt="" />
                     <v-row class="mt-1">
-                      <v-col cols="2" class="px-0">
-                        <b class="text-18 weight-600">Step 1:</b>
-                      </v-col>
                       <v-col class="pl-0">
                         <p class="text-18 font-weight-regular text-left">
                           Open your Metamask and select the address you used for the presale and use the verify button to
