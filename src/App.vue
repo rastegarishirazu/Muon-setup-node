@@ -4,14 +4,8 @@
     <v-responsive v-if="cardLoading" height="80vh">
       <v-row justify="center" style="height: 100%">
         <v-col align-self="center"></v-col>
-        <lottie-vue-player
-          ref="anim"
-          src="https://lottie.host/1fb3a319-394b-446d-8fce-824aa4f1787c/xjtL4nMuB2.json"
-          :autoplay="true"
-          :loop="true"
-          height="200px"
-          class="transparent"
-        />
+        <lottie-vue-player ref="anim" src="https://lottie.host/1fb3a319-394b-446d-8fce-824aa4f1787c/xjtL4nMuB2.json"
+          :autoplay="true" :loop="true" height="200px" class="transparent" />
       </v-row>
     </v-responsive>
     <router-view v-else />
@@ -23,6 +17,7 @@
         </div>
       </v-col>
     </v-footer>
+    <LiveChatWidget v-if="liveChat" license="15138837" visibility="minimized" v-on:new-event="handleNewEvent" />
   </v-app>
 </template>
 
@@ -34,10 +29,12 @@ import { useDashboardStore } from "@/stores/dashboardStore";
 import { mapActions, mapState, mapWritableState } from "pinia";
 import { useVerificationsStore } from "./stores/verifications";
 import { verification } from "./utils/requestVerifications";
+import { LiveChatWidget } from '@livechat/widget-vue/v2'
+
 
 export default {
   name: "app",
-  components: { Header },
+  components: { Header, LiveChatWidget },
 
   watch: {
     isConnected(newState, oldState) {
@@ -66,6 +63,9 @@ export default {
     },
   },
   methods: {
+    handleNewEvent(event) {
+      console.log('LiveChatWidget.onNewEvent', event)
+    },
     ...mapActions(useDashboardStore, [
       "getTokenTestBalance",
       "startApp",
@@ -94,7 +94,7 @@ export default {
   },
 
   computed: {
-    ...mapState(useVerificationsStore, [verification]),
+    ...mapState(useVerificationsStore, ['verification']),
     ...mapWritableState(useDashboardStore, [
       "currntIdChain",
       "addressShow",
@@ -104,6 +104,14 @@ export default {
       "provider",
       "account",
     ]),
+    liveChat() {
+      if (this.$route.path === '/discordVerification/data') {
+        console.log(this.$route.path);
+        return false
+      } else {
+        return true
+      }
+    }
   },
 
   mounted() {

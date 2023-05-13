@@ -455,7 +455,4 @@ export const useDashboardStore = defineStore("dashboardStore", {
       });
     },
   },
-  // toWrongPage() {
-  //   this.$router.push("/error");
-  // },
 });

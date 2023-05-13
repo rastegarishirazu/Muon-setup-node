@@ -24,16 +24,20 @@
 
 <script>
 import { useDashboardStore } from "@/stores/dashboardStore";
-import { mapWritableState } from "pinia";
+import { mapState, mapWritableState } from "pinia";
 
 export default {
   name: "WrongPage",
 
   created() {
     this.cardLoading = false;
+    if (this.haveNode != "error") {
+      this.$router.push('/')
+    }
   },
   computed: {
     ...mapWritableState(useDashboardStore, ["cardLoading"]),
+    ...mapState(useDashboardStore,['haveNode'])
   },
 };
 </script>

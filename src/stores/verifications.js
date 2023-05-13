@@ -16,6 +16,7 @@ export const useVerificationsStore = defineStore("verificationsStore", {
     brightIdContextId: "",
     presaleLoading: false,
     brightIdDialog: false,
+    backToStakerDialog: false,
     verifications: {
       telegtamVerified: false,
       discordVerified: false,
@@ -78,6 +79,7 @@ export const useVerificationsStore = defineStore("verificationsStore", {
     },
     presaleVerified(staker) {
       const signer = useDashboardStore().account;
+      this.presaleLoading = true
       singMessage(
         "Please sign this message to verify ownership of your Ethereum address to verify its uniqueness for Muon.",
         signer
@@ -94,7 +96,8 @@ export const useVerificationsStore = defineStore("verificationsStore", {
           })
           .catch((err) => {
             console.log(err);
-            this.preslaeStep = 5;
+          }).finally(() => {
+            this.presaleLoading = false
           });
       });
     },
@@ -117,6 +120,7 @@ export const useVerificationsStore = defineStore("verificationsStore", {
     },
     brightIdVerification() {
       const staker = useDashboardStore().account;
+      this.brigthIdLoading = true
       singMessage(
         "Please sign this message to verify ownership of your Ethereum address to verify its uniqueness for Muon.",
         staker
@@ -138,6 +142,8 @@ export const useVerificationsStore = defineStore("verificationsStore", {
           .catch((err) => {
             console.log(err);
           });
+      }).finally(() => {
+        this.brigthIdLoading = false
       });
     },
 
@@ -221,6 +227,14 @@ export const useVerificationsStore = defineStore("verificationsStore", {
       console.log(window.opener);
       window.opener.location.reload();
       self.close();
+    },
+    checkBack(staker) {
+      const signer = useDashboardStore().account;
+      if (staker === signer) {
+        this.router.push("/verification");
+      } else {
+        this.backToStakerDialog = true;
+      }
     },
   },
 });
