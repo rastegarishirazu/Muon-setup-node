@@ -6,6 +6,8 @@ import LottieVuePlayer from "@lottiefiles/vue-lottie-player";
 import { createPinia, PiniaVuePlugin } from "pinia";
 import router from "./router";
 import { markRaw } from "vue";
+import { useDashboardStore } from "@/stores/dashboardStore";
+
 
 Vue.use(LottieVuePlayer); // add lottie-animation to your global scope
 Vue.use(PiniaVuePlugin);
@@ -25,3 +27,21 @@ new Vue({
     return h(App);
   },
 }).$mount("#app");
+
+router.beforeEach((to, from, next) => {
+  const isConnected = useDashboardStore().isConnected
+  const haveNode = useDashboardStore().haveNode === true
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    // this route requires auth, check if logged in
+    // if not, redirect to login page.
+    if (!(isConnected && haveNode)) {
+      next({
+        path: '/',
+      })
+    } else {
+      next() // go to wherever I'm going
+    }
+  } else {
+    next() // does not require auth, make sure to always call next()!
+  }
+})

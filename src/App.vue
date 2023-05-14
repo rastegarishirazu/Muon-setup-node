@@ -81,6 +81,9 @@ export default {
     ]),
   },
   async created() {
+    if (!this.haveNode || !this.isConnected) {
+      this.$router.push('/')
+    }
     this.provider = await detectEthereumProvider();
     if (this.provider) {
       this.startApp(this.provider); // Initialize your app
@@ -94,6 +97,7 @@ export default {
   },
 
   computed: {
+    ...mapState(useDashboardStore, ['haveNode', 'isConnected']),
     ...mapState(useVerificationsStore, ['verification']),
     ...mapWritableState(useDashboardStore, [
       "currntIdChain",

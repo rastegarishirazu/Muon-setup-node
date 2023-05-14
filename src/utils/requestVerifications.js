@@ -1,5 +1,5 @@
 import axios from "axios";
-import { BASEURL } from "./fetch";
+const BASEURL = "https://alice.muon.net/test-proxy"
 const verificationEndPoint = BASEURL + "/uniqueness";
 
 export const verification = async (staker) => {

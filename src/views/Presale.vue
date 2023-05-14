@@ -29,8 +29,8 @@
                     <v-row class="mt-1">
                       <v-col class="pl-0">
                         <p class="text-18 font-weight-regular text-left">
-                          Open your Metamask and select the address you used for the presale and use the verify button to
-                          verify the ownership of the address.
+                          Open your Metamask and select the address you used for the presale. Then use the "Verify
+                          Address" button to verify the ownership of the address.
                         </p>
                       </v-col>
                     </v-row>
@@ -135,7 +135,9 @@ export default {
     ...mapActions(useDashboardStore, ["connectToMetamask"]),
   },
   created() {
-    this.preslaeStep = 1;
+    if (this.preslaeStep != 2) {
+      this.preslaeStep = 1;
+    }
   },
   computed: {
     ...mapState(useVerificationsStore, ["preslaeStep", 'presaleLoading']),

@@ -65,13 +65,11 @@
           <v-col cols="2"><b class="text-18 weight-600">Step 3:</b></v-col>
           <v-col class="px-0">
             <p class="text-18 font-weight-regular pr-5">
-              join a verification party at
-              <a @click="openWindow('https://meet.brightid.org')"> meet.brightid.org</a>
-              and choose from one of the scheduled meetings that fit your
-              schedule. Once you've successfully participated in a meeting,
-              you'll be granted the Meet Verification badge in your BrightID
-              app. After receiving this badge, you can now proceed to link your
-              BrightID account to Alice (Step 4)
+              Refer to
+              <a @click="openWindow('https://brightid.gitbook.io/brightid/getting-verified')"> meet.brightid.org</a>
+              and choose one of the scheduled verification parties that fits your schedule.
+              Once you have successfully participated in a meeting, you will be granted the Meet Verification badge in
+              your BrightID app. After receiving your badge, proceed to link your BrightID account to Alice (Step 4).
             </p>
           </v-col>
         </v-row>
@@ -89,7 +87,7 @@
           <v-col cols="2"><b class="text-18 weight-600">Step 3:</b></v-col>
           <v-col class="px-0">
             <p class="text-18 font-weight-regular">
-              Open app and scan the QR Code below
+              Open BrightID app and scan the QR Code below.
             </p>
           </v-col>
         </v-row>
@@ -103,9 +101,8 @@
           <v-col cols="2"><b class="text-18 weight-600">Step 4:</b></v-col>
           <v-col class="px-0">
             <p class="text-18 font-weight-regular">
-              After scanning and connecting to brightID, click on submit
-              connection and wait 2-5 minutes for verification result to show on
-              this window
+              After scanning the code and connecting to BrightID, click on the "Verify Link" button and wait for a few
+              minutes to see the result.
             </p>
           </v-col>
         </v-row>

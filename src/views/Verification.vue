@@ -306,11 +306,12 @@ export default {
   },
   async created() {
     this.getVerificationsStatus(this.account);
+    
   },
 
   computed: {
     ...mapState(useVerificationsStore, ["verifications"]),
-    ...mapState(useDashboardStore, ["account"]),
+    ...mapState(useDashboardStore, ["account",]),
     ...mapWritableState(useDashboardStore, ["cardLoading"]),
     ...mapWritableState(useVerificationsStore, [
       "telegramDialog",
