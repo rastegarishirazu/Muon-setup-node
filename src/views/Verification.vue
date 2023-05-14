@@ -239,10 +239,11 @@
                     </div>
                   </div>
                 </v-col>
-                <v-col class="text-right" align-self="center"><v-btn elevation="0" :color="verifications['brightidAuraVerified']
-                  ? '#23B5D3'
-                  : 'rgba(81, 88, 246, 0.1)'
-                  " :class="[
+                <v-col class="text-right" align-self="center">
+                  <v-btn elevation="0" :color="verifications['brightidAuraVerified']
+                    ? '#23B5D3'
+                    : 'rgba(81, 88, 246, 0.1)'
+                    " :class="[
     'py-6',
     'px-3',
     verifications['brightidAuraVerified']
@@ -259,7 +260,8 @@
   verifications["brightidAuraVerified"]
   ? `Verification passed!`
   : `Pass verification`
-}}</v-btn>
+}}
+                  </v-btn>
                 </v-col>
               </v-row>
             </v-card>

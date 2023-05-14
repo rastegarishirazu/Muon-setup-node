@@ -189,7 +189,7 @@ export const useVerificationsStore = defineStore("verificationsStore", {
       this.brigthIdLoading = true;
       this.brightidTryed = 0;
       this.brighitIdIntervalRequest = window.setInterval(
-        this.brigthReq(),
+        this.brigthReq,
         5000
       );
       console.log("interval");
