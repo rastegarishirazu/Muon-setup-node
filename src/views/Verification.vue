@@ -217,7 +217,7 @@
               " class="node_id_card px-5 py-4 rounded-lg full-height" elevation="0" disabled>
               <div class="d-inline-flex align-center">
                 <h5 class="text-18 font-weight-medium">
-                  BrightID Aura Verification (Comming soon)
+                  BrightID Aura Verification (Coming soon)
                 </h5>
                 <img class="ml-1" src="@/assets/verification/Info.svg" />
               </div>
