@@ -66,7 +66,7 @@
           <v-col class="px-0">
             <p class="text-18 font-weight-regular pr-5">
               join a verification party at
-              <a target="_blank" href="meet.brightid.org"> meet.brightid.org</a>
+              <a @click="openWindow('https://meet.brightid.org')"> meet.brightid.org</a>
               and choose from one of the scheduled meetings that fit your
               schedule. Once you've successfully participated in a meeting,
               you'll be granted the Meet Verification badge in your BrightID
@@ -180,6 +180,9 @@ export default {
       "checkBrightIdStatus",
       "brightIdVerification",
     ]),
+    openWindow(url) {
+      window.open(url, '_blank')
+    }
   },
   computed: {
     ...mapWritableState(useVerificationsStore, [
