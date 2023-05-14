@@ -131,7 +131,7 @@
               Your access granted to run Alice Starter node
             </p>
             <v-btn elevation="0" class="rounded-sm mt-10 py-3 px-6 text-body-1 font-weight-medium primary--text"
-              color="#5158F621" @click="brightIdDialog = false">
+              color="#5158F621" @click="closeBrightIdDialog">
               Back to verification center
             </v-btn>
           </v-col>
@@ -179,6 +179,9 @@ export default {
     ]),
     openWindow(url) {
       window.open(url, '_blank')
+    },
+    closeBrightIdDialog() {
+      this.brightIdDialog = false, this.brightIdStep = 1
     }
   },
   computed: {
