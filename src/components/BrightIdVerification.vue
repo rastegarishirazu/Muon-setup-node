@@ -65,8 +65,8 @@
           <v-col cols="2"><b class="text-18 weight-600">Step 3:</b></v-col>
           <v-col class="px-0">
             <p class="text-18 font-weight-regular pr-5">
-              <a target="_blank" href="https://meet.brightid.org"> meet.brightid.org</a>
               join a verification party at
+              <a target="_blank" href="https://meet.brightid.org"> meet.brightid.org</a>
               and choose from one of the scheduled meetings that fit your
               schedule. Once you've successfully participated in a meeting,
               you'll be granted the Meet Verification badge in your BrightID

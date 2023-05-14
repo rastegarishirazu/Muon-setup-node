@@ -11,7 +11,7 @@
               <v-col cols="8" class="d-inline-flex align-center">
                 <img width="43px" src="@/assets/dashboard/WalletCheck.svg" />
                 <h2 class="ml-5 font-weight-regular text-h5">
-                  Alice Uniqueness verification
+                  Alice Uniqueness Verification
                 </h2>
               </v-col>
               <v-col class="text-right">
@@ -20,11 +20,9 @@
                 </v-btn></v-col>
             </v-row>
             <p class="font-weight-regular text-18 mt-2">
-              Welcome to Alice's Uniqueness Verification Center! Here, you can
-              complete our verification processes to access and operate our
-              3-tier levels of nodes. Please note that each verification method
-              corresponds to a specific node tier, granting you the ability to
-              run nodes within that tier
+              Welcome to Alice's Uniqueness Verification Center! Here, you can complete the verification process to access
+              and operate the three different tiers of nodes. Please note that you should complete only ONE of these
+              methods to be granted the ability to run each node tier.
             </p>
           </v-col>
           <v-col md="4" cols="12">
