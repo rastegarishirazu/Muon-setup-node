@@ -172,6 +172,13 @@ import VueQRCodeComponent from "vue-qrcode-component";
 export default {
   name: "verificationTelegram",
   components: { "qr-code": VueQRCodeComponent },
+  watch: {
+    brightIdDialog(newVal, oldVal) {
+      if (!newVal) {
+        this.brightIdStep = 1
+      }
+    }
+  },
   methods: {
     ...mapActions(useVerificationsStore, [
       "checkBrightIdStatus",
