@@ -65,7 +65,6 @@
           <v-col cols="2"><b class="text-18 weight-600">Step 3:</b></v-col>
           <v-col class="px-0">
             <p class="text-18 font-weight-regular pr-5">
-              <span> https://meet.brightid.org/</span>
               join a verification party at
               and choose from one of the scheduled meetings that fit your
               schedule. Once you've successfully participated in a meeting,
