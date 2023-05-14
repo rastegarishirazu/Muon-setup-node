@@ -28,10 +28,11 @@
           <v-col md="4" cols="12">
             <v-card class="gradient-4 full-height px-8 py-4 rounded-lg" elevation="0">
               <h5 class="font-weight-regular text-18 textGray--text">
-                Your verification pass
+                Passed Verifications
               </h5>
               <v-card-text class="font-weight-medium px-0 mt-5 text-18">
-                <b class="text-18 font-weight-medium" v-for="title in verificationsPass">{{ title }}</b>
+                <b class="text-18 font-weight-medium" v-for="(title, i) in verificationsPass">{{ title }}{{
+                  i < verificationsPass.length - 1 ? ',' : '' }} <br></b> <br>
               </v-card-text>
             </v-card>
           </v-col>
@@ -306,7 +307,7 @@ export default {
   },
   async created() {
     this.getVerificationsStatus(this.account);
-    
+
   },
 
   computed: {
