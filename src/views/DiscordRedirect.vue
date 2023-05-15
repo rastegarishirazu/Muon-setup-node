@@ -14,8 +14,8 @@
         </v-badge>
         <h5 class="mt-5 text-18 font-weight-regular">
           Congratulations! <br />
-          You passed Discord active community member verification Your access
-          granted to run Alice Starter node
+          You passed Discord Active Community member verification. You are granted access
+          to run an Alice Starter node.
         </h5>
         <v-row class="mt-10">
           <v-col class="d-flex justify-center">
@@ -33,8 +33,8 @@
           <img width="84px" src="@/assets/verification/Discord.svg" alt="" />
         </v-badge>
         <h5 class="mt-5 text-18 font-weight-regular">
-          Sorry, it looks like you haven't met our activity requirement. Please
-          consider trying another verification method
+          Sorry. It looks like you haven't met our activity requirement. Please
+          consider trying another verification method.
         </h5>
         <v-row class="mt-10">
           <v-col class="d-flex justify-center">

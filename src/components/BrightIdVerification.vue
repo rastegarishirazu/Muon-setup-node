@@ -19,7 +19,7 @@
           <v-col class="">
             <h5 class="text-18 font-weight-regular">
               <b class="text-18 weight-600">Step 1:</b> Please verify your
-              staker (node runner) address
+              staker (node runner) address.
             </h5>
             <v-row>
               <v-col class="text-center">
@@ -37,7 +37,7 @@
             </v-row>
             <h5 class="text-18 font-weight-regular mt-11">
               <b class="text-18 weight-600">Step 2:</b> Download BrightID app
-              and create an account
+              and create an account.
             </h5>
           </v-col>
         </v-row>
@@ -48,9 +48,9 @@
                 width="162px" height="48px" alt="Get it on Google Play" src="@/assets/verification/googlePlay.svg" /></a>
             <a class="mx-2" href="https://play.google.com/store/apps/details?id=org.brightid"><img width="162px"
                 height="48px" alt="Get it on Google Play" src="@/assets/verification/appStore.svg" /></a>
-            <v-btn :disabled="!brightIdContextId" x-large elevation="0" class="rounded-sm mt-10 py-4 px-15 text-h6"
-              color="primary" @click="brightIdStep = 2">
-              I have brightID account
+            <v-btn :disabled="!brightIdContextId" x-large elevation="0"
+              class="rounded-sm mt-10 py-4 px-15 text-h6 text-normal" color="primary" @click="brightIdStep = 2">
+              I have a BrightID account
             </v-btn>
           </v-col>
         </v-row>
@@ -75,9 +75,9 @@
         </v-row>
         <v-row>
           <v-col class="text-center">
-            <v-btn x-large elevation="0" class="rounded-sm mt-10 py-4 px-15 text-h6" color="primary"
+            <v-btn x-large elevation="0" class="rounded-sm mt-10 py-4 px-15 text-h6 text-normal" color="primary"
               @click="brightIdStep = 3">
-              I have Meet verification Badge
+              I have a Meet Verification Badge
             </v-btn>
           </v-col>
         </v-row>
@@ -127,8 +127,8 @@
           <v-col class="text-center">
             <p class="text-18">
               Congratulations! <br />
-              You passed BrightID meet verification <br />
-              Your access granted to run Alice Starter node
+              You passed BrightID Meet verification. <br />
+              You are granted access to run an Alice Starter node.
             </p>
             <v-btn elevation="0" class="rounded-sm mt-10 py-3 px-6 text-body-1 font-weight-medium primary--text"
               color="#5158F621" @click="closeBrightIdDialog">
@@ -148,9 +148,9 @@
         <v-row class="mt-10">
           <v-col class="text-center px-15">
             <p class="text-18">
-              Sorry, your verification process was unsuccessful. Please try
+              Sorry. Your verification process was unsuccessful. Please try
               again, or contact our <a href="#">Tech Support</a> for further
-              assistance
+              assistance.
             </p>
             <v-btn elevation="0" class="rounded-sm mt-10 py-3 px-6 text-body-1 font-weight-medium primary--text"
               color="#5158F621" @click="brightIdDialog = false">
@@ -218,5 +218,9 @@ export default {
 
 .disable-events {
   pointer-events: none;
+}
+
+.text-normal {
+  text-transform: none;
 }
 </style>

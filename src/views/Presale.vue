@@ -77,8 +77,8 @@
 
                     <p class="text-18 font-weight-regular mt-10">
                       Congratulations! <br />
-                      You passed Presale participants verification Your access
-                      granted to run Alice Starter node
+                      You passed Presale Participation verification. You are
+                      granted access to run an Alice Starter node.
                     </p>
 
                     <v-row class="mt-15">
@@ -95,9 +95,9 @@
                     </v-badge>
 
                     <p class="text-18 font-weight-regular mt-10">
-                      Sorry, this address is not among the presale participants.
+                      Sorry. This address is not among the presale participants.
                       Please try a different verification method or connect to
-                      another wallet
+                      another wallet.
                     </p>
 
                     <v-row class="mt-15">

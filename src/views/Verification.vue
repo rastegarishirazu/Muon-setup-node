@@ -335,7 +335,8 @@ export default {
           if (verifications[property]) myList.push(verificationTitle[property]);
         }
         if (!myList.length)
-          myList.push("You haven’t passed any of the verifications");
+          myList.push(`You have not yet passed any of the verification methods. 
+Choose the one that fits you and follow the instructions.`);
         return myList;
       },
     }),
