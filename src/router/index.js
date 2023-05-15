@@ -18,8 +18,8 @@ const routes = [
     name: "verification",
     component: Verification,
     meta: {
-      requiresAuth: true
-    }
+      requiresAuth: true,
+    },
   },
   {
     path: "/error",
@@ -31,16 +31,13 @@ const routes = [
     name: "apiVerify",
     component: Presale,
     meta: {
-      requiresAuth: true
-    }
+      requiresAuth: true,
+    },
   },
   {
     path: "/discordVerification/:state",
     name: "discordRedirect",
     component: DiscordRedirect,
-    meta: {
-      requiresAuth: true
-    }
   },
 ];
 
@@ -49,6 +46,5 @@ const router = new VueRouter({
   base: process.env.VUE_APP_BASE_URL,
   routes,
 });
-
 
 export default router;
