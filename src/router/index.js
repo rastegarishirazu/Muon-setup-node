@@ -25,6 +25,9 @@ const routes = [
     path: "/error",
     name: "error",
     component: WrongPage,
+    meta: {
+      requiresAuth: false,
+    },
   },
   {
     path: "/verification/presale/:staker",
@@ -38,6 +41,9 @@ const routes = [
     path: "/discordVerification/:state",
     name: "discordRedirect",
     component: DiscordRedirect,
+    meta: {
+      requiresAuth: false,
+    },
   },
 ];
 
