@@ -176,6 +176,7 @@ export default {
     brightIdDialog(newVal, oldVal) {
       if (!newVal) {
         this.brightIdStep = 1
+        window.clearInterval(this.brighitIdIntervalRequest)
       }
     }
   },
@@ -199,6 +200,7 @@ export default {
     ...mapState(useVerificationsStore, [
       "brightIdContextId",
       "brigthIdLoading",
+      "brighitIdIntervalRequest"
     ]),
     ...mapState(useDashboardStore, ["addressShow"]),
   },
