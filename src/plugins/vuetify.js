@@ -22,13 +22,6 @@ export default new Vuetify({
         textGray: "#6F7787",
         gray3: "#939393",
       },
-      dark: {
-        primary: "#FAC739",
-        secondary: "#FB0D6A",
-        accent: "#8c9eff",
-        error: "#b71c1c",
-        blackText: "#323245",
-      },
     },
   },
   iconfont: "fa",

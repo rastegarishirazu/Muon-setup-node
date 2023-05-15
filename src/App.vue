@@ -142,9 +142,6 @@ export default {
       this.checkNetwork();
     });
 
-    if (localStorage.themeIsDark === "true") {
-      this.themeIsDark = true;
-    }
   },
 };
 </script>

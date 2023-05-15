@@ -6,13 +6,11 @@ import {
   mint,
   newAddNode,
   getBalanceaOfTokenTest,
-  nodeAdressIsValid,
   rewardChecker,
 } from "@/utils/transactions";
 import { getNodeInfo, checkIP } from "@/utils/fetch";
 import moment from "moment";
 import { ValidateIPaddress } from "@/utils/formatChecker";
-import Vue from "vue";
 const mainChainId = 0x61;
 
 const STEPS = {
@@ -30,15 +28,13 @@ export const useDashboardStore = defineStore("dashboardStore", {
     nodeIpStatus: "",
     cardLoading: true,
     copySnackbar: false,
-    TR: true,
-    themeIsDark: false,
     dialog: false,
     steps: STEPS,
     heightSize: Number,
     account: "",
     addressShow: "connect Wallet",
     web3: "",
-    currntIdChain: NaN,
+    currntIdChain: "",
     isCorrectChain: false,
     isConnected: false,
     e1: 1,
@@ -52,7 +48,7 @@ export const useDashboardStore = defineStore("dashboardStore", {
     haveEnoughTokenTEst: false,
     mintAmount: 1000,
     nativeTokenBalance: 0,
-    nodeInfo: Object,
+    nodeInfo: {},
     btnLoading: false,
     nodeIsActive: "Loading...",
     nodeUptime: "",
@@ -87,9 +83,6 @@ export const useDashboardStore = defineStore("dashboardStore", {
         "..." +
         address.slice(address.length - 4, address.length)
       );
-    },
-    changeTheme() {
-      this.themeIsDark = !this.themeIsDark;
     },
     getNativeBalance() {
       this.web3.eth.getBalance(this.account).then((res) => {

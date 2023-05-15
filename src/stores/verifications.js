@@ -38,10 +38,11 @@ export const useVerificationsStore = defineStore("verificationsStore", {
     telegramStep: 1,
     discordStep: 1,
     preslaeStep: 1,
+    presaleMessage: "",
     snackbarErorr: false,
     snackbarErorrMsg: "",
     brigthIdLoading: false,
-    discordStatus: "...Loading",
+    discordMessage: "...Loading",
   }),
 
   actions: {
@@ -79,7 +80,7 @@ export const useVerificationsStore = defineStore("verificationsStore", {
     },
     presaleVerified(staker) {
       const signer = useDashboardStore().account;
-      this.presaleLoading = true
+      this.presaleLoading = true;
       singMessage(
         "Please sign this message to verify ownership of your Ethereum address to verify its uniqueness for Muon.",
         signer
@@ -92,12 +93,14 @@ export const useVerificationsStore = defineStore("verificationsStore", {
               this.verifications.presaleVerified = true;
             } else {
               this.preslaeStep = 3;
+              this.presaleMessage = res.data.message;
             }
           })
           .catch((err) => {
             console.log(err);
-          }).finally(() => {
-            this.presaleLoading = false
+          })
+          .finally(() => {
+            this.presaleLoading = false;
           });
       });
     },
@@ -120,31 +123,33 @@ export const useVerificationsStore = defineStore("verificationsStore", {
     },
     brightIdVerification() {
       const staker = useDashboardStore().account;
-      this.brigthIdLoading = true
+      this.brigthIdLoading = true;
       singMessage(
         "Please sign this message to verify ownership of your Ethereum address to verify its uniqueness for Muon.",
         staker
-      ).then(async (signature) => {
-        await getBrightIdContextId(staker, signature)
-          .then(async (res) => {
-            console.log(res);
-            await sponsorBrightIdRequest(staker).then((sponsorRes) => {
-              console.log(sponsorRes);
-              if (sponsorRes.data.success) {
-                this.brightIdContextId = res.data.result.contextId;
-                this.brightIdDialog = true;
-              } else {
-                this.snackbarErorrMsg = sponsorRes.data.message;
-                this.snackbarErorr = true;
-              }
+      )
+        .then(async (signature) => {
+          await getBrightIdContextId(staker, signature)
+            .then(async (res) => {
+              console.log(res);
+              await sponsorBrightIdRequest(staker).then((sponsorRes) => {
+                console.log(sponsorRes);
+                if (sponsorRes.data.success) {
+                  this.brightIdContextId = res.data.result.contextId;
+                  this.brightIdDialog = true;
+                } else {
+                  this.snackbarErorrMsg = sponsorRes.data.message;
+                  this.snackbarErorr = true;
+                }
+              });
+            })
+            .catch((err) => {
+              console.log(err);
             });
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }).finally(() => {
-        this.brigthIdLoading = false
-      });
+        })
+        .finally(() => {
+          this.brigthIdLoading = false;
+        });
     },
 
     brigthReq() {
@@ -188,10 +193,7 @@ export const useVerificationsStore = defineStore("verificationsStore", {
     checkBrightIdStatus() {
       this.brigthIdLoading = true;
       this.brightidTryed = 0;
-      this.brighitIdIntervalRequest = window.setInterval(
-        this.brigthReq,
-        5000
-      );
+      this.brighitIdIntervalRequest = window.setInterval(this.brigthReq, 5000);
       console.log("interval");
       console.log(this.brighitIdIntervalRequest);
     },
@@ -213,14 +215,14 @@ export const useVerificationsStore = defineStore("verificationsStore", {
           if (res.data.success) {
             this.discordStep = 2;
           } else {
-            this.discordStatus = res.data.message;
+            this.discordMessage = res.data.message;
             this.discordStep = 3;
           }
         })
         .catch((err) => {
           this.discordStep = 3;
           console.log(err);
-          this.discordStatus = "problem in server";
+          this.discordMessage = "problem in server";
         });
     },
     closePopup() {

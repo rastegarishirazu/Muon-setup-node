@@ -603,10 +603,6 @@ export default {
         this.e1 = this.steps.mint;
       }
     },
-    themeIsDark(newState, oldState) {
-      this.$vuetify.theme.dark = newState;
-      localStorage.themeIsDark = newState;
-    },
     isConnected(newState, oldState) {
       if (newState) {
         this.getTokenTestBalance();
@@ -693,7 +689,6 @@ export default {
       "cardLoading",
       "copySnackbar",
       "TR",
-      "themeIsDark",
       "dialog",
       "steps",
       "heightSize",
