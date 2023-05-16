@@ -18,7 +18,7 @@ export const useVerificationsStore = defineStore("verificationsStore", {
     brightIdDialog: false,
     backToStakerDialog: false,
     verifications: {
-      telegtamVerified: false,
+      telegramVerified: false,
       discordVerified: false,
       presaleVerified: false,
       brightidMeetsVerified: false,
@@ -70,7 +70,7 @@ export const useVerificationsStore = defineStore("verificationsStore", {
       telegramVerification(user, staker).then((res) => {
         console.log(res);
         if (res.data.success) {
-          this.verifications.telegtamVerified = true;
+          this.verifications.telegramVerified = true;
           this.telegramStep = 2;
         } else {
           console.log(res.data.message);

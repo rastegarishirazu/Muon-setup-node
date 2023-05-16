@@ -79,7 +79,7 @@
               </v-row>
             </v-card>
           </v-col>
-          <v-col md="4" cols="12"><v-card :color="verifications['telegtamVerified']
+          <v-col md="4" cols="12"><v-card :color="verifications['telegramVerified']
                 ? 'rgba(35, 181, 211, 0.3)'
                 : 'rgba(81, 88, 246, 0.1)'
               " class="node_id_card px-5 py-4 rounded-lg full-height" elevation="0">
@@ -94,13 +94,13 @@
                     <span class="font-weight-regular"> Alice Starter </span>
                   </div>
                 </v-col>
-                <v-col class="text-right" align-self="center"><v-btn elevation="0" :color="verifications['telegtamVerified']
+                <v-col class="text-right" align-self="center"><v-btn elevation="0" :color="verifications['telegramVerified']
                   ? '#23B5D3'
                   : 'rgba(81, 88, 246, 0.1)'
                   " :class="[
     'py-6',
     'px-3',
-    verifications['telegtamVerified']
+    verifications['telegramVerified']
       ? 'white--text'
       : 'primary--text',
     'text-subtitle-1',
@@ -108,11 +108,11 @@
     'font-weight-medium',
     'text-capitalize',
     {
-      'disable-events': verifications['telegtamVerified'],
+      'disable-events': verifications['telegramVerified'],
     },
   ]" @click="telegramDialog = true">
                     {{
-                      verifications["telegtamVerified"]
+                      verifications["telegramVerified"]
                       ? `Verification passed!`
                       : `Pass verification`
                     }}
@@ -323,7 +323,7 @@ export default {
     ...mapState(useVerificationsStore, {
       verificationsPass(store) {
         const verificationTitle = {
-          telegtamVerified: "Active Community Member (Telegram)",
+          telegramVerified: "Active Community Member (Telegram)",
           discordVerified: "Active Community Member (Discord)",
           presaleVerified: "Muon Presale Participation",
           brightidMeetsVerified: "BrightID Meet Verification",

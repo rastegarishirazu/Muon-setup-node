@@ -371,7 +371,7 @@
                     <v-col align-self="center" class="text-right">
                       <b class="mr-2 font-weight-medium">{{
                         nodeInfo.nodeIP
-                      }}</b>
+                        }}</b>
                       <v-btn @click="copyURL(nodeInfo.nodeIP)" icon>
                         <v-img src="@/assets/dashboard/Copy.svg"></v-img>
                       </v-btn>
@@ -422,7 +422,7 @@
                     <v-col align-self="center" class="text-right">
                       <b class="mr-2 font-weight-medium">{{
                         addressToShort(nodeInfo.peerId)
-                      }}</b>
+                        }}</b>
                       <v-btn icon @click="copyURL(nodeInfo.peerId)">
                         <v-img src="@/assets/dashboard/Copy.svg"></v-img>
                       </v-btn>
@@ -483,7 +483,7 @@
                     <v-col class="text-right">
                       <b class="font-weight-medium text-h5">{{
                         nodeInfo.staked
-                      }}</b>
+                        }}</b>
                     </v-col>
                   </v-row>
                   <v-card-actions class="px-0">
@@ -728,7 +728,7 @@ export default {
     ...mapState(useVerificationsStore, {
       haveVerifications(state) {
         const verification = state.verifications
-        return (verification.brightidAuraVerified || verification.brightidMeetsVerified || verification.discordVerified || verification.presaleVerified || verification.telegtamVerified)
+        return (verification.brightidAuraVerified || verification.brightidMeetsVerified || verification.discordVerified || verification.presaleVerified || verification.telegramVerified)
       }
     }),
     ...mapState(useDashboardStore, {

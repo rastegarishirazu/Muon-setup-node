@@ -1,5 +1,5 @@
 import axios from "axios";
-const BASEURL = "https://alice.muon.net/test-proxy"
+const BASEURL = "https://alice.muon.net/test-proxy";
 const verificationEndPoint = BASEURL + "/uniqueness";
 
 export const verification = async (staker) => {
@@ -13,7 +13,7 @@ export const verification = async (staker) => {
 
 export const telegramVerification = async (user, staker) => {
   user.staker = staker;
-  return axios.post(`${verificationEndPoint}/telegtam`, JSON.stringify(user), {
+  return axios.post(`${verificationEndPoint}/telegram`, JSON.stringify(user), {
     headers: {
       "Content-Type": "application/json",
     },
