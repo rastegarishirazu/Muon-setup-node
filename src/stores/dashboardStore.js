@@ -333,7 +333,24 @@ export const useDashboardStore = defineStore("dashboardStore", {
         this.isApproved = res;
       });
     },
-
+    async addChain() {
+      await window.ethereum.request({
+        method: "wallet_addEthereumChain",
+        params: [
+          {
+            chainName: "BNB Smart Chain Testnet",
+            chainId: this.web3.utils.toHex(mainChainId),
+            nativeCurrency: {
+              name: "tBNB",
+              decimals: 18,
+              symbol: "tBNB",
+            },
+            rpcUrls: ["https://bsc-testnet.publicnode.com"],
+            blockExplorerUrls: ["https://testnet.bscscan.com/"],
+          },
+        ],
+      });
+    },
     async switchToCorrectChain() {
       try {
         await window.ethereum
@@ -359,7 +376,7 @@ export const useDashboardStore = defineStore("dashboardStore", {
                   decimals: 18,
                   symbol: "tBNB",
                 },
-                rpcUrls: ["https://bsc-testnet.publicnode.com"],
+                rpcUrls: ["https://bsc-testnet.public.blastapi.io"],
                 blockExplorerUrls: ["https://testnet.bscscan.com/"],
               },
             ],
@@ -419,6 +436,7 @@ export const useDashboardStore = defineStore("dashboardStore", {
       if (this.currntIdChain != mainChainId) {
         this.isCorrectChain = false;
         this.cardLoading = false;
+        this.addChain();
       } else {
         this.isCorrectChain = true;
         ethereum

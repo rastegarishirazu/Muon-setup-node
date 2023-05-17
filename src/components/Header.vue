@@ -26,7 +26,7 @@
       </div>
 
       <v-btn v-if="!isCorrectChain" width="fit-content" small color="#ff58f61a" class="py-5 'rounded-sm'" elevation="0"
-        @click="switchToCorrectChain">
+        @click="addChain">
         switch network
       </v-btn>
       <v-btn v-else-if="showHeader" width="fit-content" small color="#ff58f61a" :class="[
@@ -53,6 +53,7 @@ export default {
     ...mapActions(useDashboardStore, [
       "connectToMetamask",
       "switchToCorrectChain",
+      "addChain"
     ]),
   },
   created() {

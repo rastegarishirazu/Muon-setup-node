@@ -173,7 +173,7 @@
                         </v-row>
                         <v-row v-else>
                           <v-col>
-                            <v-btn v-if="!isCorrectChain" @click="switchToCorrectChain" block large elevation="0"
+                            <v-btn v-if="!isCorrectChain" @click="addChain" block large elevation="0"
                               color="primary">switch network</v-btn>
                             <v-btn v-else @click="connectToMetamask" block large elevation="0" color="primary">connect
                               wallet</v-btn>
@@ -371,7 +371,7 @@
                     <v-col align-self="center" class="text-right">
                       <b class="mr-2 font-weight-medium">{{
                         nodeInfo.nodeIP
-                        }}</b>
+                      }}</b>
                       <v-btn @click="copyURL(nodeInfo.nodeIP)" icon>
                         <v-img src="@/assets/dashboard/Copy.svg"></v-img>
                       </v-btn>
@@ -422,7 +422,7 @@
                     <v-col align-self="center" class="text-right">
                       <b class="mr-2 font-weight-medium">{{
                         addressToShort(nodeInfo.peerId)
-                        }}</b>
+                      }}</b>
                       <v-btn icon @click="copyURL(nodeInfo.peerId)">
                         <v-img src="@/assets/dashboard/Copy.svg"></v-img>
                       </v-btn>
@@ -483,7 +483,7 @@
                     <v-col class="text-right">
                       <b class="font-weight-medium text-h5">{{
                         nodeInfo.staked
-                        }}</b>
+                      }}</b>
                     </v-col>
                   </v-row>
                   <v-card-actions class="px-0">
@@ -670,6 +670,7 @@ export default {
       "stake",
       "checkApproved",
       "switchToCorrectChain",
+      'addChain',
       "approve",
       "connectToMetamask",
       "copyURL",
