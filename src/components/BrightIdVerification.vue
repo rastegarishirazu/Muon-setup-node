@@ -50,7 +50,7 @@
                 height="48px" alt="Get it on Google Play" src="@/assets/verification/appStore.svg" /></a>
             <v-btn :disabled="!brightIdContextId" x-large elevation="0"
               class="rounded-sm mt-10 py-4 px-15 text-h6 text-normal" color="primary" @click="brightIdStep = 2">
-              I have a BrightID account
+              I have a BrightID Account
             </v-btn>
           </v-col>
         </v-row>
