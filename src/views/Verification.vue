@@ -31,8 +31,9 @@
                 Passed Verifications
               </h5>
               <v-card-text class="font-weight-medium px-0 mt-5 text-18">
-                <p class="text-18 font-weight-medium" v-for="(title, i) in verificationsPass">{{ title }}{{
-                  i < verificationsPass.length - 1 ? ',' : '' }} </p>
+                <b class="text-18 font-weight-medium" v-for="(title, i) in verificationsPass"><b
+                    class="text-18 font-weight-medium" v-html="title"></b>{{
+                      i < verificationsPass.length - 1 ? ',' : '' }} <br> </b>
               </v-card-text>
             </v-card>
           </v-col>
@@ -334,9 +335,9 @@ export default {
         for (const property in verifications) {
           if (verifications[property]) myList.push(verificationTitle[property]);
         }
-        if (!myList.length)
-          myList.push(`You have not yet passed any of the verification methods. 
-Choose the one that fits you and follow the instructions.`);
+        if (!myList.length) {
+          myList.push(`You have not yet passed any of the verification methods.<br> Choose the one that fits you and follow the instructions.`);
+        }
         return myList;
       },
     }),
