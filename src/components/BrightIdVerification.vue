@@ -66,10 +66,10 @@
           <v-col class="px-0">
             <p class="text-18 font-weight-regular pr-5">
               Refer to
-              <a @click="openWindow('https://brightid.gitbook.io/brightid/getting-verified')"> meet.brightid.org</a>
+              <a @click="openWindow('https://meet.brightid.org')"> meet.brightid.org</a>
               and choose one of the scheduled verification parties that fits your schedule.
-              Once you have successfully participated in a meeting, you will be granted the Meet Verification badge in
-              your BrightID app. After receiving your badge, proceed to link your BrightID account to Alice (Step 4).
+              Once you have successfully participated in a meeting, you will get your Meet Verification in your BrightID
+              app.
             </p>
           </v-col>
         </v-row>
@@ -84,7 +84,7 @@
       </v-card-text>
       <v-card-text class="text-black" v-if="brightIdStep === 3">
         <v-row>
-          <v-col cols="2"><b class="text-18 weight-600">Step 3:</b></v-col>
+          <v-col cols="2"><b class="text-18 weight-600">Step 4:</b></v-col>
           <v-col class="px-0">
             <p class="text-18 font-weight-regular">
               Open BrightID app and scan the QR Code below.
@@ -98,7 +98,7 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col cols="2"><b class="text-18 weight-600">Step 4:</b></v-col>
+          <v-col cols="2"><b class="text-18 weight-600">Step 5:</b></v-col>
           <v-col class="px-0">
             <p class="text-18 font-weight-regular">
               After scanning the code and connecting to BrightID, click on the "Verify Link" button and wait for a few

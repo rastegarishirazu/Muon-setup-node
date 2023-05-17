@@ -474,26 +474,27 @@
               <v-col md="4" cols="12">
                 <v-card color="rgba(81, 88, 246, 0.1)" class="full-height node_id_card px-5 py-4 rounded-lg"
                   elevation="0">
-                  <v-row justify="spase-between">
-                    <v-col cols="8">
+                  <v-row style="height: 100%;">
+                    <v-col cols="7">
                       <h6 class="black--text text-h6 font-weight-regular">
                         Staked ALICE
                       </h6>
                     </v-col>
-                    <v-col class="text-right">
-                      <b class="font-weight-medium text-h5">{{
-                        nodeInfo.staked
-                      }}</b>
-                    </v-col>
-                  </v-row>
-                  <v-card-actions class="px-0">
-                    <v-row justify="end" class="mt-10">
-                      <v-col align-self="center" class="text-right">
+                    <v-col style="height: 100%;" cols="5"
+                      class="text-right d-flex justify-end align-content-space-between flex-wrap">
+                      <div style="width: 100%;">
+
+                        <b class="font-weight-medium text-h5">{{
+                          nodeInfo.staked
+                        }}</b>
+                      </div>
+                      <div>
+
                         <v-btn disabled elevation="0" color="rgba(81, 88, 246, 0.1)"
                           class="primary--text font-weight-medium rounded-sm">Stake more</v-btn>
-                      </v-col>
-                    </v-row>
-                  </v-card-actions>
+                      </div>
+                    </v-col>
+                  </v-row>
                 </v-card>
               </v-col>
               <v-col md="4" cols="12">

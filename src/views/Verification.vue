@@ -31,8 +31,8 @@
                 Passed Verifications
               </h5>
               <v-card-text class="font-weight-medium px-0 mt-5 text-18">
-                <b class="text-18 font-weight-medium" v-for="(title, i) in verificationsPass">{{ title }}{{
-                  i < verificationsPass.length - 1 ? ',' : '' }} <br></b> <br>
+                <p class="text-18 font-weight-medium" v-for="(title, i) in verificationsPass">{{ title }}{{
+                  i < verificationsPass.length - 1 ? ',' : '' }} </p>
               </v-card-text>
             </v-card>
           </v-col>
