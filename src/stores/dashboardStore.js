@@ -359,7 +359,7 @@ export const useDashboardStore = defineStore("dashboardStore", {
                   decimals: 18,
                   symbol: "tBNB",
                 },
-                rpcUrls: ["https://bsc-testnet.public.blastapi.io"],
+                rpcUrls: ["https://bsc-testnet.publicnode.com"],
                 blockExplorerUrls: ["https://testnet.bscscan.com/"],
               },
             ],
