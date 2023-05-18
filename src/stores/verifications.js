@@ -238,5 +238,13 @@ export const useVerificationsStore = defineStore("verificationsStore", {
         this.backToStakerDialog = true;
       }
     },
+    clearDataAfterChangeAccount() {
+      this.brightIdContextId = "";
+      this.discordResponse.code = "";
+      this.discordResponse.staker = "";
+      window.clearInterval(this.brighitIdIntervalRequest);
+      this.brightidTryed = 0;
+      this.presaleMessage = ""
+    }
   },
 });

@@ -73,12 +73,12 @@ export default {
       "connectToMetamask",
       "checkNetwork",
       "checkHaveNode",
-      ,
       "checkApproved",
       "checkHaveNode",
       "getTokenTestBalance",
       "getNativeBalance",
     ]),
+    ...mapActions(useVerificationsStore, ['clearDataAfterChangeAccount'])
   },
   async created() {
     this.provider = await detectEthereumProvider();
@@ -127,6 +127,7 @@ export default {
         this.getTokenTestBalance();
         this.getNativeBalance();
         this.checkHaveNode();
+        this.clearDataAfterChangeAccount()
       }
     });
 

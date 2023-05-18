@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar max-height="64px" elevation="0" color="rgba(0,0,0,0)" class="mb-10">
+  <v-app-bar max-height="64px" elevation="0" color="rgba(0,0,0,0)">
     <img @click="$router.push('/')" src="../assets/muon-logo1.svg" width="120px" alt="" class="cursor-pointer" />
     <v-spacer></v-spacer>
     <div v-if="$vuetify.breakpoint.mdAndUp && showHeader" class="d-flex">
