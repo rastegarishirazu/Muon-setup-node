@@ -1,6 +1,6 @@
 <template>
   <div :class="[
-    $vuetify.breakpoint.lgAndUp ? 'padding-verification-md' : 'px-5 pb-15',
+    $vuetify.breakpoint.lgAndUp ? 'padding-verification-md' : 'padding-footer',
     'mt-10',
   ]">
     <v-row justify="center">
@@ -389,5 +389,9 @@ export default {
 
 .disable-events {
   pointer-events: none;
+}
+
+.padding-footer {
+  padding-bottom: 124px;
 }
 </style>

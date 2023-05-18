@@ -102,7 +102,7 @@ export default {
 }
 
 .balance_title {
-  font-family: "Montserrat" !important;
+  font-family: "Inter" !important;
   font-style: normal;
   font-weight: 400;
   font-size: 14px !important;
@@ -111,7 +111,7 @@ export default {
 }
 
 .balance_amount {
-  font-family: "Montserrat";
+  font-family: "Inter";
   font-style: normal;
   font-weight: 600;
   font-size: 14px;
@@ -125,7 +125,7 @@ export default {
 }
 
 .alice {
-  font-family: "Montserrat";
+  font-family: "Inter";
   font-style: normal;
   font-weight: 600;
   font-size: 14px;
@@ -138,7 +138,7 @@ export default {
 }
 
 .address {
-  font-family: "Montserrat";
+  font-family: "Inter";
   font-style: normal;
   font-weight: 500;
   font-size: 14px;

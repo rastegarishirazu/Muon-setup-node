@@ -771,7 +771,7 @@ export default {
 </script>
 
 <style>
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;600&display=swap");
 
 html {
   overflow-y: auto;
@@ -782,15 +782,15 @@ html {
 }
 
 .v-application {
-  font-family: "Montserrat", sans-serif !important;
+  font-family: "Inter", sans-serif !important;
 }
 
 .myFont {
-  font-family: "Montserrat", sans-serif !important;
+  font-family: "Inter", sans-serif !important;
 }
 
 h3 {
-  font-family: "Montserrat", sans-serif !important;
+  font-family: "Inter", sans-serif !important;
   font-weight: 300 !important;
   color: white;
 }
@@ -858,7 +858,7 @@ h3 {
 }
 
 .main_title {
-  font-family: "Montserrat";
+  font-family: "Inter";
   font-style: normal;
   font-weight: 600;
   line-height: 44px;
@@ -890,7 +890,7 @@ h3 {
 
 .title_card_box_font {
   font-size: 24px;
-  font-family: "Montserrat";
+  font-family: "Inter";
   font-style: normal;
   font-weight: 600;
   line-height: 44px;
@@ -902,7 +902,7 @@ h3 {
 }
 
 .subtitle_card_box_font {
-  font-family: "Montserrat";
+  font-family: "Inter";
   font-style: normal;
   font-weight: 500 !important;
   font-size: 14px;
@@ -919,7 +919,7 @@ h3 {
 }
 
 .stepper_header_text {
-  font-family: "Montserrat";
+  font-family: "Inter";
   font-style: normal;
   font-weight: 400;
   line-height: 24px;
@@ -931,7 +931,7 @@ h3 {
 }
 
 .enough_tokens_message {
-  font-family: "Montserrat";
+  font-family: "Inter";
   font-style: normal;
   font-weight: 600;
   font-size: 28px;
@@ -1102,6 +1102,6 @@ h3 {
 }
 
 .padding-footer {
-  padding-bottom: 80px !important;
+  padding-bottom: 124px !important;
 }
 </style>
