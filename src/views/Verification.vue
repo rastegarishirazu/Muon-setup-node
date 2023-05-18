@@ -383,7 +383,7 @@ export default {
   .padding-verification-md {
     padding-left: 124px;
     padding-right: 124px;
-    padding-bottom: 70px;
+    padding-bottom: 124px;
   }
 }
 
