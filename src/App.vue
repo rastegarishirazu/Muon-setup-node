@@ -9,7 +9,7 @@
       </v-row>
     </v-responsive>
     <router-view v-else />
-    <v-footer padless color="rgba(0,0,0,0)">
+    <v-footer absolute padless color="rgba(0,0,0,0)">
       <v-col cols="12" class="text-center myFont">
         <div class="d-flex align-center text-center justify-center">
           <span class="mx-2 myFont">Powered by</span>

@@ -1,10 +1,6 @@
 <template>
-  <div :class="[
-    $vuetify.theme.dark ? 'backgorundpic_dark' : 'backgorundpic_light',
-  ]">
-    <!-- <particles></particles> -->
-
-    <v-main class="">
+  <div>
+    <v-main class="padding-footer">
       <v-responsive v-if="cardLoading" height="80vh">
         <v-row justify="center" style="height: 100%">
           <v-col align-self="center"></v-col>
@@ -1103,5 +1099,9 @@ h3 {
 
 .max-width-1032 {
   max-width: 1180px;
+}
+
+.padding-footer {
+  padding-bottom: 80px !important;
 }
 </style>
