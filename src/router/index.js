@@ -30,7 +30,7 @@ const routes = [
     },
   },
   {
-    path: "/verification/presale/:staker",
+    path: "/presale/:staker",
     name: "apiVerify",
     component: Presale,
     meta: {

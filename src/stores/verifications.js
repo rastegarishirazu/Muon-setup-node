@@ -48,18 +48,20 @@ export const useVerificationsStore = defineStore("verificationsStore", {
   actions: {
     getVerificationsStatus(staker) {
       verificationStatus(staker).then((response) => {
-        const data = response.data;
-        console.log(data);
-        for (const [key, value] of Object.entries(this.verifications)) {
-          this.verifications[key] = false;
-        }
-        if (data["success"]) {
-          for (const [key, value] of Object.entries(data["result"])) {
-            this.verifications[key] = value;
+        if (response) {
+          const data = response.data;
+          console.log(data);
+          for (const [key, value] of Object.entries(this.verifications)) {
+            this.verifications[key] = false;
           }
+          if (data["success"]) {
+            for (const [key, value] of Object.entries(data["result"])) {
+              this.verifications[key] = value;
+            }
+          }
+          console.log(data);
         }
-        console.log(data);
-      });
+        });
     },
     telegramCallbackFunction(user) {
       const staker = useDashboardStore().account;
