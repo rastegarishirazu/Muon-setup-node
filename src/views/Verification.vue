@@ -54,8 +54,8 @@
                     <span class="font-weight-regular"> Alice Starter </span>
                   </div>
                 </v-col>
-                <v-col class="text-right" align-self="center"><v-btn
-                    @click="$router.push(`/verification/presale/${account}`)" elevation="0" :color="verifications['presaleVerified']
+                <v-col class="text-right" align-self="center"><v-btn @click="$router.push(`/presale/${account}`)"
+                    elevation="0" :color="verifications['presaleVerified']
                       ? '#23B5D3'
                       : 'rgba(81, 88, 246, 0.1)'
                       " :class="[
