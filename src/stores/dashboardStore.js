@@ -254,9 +254,6 @@ export const useDashboardStore = defineStore("dashboardStore", {
           })
           .finally(() => {
             this.cardLoading = false;
-            if (this.haveNode != true && this.route.params === "/verification") {
-              this.router.push("/");
-            }
             if (this.haveNode === "error") {
               this.router.push("/error");
             }

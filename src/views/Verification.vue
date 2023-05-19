@@ -297,6 +297,7 @@ export default {
     verificationLoading(newData) {
       // this.cardLoading = false;
     },
+
   },
   methods: {
     ...mapActions(useVerificationsStore, [
@@ -313,7 +314,7 @@ export default {
 
   computed: {
     ...mapState(useVerificationsStore, ["verifications"]),
-    ...mapState(useDashboardStore, ["account",]),
+    ...mapState(useDashboardStore, ["account", "haveNode"]),
     ...mapWritableState(useDashboardStore, ["cardLoading"]),
     ...mapWritableState(useVerificationsStore, [
       "telegramDialog",
@@ -344,6 +345,9 @@ export default {
   },
   mounted() {
     this.getVerificationsStatus();
+    if (this.haveNode != true) {
+      this.$router.push('/')
+    }
   },
 };
 </script>
