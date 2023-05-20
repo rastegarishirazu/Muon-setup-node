@@ -5,6 +5,7 @@ import Verification from "@/views/Verification.vue";
 import WrongPage from "@/views/WrongPage.vue";
 import Presale from "@/views/Presale.vue";
 import DiscordRedirect from "@/views/DiscordRedirect.vue";
+import { PUBLICPATH } from "vue.config";
 Vue.use(VueRouter);
 
 const routes = [
@@ -49,7 +50,7 @@ const routes = [
 
 const router = new VueRouter({
   mode: "history",
-  // base: process.env.VUE_APP_BASE_URL,
+  base: PUBLICPATH,
   routes,
 });
 

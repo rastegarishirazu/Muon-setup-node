@@ -8,3 +8,5 @@ module.exports = defineConfig({
     port: 8081,
   },
 });
+
+export const PUBLICPATH = process.env.VUE_APP_BASE_URL
