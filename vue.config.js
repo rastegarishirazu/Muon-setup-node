@@ -9,4 +9,3 @@ module.exports = defineConfig({
   },
 });
 
-export const PUBLICPATH = process.env.VUE_APP_BASE_URL
