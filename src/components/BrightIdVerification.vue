@@ -147,7 +147,10 @@
         </v-row>
         <v-row class="mt-10">
           <v-col class="text-center px-15">
-            <p class="text-18">
+            <p v-if="brightIDMessage" class="text-18">
+              {{ brightIDMessage }}
+            </p>
+            <p v-else class="text-18">
               Sorry. Your verification process was unsuccessful. Please try
               again, or contact our <a href="#">Tech Support</a> for further
               assistance.
@@ -177,6 +180,8 @@ export default {
       if (!newVal) {
         this.brightIdStep = 1
         window.clearInterval(this.brighitIdIntervalRequest)
+        this.brigthIdLoading = false
+        this.brightIDMessage = ""
       }
     }
   },
@@ -196,10 +201,11 @@ export default {
     ...mapWritableState(useVerificationsStore, [
       "brightIdDialog",
       "brightIdStep",
+      "brigthIdLoading",
+      "brightIDMessage"
     ]),
     ...mapState(useVerificationsStore, [
       "brightIdContextId",
-      "brigthIdLoading",
       "brighitIdIntervalRequest"
     ]),
     ...mapState(useDashboardStore, ["addressShow"]),

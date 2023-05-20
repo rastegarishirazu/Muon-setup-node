@@ -43,6 +43,7 @@ export const useVerificationsStore = defineStore("verificationsStore", {
     snackbarErorrMsg: "",
     brigthIdLoading: false,
     discordMessage: "...Loading",
+    brightIDMessage : ""
   }),
 
   actions: {
@@ -158,7 +159,6 @@ export const useVerificationsStore = defineStore("verificationsStore", {
       const staker = useDashboardStore().account;
       checkBrightIdConnection(staker)
         .then((res) => {
-          console.log(res);
           const response = res.data;
           if (
             response.success &&
@@ -170,12 +170,15 @@ export const useVerificationsStore = defineStore("verificationsStore", {
             this.verifications.brightidAuraVerified =
               response.result.brightidAuraVerified;
             window.clearInterval(this.brighitIdIntervalRequest);
-            console.log("clear interval");
-
             this.brightIdStep = 4;
-
             this.brigthIdLoading = false;
-          } else {
+          } else if (!response.success && response.message) {
+            this.brightIDMessage = response.message
+            this.brightIdStep = 5
+            window.clearInterval(this.brighitIdIntervalRequest);
+            this.brigthIdLoading = false;
+          }
+          else {
             this.brightidTryed++;
           }
         })
@@ -187,7 +190,6 @@ export const useVerificationsStore = defineStore("verificationsStore", {
             this.brightIdStep = 5;
             this.brigthIdLoading = false;
             window.clearInterval(this.brighitIdIntervalRequest);
-            console.log("clear interval");
           }
         });
     },
@@ -196,8 +198,6 @@ export const useVerificationsStore = defineStore("verificationsStore", {
       this.brigthIdLoading = true;
       this.brightidTryed = 0;
       this.brighitIdIntervalRequest = window.setInterval(this.brigthReq, 5000);
-      console.log("interval");
-      console.log(this.brighitIdIntervalRequest);
     },
     getCodeAndStakerFromRoute(string) {
       this.discordStep = 1;
@@ -247,6 +247,8 @@ export const useVerificationsStore = defineStore("verificationsStore", {
       window.clearInterval(this.brighitIdIntervalRequest);
       this.brightidTryed = 0;
       this.presaleMessage = ""
+      this.brigthIdLoading = false
+      this.brightIDMessage = ""
     }
   },
 });
