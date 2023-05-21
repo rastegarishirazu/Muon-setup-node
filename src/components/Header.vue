@@ -75,7 +75,7 @@ export default {
       },
     }),
     showHeader() {
-      return !this.$route.path.includes('/verification/presale/')
+      return !this.$route.path.includes('/presale/')
     }
   },
 };

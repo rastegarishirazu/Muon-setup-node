@@ -1,15 +1,14 @@
 <template>
   <div>
-    <v-main class="padding-footer">
-      <v-responsive v-if="cardLoading" height="80vh">
+    <v-main>
+      <v-responsive v-if="cardLoading" height="75vh">
         <v-row justify="center" style="height: 100%">
           <v-col align-self="center"></v-col>
           <lottie-vue-player ref="anim" src="https://lottie.host/1fb3a319-394b-446d-8fce-824aa4f1787c/xjtL4nMuB2.json"
             :autoplay="true" :loop="true" height="200px" class="transparent" />
         </v-row>
       </v-responsive>
-      <v-responsive v-else-if="haveNode != 'error' && e1 < steps.newNode" width="100%"
-        class="px-5 overflow-visible pb-10">
+      <v-responsive v-else-if="haveNode != 'error' && e1 < steps.newNode" width="100%" class="px-5 overflow-visible">
         <v-row v-if="e1 < steps.newNode || e1 === steps.newNode" class="" justify="center">
           <v-col md="4" class="text-center d-flex justify-center" justify-center>
             <div class="d-flex justify-center title_card">
@@ -328,14 +327,14 @@
           </v-col>
         </v-row>
       </v-responsive>
-      <v-responsive v-else-if="haveNode != 'error' && e1 > steps.addNode" width="100%" min-height="80vh"
+      <v-responsive v-else-if="haveNode != 'error' && e1 > steps.addNode" width="100%" min-height="75vh"
         class="px-5 overflow-visible">
         <v-row justify="center" :class="[
           { 'px-240': $vuetify.breakpoint.lgAndUp },
           'px-mdAndDown-10',
           'full-height',
         ]">
-          <v-col align-self="center max-width-1032">
+          <v-col align-self="center" class="max-width-1032">
             <v-row v-if="e1 === steps.haveNode" justify="center" class="">
               <v-col cols="12">
                 <v-card color="rgba(81, 88, 246, 0.1)" class="node_id_card px-5 py-4 rounded-lg" elevation="0">
@@ -468,8 +467,8 @@
                 </v-card>
               </v-col>
               <v-col md="4" cols="12">
-                <v-card color="rgba(81, 88, 246, 0.1)" class="full-height node_id_card px-5 py-4 rounded-lg"
-                  elevation="0">
+                <v-card min-height="150" color="rgba(81, 88, 246, 0.1)"
+                  class="full-height node_id_card px-5 py-4 rounded-lg" elevation="0">
                   <v-row style="height: 100%;">
                     <v-col cols="7">
                       <h6 class="black--text text-h6 font-weight-regular">
@@ -477,7 +476,7 @@
                       </h6>
                     </v-col>
                     <v-col style="height: 100%;" cols="5"
-                      class="text-right d-flex justify-end align-content-space-between flex-wrap">
+                      class="text-right pb-0 d-flex justify-end align-content-space-between flex-wrap">
                       <div style="width: 100%;">
 
                         <b class="font-weight-medium text-h5">{{
@@ -494,28 +493,29 @@
                 </v-card>
               </v-col>
               <v-col md="4" cols="12">
-                <v-card class="full-height node_id_card px-5 py-4 rounded-lg reward_background" elevation="0">
-                  <v-row justify="spase-between">
-                    <v-col cols="5">
+                <v-card min-height="150" class="full-height node_id_card px-5 py-4 rounded-lg reward_background"
+                  elevation="0">
+                  <v-row style="height: 100%;">
+                    <v-col cols="7">
                       <h6 class="black--text text-h6 font-weight-regular">
                         Reward
                       </h6>
                     </v-col>
-                    <v-col class="text-right">
-                      <b class="font-weight-medium text-h5">{{ nodeInfo.rewardAmount }} ALICE</b>
-                      <br />
+                    <v-col style="height: 100%;" cols="5"
+                      class="text-right pb-0 d-flex justify-end align-content-space-between flex-wrap">
+                      <div style="width: 100%;">
+
+                        <b class="font-weight-medium text-h5">{{
+                          nodeInfo.rewardAmount
+                        }}</b>
+                      </div>
+                      <div>
+
+                        <v-btn disabled elevation="0" color="#FEEFE9"
+                          class="primaryOrange--text rounded-sm font-weight-medium text-subtitle-1">Withdraw</v-btn>
+                      </div>
                     </v-col>
                   </v-row>
-                  <v-card-actions class="px-0">
-                    <v-row justify="end" class="mt-10">
-                      <v-col align-self="center" class="text-right">
-                        <v-btn disabled elevation="0" color="#FEEFE9"
-                          class="primaryOrange--text rounded-sm font-weight-medium text-subtitle-1">
-                          Withdraw
-                        </v-btn>
-                      </v-col>
-                    </v-row>
-                  </v-card-actions>
                 </v-card>
               </v-col>
             </v-row>
@@ -542,7 +542,7 @@
     </v-main>
     <div class="pr-5" v-if="e1 === steps.haveNode && !cardLoading">
       <v-row justify="end">
-        <v-col class="warning-message" md="5" cols="12">
+        <v-col class="warning-message" md="5" cols="6">
           <AllertCard class="mt-5" v-for="(value, i) in nodeInfo.messages" :message="value.message" :key="i"></AllertCard>
         </v-col>
       </v-row>

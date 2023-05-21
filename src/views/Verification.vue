@@ -1,6 +1,6 @@
 <template>
   <div :class="[
-    $vuetify.breakpoint.lgAndUp ? 'padding-verification-md' : 'padding-footer',
+    $vuetify.breakpoint.lgAndUp ? 'padding-verification-md' : 'px-5',
     'mt-10',
   ]">
     <v-row justify="center">
@@ -379,7 +379,6 @@ export default {
   .padding-verification-md {
     padding-left: 40px;
     padding-right: 40px;
-    padding-bottom: 70px;
   }
 }
 
@@ -387,15 +386,10 @@ export default {
   .padding-verification-md {
     padding-left: 124px;
     padding-right: 124px;
-    padding-bottom: 124px;
   }
 }
 
 .disable-events {
   pointer-events: none;
-}
-
-.padding-footer {
-  padding-bottom: 124px;
 }
 </style>

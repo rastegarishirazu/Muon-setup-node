@@ -139,9 +139,9 @@ export const useVerificationsStore = defineStore("verificationsStore", {
                 console.log(sponsorRes);
                 if (sponsorRes.data.success) {
                   this.brightIdContextId = res.data.result.contextId;
-                  this.brightIdDialog = true;
+                  this.brightIdStep = 4;
                 } else {
-                  this.snackbarErorrMsg = sponsorRes.data.message;
+                  this.snackbarErorrMsg = "some things went wrong!";
                   this.snackbarErorr = true;
                 }
               });
@@ -170,11 +170,11 @@ export const useVerificationsStore = defineStore("verificationsStore", {
             this.verifications.brightidAuraVerified =
               response.result.brightidAuraVerified;
             window.clearInterval(this.brighitIdIntervalRequest);
-            this.brightIdStep = 4;
+            this.brightIdStep = 5;
             this.brigthIdLoading = false;
-          } else if (!response.success && response.message) {
+          } else if (!response.success && response.errorCode === 3) {
             this.brightIDMessage = response.message
-            this.brightIdStep = 5
+            this.brightIdStep = 6
             window.clearInterval(this.brighitIdIntervalRequest);
             this.brigthIdLoading = false;
           }
@@ -187,7 +187,7 @@ export const useVerificationsStore = defineStore("verificationsStore", {
         })
         .finally(() => {
           if (this.brightidTryed > 12 * 3) {
-            this.brightIdStep = 5;
+            this.brightIdStep = 6;
             this.brigthIdLoading = false;
             window.clearInterval(this.brighitIdIntervalRequest);
           }

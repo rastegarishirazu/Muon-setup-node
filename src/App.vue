@@ -8,7 +8,7 @@
           :autoplay="true" :loop="true" height="200px" class="transparent" />
       </v-row>
     </v-responsive>
-    <router-view v-else />
+    <router-view v-else class="padding-footer" />
     <v-footer absolute padless color="rgba(0,0,0,0)">
       <v-col cols="12" class="text-center myFont">
         <div class="d-flex align-center text-center justify-center">
@@ -30,7 +30,7 @@ import { mapActions, mapState, mapWritableState } from "pinia";
 import { useVerificationsStore } from "./stores/verifications";
 import { verification } from "./utils/requestVerifications";
 import { LiveChatWidget } from '@livechat/widget-vue/v2'
-
+import { testEnv } from "@/router";
 
 export default {
   name: "app",
@@ -148,5 +148,9 @@ export default {
 .backgorundpic_light {
   overflow-x: hidden;
   overflow-y: hidden;
+}
+
+.padding-footer {
+  padding-bottom: 124px !important;
 }
 </style>
