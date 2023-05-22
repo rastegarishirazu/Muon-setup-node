@@ -32,7 +32,10 @@
         <v-badge bottom color="red" icon="mdi-close" overlap offset-x="20" offset-y="20">
           <img width="84px" src="@/assets/verification/Discord.svg" alt="" />
         </v-badge>
-        <h5 class="mt-5 text-18 font-weight-regular">
+        <h5 v-if="errorMessage" class="mt-5 text-18 font-weight-regular">
+          {{ errorMessage }}
+        </h5>
+        <h5 v-else class="mt-5 text-18 font-weight-regular">
           Sorry. It looks like you haven't met our activity requirement. Please
           consider trying another verification method.
         </h5>
@@ -73,6 +76,7 @@ export default {
     ...mapWritableState(useVerificationsStore, [
       "snackbarErorr",
       "snackbarErorrMsg",
+      "errorMessage"
     ]),
     ...mapWritableState(useDashboardStore, ['liveChat'])
   },

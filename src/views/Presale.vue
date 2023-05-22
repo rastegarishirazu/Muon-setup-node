@@ -98,7 +98,10 @@
                             <img width="84px" src="@/assets/verification/Wallet.svg" alt="" />
                           </v-badge>
 
-                          <p class="text-18 font-weight-regular mt-10">
+                          <p v-if="errorMessage" class="text-18 font-weight-regular mt-10">
+                            {{ errorMessage }}
+                          </p>
+                          <p v-else class="text-18 font-weight-regular mt-10">
                             Sorry. This address is not among the presale participants.
                             Please try a different verification method or connect to
                             another wallet.
@@ -136,6 +139,7 @@ export default {
   name: "apiVerify",
   components: { BackToVerification, StakerAndSignerIsNotSameDialog },
   watch: {
+
   },
   methods: {
     ...mapActions(useVerificationsStore, ["presaleVerified", "closePopup"]),
@@ -153,6 +157,7 @@ export default {
       "snackbarErorr",
       "snackbarErorrMsg",
       "preslaeStep",
+      "errorMessage"
     ]),
     ...mapWritableState(useDashboardStore, ['isConnected'])
   },

@@ -10,6 +10,18 @@ import {
   checkBrightIdConnection,
 } from "@/utils/requestVerifications";
 import { useDashboardStore } from "./dashboardStore";
+
+const ERRORCODE = {
+  1: ()=>'Staker address is not valid or does not belong to a node.',
+  2: (platform) => `This ${platform} ${platform === 'presale'? 'address':'account'} address is not eligible.`,
+  3: (platform) => `This ${platform} ${platform === 'presale'? 'address':'account'} is already registred by another node.`,
+  4: ()=>'Your request has already been registered.',
+  5: () => 'Your signature is not valid.',
+  11: () => 'Something went wrong. Please try after a while. (error code: 11)',
+  12: () => 'Something went wrong. Please try after a while. (error code: 12)',
+  'connection': ()=>'Something went wrong. Please try after a while. (connection problem)'
+}
+
 export const useVerificationsStore = defineStore("verificationsStore", {
   state: () => ({
     telegramDialog: false,
@@ -43,7 +55,7 @@ export const useVerificationsStore = defineStore("verificationsStore", {
     snackbarErorrMsg: "",
     brigthIdLoading: false,
     discordMessage: "...Loading",
-    brightIDMessage : ""
+    errorMessage : ""
   }),
 
   actions: {
@@ -65,6 +77,7 @@ export const useVerificationsStore = defineStore("verificationsStore", {
         });
     },
     telegramCallbackFunction(user) {
+      this.errorMessage = ""
       const staker = useDashboardStore().account;
       // gets user as an input
       // id, first_name, last_name, username,
@@ -77,11 +90,16 @@ export const useVerificationsStore = defineStore("verificationsStore", {
           this.telegramStep = 2;
         } else {
           console.log(res.data.message);
+          this.errorMessage = ERRORCODE[res.data.errorCode]('Telegram')
           this.telegramStep = 3;
         }
+      }).catch(() => {
+        this.errorMessage = ERRORCODE['connection']()
+        this.telegramStep = 3;
       });
     },
     presaleVerified(staker) {
+      this.errorMessage = ""
       const signer = useDashboardStore().account;
       this.presaleLoading = true;
       singMessage(
@@ -95,16 +113,22 @@ export const useVerificationsStore = defineStore("verificationsStore", {
               this.preslaeStep = 2;
               this.verifications.presaleVerified = true;
             } else {
+              this.errorMessage = ERRORCODE[res.data.errorCode]('presale')
               this.preslaeStep = 3;
               this.presaleMessage = res.data.message;
             }
           })
           .catch((err) => {
             console.log(err);
+            this.errorMessage = ERRORCODE['connection']()
+            this.preslaeStep = 3;
           })
           .finally(() => {
             this.presaleLoading = false;
           });
+      }).catch(() => {
+        this.errorMessage = ERRORCODE['connection']()
+        this.preslaeStep = 3;
       });
     },
     discordVerified() {
@@ -125,6 +149,7 @@ export const useVerificationsStore = defineStore("verificationsStore", {
       );
     },
     brightIdVerification() {
+      this.errorMessage = ""
       const staker = useDashboardStore().account;
       this.brigthIdLoading = true;
       singMessage(
@@ -135,19 +160,27 @@ export const useVerificationsStore = defineStore("verificationsStore", {
           await getBrightIdContextId(staker, signature)
             .then(async (res) => {
               console.log(res);
-              await sponsorBrightIdRequest(staker).then((sponsorRes) => {
-                console.log(sponsorRes);
-                if (sponsorRes.data.success) {
-                  this.brightIdContextId = res.data.result.contextId;
-                  this.brightIdStep = 4;
-                } else {
-                  this.snackbarErorrMsg = "some things went wrong!";
-                  this.snackbarErorr = true;
-                }
-              });
+              if (!res.data.success) {
+                this.errorMessage = ERRORCODE[res.data.errorCode]('BrightID')
+                this.brightIdStep = 6
+              } else {
+                
+                await sponsorBrightIdRequest(staker).then((sponsorRes) => {
+                  console.log(sponsorRes);
+                  if (sponsorRes.data.success) {
+                    this.brightIdContextId = res.data.result.contextId;
+                    this.brightIdStep = 4;
+                  } else {
+                    this.errorMessage = ERRORCODE[sponsorRes.data.errorCode]('BrightID')
+                    this.brightIdStep = 6
+                  }
+                });
+              }
             })
             .catch((err) => {
               console.log(err);
+              this.errorMessage = ERRORCODE['connection']()
+              this.brightIdStep = 6
             });
         })
         .finally(() => {
@@ -156,6 +189,7 @@ export const useVerificationsStore = defineStore("verificationsStore", {
     },
 
     brigthReq() {
+      this.errorMessage = ""
       const staker = useDashboardStore().account;
       checkBrightIdConnection(staker)
         .then((res) => {
@@ -172,7 +206,8 @@ export const useVerificationsStore = defineStore("verificationsStore", {
             window.clearInterval(this.brighitIdIntervalRequest);
             this.brightIdStep = 5;
             this.brigthIdLoading = false;
-          } else if (!response.success && response.errorCode === 3) {
+          } else if (!response.success && response.errorCode) {
+            this.errorMessage = ERRORCODE[response.errorCode]("BrightID")
             this.brightIDMessage = response.message
             this.brightIdStep = 6
             window.clearInterval(this.brighitIdIntervalRequest);
@@ -180,10 +215,13 @@ export const useVerificationsStore = defineStore("verificationsStore", {
           }
           else {
             this.brightidTryed++;
+            this.errorMessage = ""
           }
         })
         .catch((err) => {
           console.log(err);
+          this.errorMessage = ERRORCODE['connection']()
+
         })
         .finally(() => {
           if (this.brightidTryed > 12 * 3) {
@@ -199,7 +237,8 @@ export const useVerificationsStore = defineStore("verificationsStore", {
       this.brightidTryed = 0;
       this.brighitIdIntervalRequest = window.setInterval(this.brigthReq, 5000);
     },
-    getCodeAndStakerFromRoute(string) {
+    getCodeAndStakerFromRoute(string) { // discord
+      this.errorMessage = ""
       this.discordStep = 1;
       console.log(string.split("code=").length);
       if (string.split("code=").length < 2) {
@@ -218,10 +257,12 @@ export const useVerificationsStore = defineStore("verificationsStore", {
             this.discordStep = 2;
           } else {
             this.discordMessage = res.data.message;
+            this.errorMessage = ERRORCODE[res.data.errorCode]('Discord')
             this.discordStep = 3;
           }
         })
         .catch((err) => {
+          this.errorMessage = ERRORCODE['connection']()
           this.discordStep = 3;
           console.log(err);
           this.discordMessage = "problem in server";
@@ -241,6 +282,7 @@ export const useVerificationsStore = defineStore("verificationsStore", {
       }
     },
     clearDataAfterChangeAccount() {
+      this.errorMessage = ""
       this.brightIdContextId = "";
       this.discordResponse.code = "";
       this.discordResponse.staker = "";

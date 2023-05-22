@@ -32,8 +32,9 @@
       <v-card-actions v-if="brightIdStep === 1" class="card-actions">
         <v-row class="full-width" justify="center">
           <v-col class="pb-0" cols="9">
-            <p>Need help? check our <a @click="openWindow('https://brightid.gitbook.io/brightid/')">
-                step-by-step guide</a></p>
+            <p>Need help? Check our <a
+                @click="openWindow('https://docs.muon.net/muon-network/muon-nodes/joining-alice-testnet/uniqueness-verification/brightid-meet-verification')">
+                step-by-step guide</a>.</p>
             <v-btn x-large elevation="0" block class="rounded-sm  py-4 px-15 text-h6 text-normal" color="primary"
               @click="brightIdStep = 2">
               I have a BrightID Account
@@ -54,8 +55,9 @@
               Join a verification party at
               <a class="black--text text-decoration-underline" @click="openWindow('https://meet.brightid.org')">
                 meet.brightid.org</a>
-              and choose from one of the scheduled meetings that fit your
-              schedule. Once you've successfully participated in a meeting, you'll be granted the Meet Verification badge
+              and choose one of the meetings that fit your
+              schedule. Once you have successfully participated in a meeting, you will be granted the Meet Verification
+              badge
               in your BrightID app.
             </p>
           </v-col>
@@ -70,14 +72,14 @@
                 fa-circle-exclamation</v-icon>
             </v-col>
             <v-col align-self="center">
-              <p class="text-body-2 mb-0">Please note, it typically takes about 1 hour to receive you badge after the
+              <p class="text-body-2 mb-0">Please note that it typically takes about 1 hour to receive you badge after the
                 meeting.</p>
             </v-col>
           </v-row>
         </div>
         <v-btn x-large elevation="0" class="rounded-sm mt-2  py-4 px-15 text-h6 text-normal" color="primary"
           @click="brightIdStep = 3">
-          I have Meet Verification Badge
+          I have a Meet Verification badge
         </v-btn>
       </v-card-actions>
       <v-card-text class="text-black" v-if="brightIdStep === 3">
@@ -90,7 +92,7 @@
           <v-col cols="2"><b class="text-18 weight-600">Step 3:</b></v-col>
           <v-col class="px-0">
             <p class="text-18 font-weight-regular pr-5">
-              Please verify your staking address
+              Please verify your staking address.
             </p>
           </v-col>
         </v-row>
@@ -121,7 +123,7 @@
           <v-col cols="2"><b class="text-18 weight-600">Step 4:</b></v-col>
           <v-col class="px-0">
             <p class="text-18 font-weight-regular pr-5">
-              Open app and scan the QR Code below
+              Open the app and scan the QR Code below.
             </p>
           </v-col>
         </v-row>
@@ -135,9 +137,8 @@
           <v-col cols="2"><b class="text-18 weight-600">Step 4:</b></v-col>
           <v-col class="px-0">
             <p class="text-18 font-weight-regular pr-5">
-              After scanning the QR code, wait until you the "Successfully linked" message in the app.
-              next, click on the 'Verify Link' button. This confirms the connection between your BrightID and Alice,
-              completing the linking process.
+              After scanning the QR code, wait until you see the "Successfully linked" message in the app.
+              next, click on the 'Verify Link' button to complete the linking process.
             </p>
           </v-col>
         </v-row>
@@ -180,8 +181,8 @@
         </v-row>
         <v-row class="mt-10">
           <v-col class="text-center px-15">
-            <p v-if="brightIDMessage" class="text-18">
-              {{ brightIDMessage }}
+            <p v-if="errorMessage" class="text-18">
+              {{ errorMessage }}
             </p>
             <p v-else class="text-18">
               Sorry. Your verification process was unsuccessful. Please try
@@ -214,7 +215,7 @@ export default {
         this.brightIdStep = 1
         window.clearInterval(this.brighitIdIntervalRequest)
         this.brigthIdLoading = false
-        this.brightIDMessage = ""
+        this.errorMessage = ""
       }
     }
   },
@@ -235,7 +236,7 @@ export default {
       "brightIdDialog",
       "brightIdStep",
       "brigthIdLoading",
-      "brightIDMessage"
+      "errorMessage"
     ]),
     ...mapState(useVerificationsStore, [
       "brightIdContextId",

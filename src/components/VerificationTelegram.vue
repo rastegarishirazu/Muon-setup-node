@@ -64,7 +64,10 @@
         </v-row>
         <v-row class="mt-10" justify="center">
           <v-col cols="10" class="text-center">
-            <h5 class="text-18 font-weight-regular">
+            <h5 v-if="errorMessage" class="text-18 font-weight-regular">
+              {{ errorMessage }}
+            </h5>
+            <h5 v-else class="text-18 font-weight-regular">
               Sorry. It looks like you haven't met our activity requirement.
               Please consider trying another verification method.
             </h5>
@@ -91,11 +94,18 @@ import { vueTelegramLogin } from "vue-telegram-login";
 export default {
   name: "verificationTelegram",
   components: { vueTelegramLogin },
+  watch: {
+    telegramDialog(newState) {
+      if (!newState) {
+        this.errorMessage = ""
+      }
+    }
+  },
   methods: {
     ...mapActions(useVerificationsStore, ["telegramCallbackFunction"]),
   },
   computed: {
-    ...mapWritableState(useVerificationsStore, ["telegramDialog"]),
+    ...mapWritableState(useVerificationsStore, ["telegramDialog", "errorMessage"]),
     ...mapState(useVerificationsStore, ["telegramStep"]),
   },
 };
