@@ -347,7 +347,7 @@
                     </v-col>
                     <v-col cols="7" class="d-inline-flex align-center justify-end">
                       <h5 class="mr-8 text-h6 font-weight-600">
-                        {{ haveVerifications ? 'Verfied for Starter Node' : 'Not Verified' }}
+                        {{ haveVerifications ? 'Verified for Starter Node' : 'Not Verified' }}
                       </h5>
                       <v-btn elevation="0" color="rgba(81, 88, 246, 0.1)" @click="$router.push('/verification')"
                         class="primary--text rounded-sm font-weight-medium text-body-2 text-capitalize">

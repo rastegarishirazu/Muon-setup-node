@@ -138,7 +138,7 @@
           <v-col class="px-0">
             <p class="text-18 font-weight-regular pr-5">
               After scanning the QR code, wait until you see the "Successfully linked" message in the app.
-              next, click on the 'Verify Link' button to complete the linking process.
+              next, click on the "Verify Link" button to complete the linking process.
             </p>
           </v-col>
         </v-row>

@@ -13,7 +13,7 @@ import { useDashboardStore } from "./dashboardStore";
 
 const ERRORCODE = {
   1: ()=>'Staker address is not valid or does not belong to a node.',
-  2: (platform) => `This ${platform} ${platform === 'presale'? 'address':'account'} address is not eligible.`,
+  2: (platform) => `This ${platform} ${platform === 'presale'? 'address':'account'} is not eligible.`,
   3: (platform) => `This ${platform} ${platform === 'presale'? 'address':'account'} is already registred by another node.`,
   4: ()=>'Your request has already been registered.',
   5: () => 'Your signature is not valid.',
