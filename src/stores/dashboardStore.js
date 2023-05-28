@@ -45,7 +45,6 @@ export const useDashboardStore = defineStore("dashboardStore", {
     totalStake: 0,
     haveNode: false,
     tokenTestBalance: 0,
-    haveEnoughTokenTEst: false,
     mintAmount: 1000,
     nativeTokenBalance: 0,
     nodeInfo: {},

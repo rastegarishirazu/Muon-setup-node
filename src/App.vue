@@ -28,9 +28,7 @@ import detectEthereumProvider from "@metamask/detect-provider";
 import { useDashboardStore } from "@/stores/dashboardStore";
 import { mapActions, mapState, mapWritableState } from "pinia";
 import { useVerificationsStore } from "./stores/verifications";
-import { verification } from "./utils/requestVerifications";
 import { LiveChatWidget } from '@livechat/widget-vue/v2'
-import { testEnv } from "@/router";
 
 export default {
   name: "app",
@@ -74,8 +72,6 @@ export default {
       "checkNetwork",
       "checkHaveNode",
       "checkApproved",
-      "checkHaveNode",
-      "getTokenTestBalance",
       "getNativeBalance",
     ]),
     ...mapActions(useVerificationsStore, ['clearDataAfterChangeAccount'])
@@ -94,7 +90,7 @@ export default {
   },
 
   computed: {
-    ...mapState(useDashboardStore, ['haveNode', 'isConnected']),
+    ...mapState(useDashboardStore, ['haveNode']),
     ...mapState(useVerificationsStore, ['verification']),
     ...mapWritableState(useDashboardStore, [
       "currntIdChain",

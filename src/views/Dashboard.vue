@@ -607,13 +607,6 @@ export default {
         this.addressShow = "connect Wallet";
       }
     },
-    tokenTestBalance(newBalance, oldBalance) {
-      if (newBalance >= 1000) {
-        this.haveEnoughTokenTEst = true;
-      } else {
-        this.haveEnoughTokenTEst = false;
-      }
-    },
     isApproved() {
       if (this.isApproved && this.e1 === this.steps.approve) {
         this.e1 = this.steps.addNode;
@@ -704,7 +697,6 @@ export default {
       "totalStake",
       "haveNode",
       "tokenTestBalance",
-      "haveEnoughTokenTEst",
       "mintAmount",
       "nativeTokenBalance",
       "nodeInfo",
@@ -744,6 +736,13 @@ export default {
           return amount.toFixed(2);
         } else {
           return "0";
+        }
+      },
+      haveEnoughTokenTEst(state) {
+        if (state.tokenTestBalance >= 1000) {
+          return true;
+        } else {
+          return false;
         }
       },
     }),
