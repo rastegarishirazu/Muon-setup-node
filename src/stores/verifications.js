@@ -306,12 +306,12 @@ export const useVerificationsStore = defineStore("verificationsStore", {
     gitCoinVerify(staker) {
       this.gitCoinErrorMsg = ""
       this.gitCoinLoading = true
-      gitCoinMessage().then(res => {
+      gitCoinMessage().then(async res => {
         const response = res.data
         if (response.success) {
           const signer = useDashboardStore().account;
-          singMessage(response.result.message, signer).then((signRes => {
-            gitCoinVerification(staker,signer,signRes ,response.result.nonce).then(gitCoinVerificationResponse => {
+          await singMessage(response.result.message, signer).then((async signRes => {
+            await gitCoinVerification(staker,signer,signRes ,response.result.nonce).then(gitCoinVerificationResponse => {
               const resData = gitCoinVerificationResponse.data
               if (resData.success) {
                 this.gitcoinStep = 3
