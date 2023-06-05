@@ -34,7 +34,8 @@
                             <v-col cols="2"><b class="text-18 weight-600">Step 1:</b></v-col>
                             <v-col class="pl-0">
                               <p class="text-18 font-weight-regular text-left">
-                                Head over to passport.gitcoin.co and follow the provided instructions. Achieving a score
+                                Head over to <a @click="openWindow('https://passport.gitcoin.co')">passport.gitcoin.co</a>
+                                and follow the provided instructions. Achieving a score
                                 of 15 or above is necessary to pass the verification.
                               </p>
                             </v-col>
@@ -181,11 +182,16 @@ export default {
 
   },
   methods: {
+    openWindow(url) {
+      window.open(url, '_blank')
+    },
     ...mapActions(useVerificationsStore, ['gitCoinVerify']),
     ...mapActions(useDashboardStore, ["connectToMetamask"]),
   },
   created() {
-    this.gitcoinStep = 1;
+    if (this.gitcoinStep != 2) {
+      this.gitcoinStep = 1;
+    }
   },
   computed: {
     ...mapState(useVerificationsStore, ["gitcoinStep", 'presaleLoading', 'gitCoinErrorMsg', 'gitCoinLoading']),

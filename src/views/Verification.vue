@@ -357,7 +357,7 @@ export default {
   },
   async created() {
     this.getVerificationsStatus(this.account);
-
+    this.gitcoinStep = 1
   },
 
   computed: {
@@ -368,7 +368,7 @@ export default {
       "telegramDialog",
       "brightIdDialog",
       "snackbarErorr",
-      "snackbarErorrMsg",
+      "snackbarErorrMsg", 'gitcoinStep'
     ]),
     ...mapState(useVerificationsStore, {
       verificationsPass(store) {

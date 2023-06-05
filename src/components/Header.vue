@@ -75,7 +75,7 @@ export default {
       },
     }),
     showHeader() {
-      return !this.$route.path.includes('/presale/')
+      return !(this.$route.path.includes('/presale/') || this.$route.path.includes('/gitcoin/'))
     }
   },
 };
