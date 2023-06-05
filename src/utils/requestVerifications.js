@@ -86,3 +86,21 @@ export const discordRequest = async (code, staker) => {
     },
   });
 };
+
+export const gitCoinMessage = async () => {
+  return await axios.get(`${verificationEndPoint}/gitcoinMessage`)
+}
+
+export const gitCoinVerification = async (staker, signer, signature, nonce) => {
+  const data = JSON.stringify({
+    staker: staker,
+    signer:signer,
+    signature: signature,
+    nonce: nonce
+  });
+  return await axios.post(`${verificationEndPoint}/gitcoin`, data, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+}

@@ -97,7 +97,8 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col class="d-flex justify-center">
+          <v-col cols="2"></v-col>
+          <v-col class="d-flex justify-start px-0">
             <div class="wallet-connected d-inline-flex justify-space-between align-center px-6">
               <div class="text-left">
                 <b class="text-body-1 font-weight-reguler">

@@ -54,7 +54,7 @@
                     <span class="font-weight-regular"> Alice Starter </span>
                   </div>
                 </v-col>
-                <v-col class="text-right" align-self="center"><v-btn @click="$router.push(`/presale/${account}`)"
+                <v-col class="text-right" align-self="end"><v-btn @click="$router.push(`/presale/${account}`)"
                     elevation="0" :color="verifications['presaleVerified']
                       ? '#23B5D3'
                       : 'rgba(81, 88, 246, 0.1)'
@@ -95,7 +95,7 @@
                     <span class="font-weight-regular"> Alice Starter </span>
                   </div>
                 </v-col>
-                <v-col class="text-right" align-self="center"><v-btn elevation="0" :color="verifications['telegramVerified']
+                <v-col class="text-right" align-self="end"><v-btn elevation="0" :color="verifications['telegramVerified']
                   ? '#23B5D3'
                   : 'rgba(81, 88, 246, 0.1)'
                   " :class="[
@@ -140,7 +140,7 @@
                     <span class="font-weight-regular"> Alice Starter </span>
                   </div>
                 </v-col>
-                <v-col class="text-right" align-self="center"><v-btn elevation="0" :color="verifications['discordVerified']
+                <v-col class="text-right" align-self="end"><v-btn elevation="0" :color="verifications['discordVerified']
                   ? '#23B5D3'
                   : 'rgba(81, 88, 246, 0.1)'
                   " :class="[
@@ -167,51 +167,8 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col md="4" cols="12"><v-card :color="verifications['brightidMeetsVerified']
-                ? 'rgba(35, 181, 211, 0.3)'
-                : 'rgba(81, 88, 246, 0.1)'
-              " class="node_id_card px-5 py-4 rounded-lg full-height" elevation="0">
-              <div class="d-inline-flex align-center">
-                <h5 class="text-18 font-weight-medium">
-                  BrightID Meet Verification
-                </h5>
-                <img class="ml-1" src="@/assets/verification/Info.svg" />
-              </div>
-              <v-row class="mt-10">
-                <v-col>
-                  <b class="font-weight-regular text-body-2 sub-color">Tier(s) authorization:</b>
-                  <div class="mt-2">
-                    <v-icon color="#414141">mdi-circle-medium</v-icon>
-                    <span class="font-weight-regular"> Alice Starter </span>
-                  </div>
-                </v-col>
-                <v-col class="text-right" align-self="center"><v-btn elevation="0" :color="verifications['brightidMeetsVerified']
-                  ? '#23B5D3'
-                  : 'rgba(81, 88, 246, 0.1)'
-                  " :class="[
-    'py-6',
-    'px-3',
-    verifications['brightidMeetsVerified']
-      ? 'white--text'
-      : 'primary--text',
-    'text-subtitle-1',
-    'rounded-sm',
-    'font-weight-medium',
-    'text-capitalize',
-    {
-      'disable-events':
-        verifications['brightidMeetsVerified'],
-    },
-  ]" @click="brightIdDialog = true">{{
-  verifications["brightidMeetsVerified"]
-  ? `Verification passed!`
-  : `Pass verification`
-}}</v-btn>
-                </v-col>
-              </v-row>
-            </v-card>
-          </v-col>
-          <v-col md="8" cols="12"><v-card :color="verifications['brightidAuraVerified']
+
+          <v-col md="4" cols="12"><v-card :color="verifications['brightidAuraVerified']
                 ? 'rgba(35, 181, 211, 0.3)'
                 : 'rgba(81, 88, 246, 0.1)'
               " class="node_id_card px-5 py-4 rounded-lg full-height" elevation="0" disabled>
@@ -219,19 +176,18 @@
                 <h5 class="text-18 font-weight-medium">
                   BrightID Aura Verification (Coming soon)
                 </h5>
-                <img class="ml-1" src="@/assets/verification/Info.svg" />
               </div>
-              <v-row class="mt-10">
-                <v-col md="9" cols="12">
+              <v-row class="mt-2">
+                <v-col md="6" sm="12" cols="12">
                   <b class="font-weight-regular text-body-2 sub-color">Tier(s) authorization:</b>
-                  <div class="mt-2 d-inline-flex align-center">
+                  <div class="mt-2 ">
                     <div>
                       <v-icon color="#414141">mdi-circle-medium</v-icon>
                       <b class="font-weight-regular">
                         Alice Pro: <span class="bronze">Bronze</span>
                       </b>
                     </div>
-                    <div class="ml-5">
+                    <div>
                       <v-icon color="#414141">mdi-circle-medium</v-icon>
                       <b class="font-weight-regular">
                         Alice Master: <span class="silver">Silver</span>
@@ -239,7 +195,7 @@
                     </div>
                   </div>
                 </v-col>
-                <v-col class="text-right" align-self="center">
+                <v-col class="text-right pl-0" align-self="end">
                   <v-btn elevation="0" :color="verifications['brightidAuraVerified']
                     ? '#23B5D3'
                     : 'rgba(81, 88, 246, 0.1)'
@@ -261,6 +217,98 @@
   ? `Verification passed!`
   : `Pass verification`
 }}
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-card>
+          </v-col>
+          <v-col md="4" cols="12"><v-card :color="verifications['brightidMeetsVerified']
+                ? 'rgba(35, 181, 211, 0.3)'
+                : 'rgba(81, 88, 246, 0.1)'
+              " class="node_id_card px-5 py-4 rounded-lg full-height" elevation="0">
+              <div class="d-inline-flex align-center">
+                <h5 class="text-18 font-weight-medium">
+                  BrightID Meet Verification
+                </h5>
+              </div>
+              <v-row class="mt-10">
+                <v-col>
+                  <b class="font-weight-regular text-body-2 sub-color">Tier(s) authorization:</b>
+                  <div class="mt-2">
+                    <v-icon color="#414141">mdi-circle-medium</v-icon>
+                    <span class="font-weight-regular"> Alice Starter </span>
+                  </div>
+                </v-col>
+                <v-col class="text-right" align-self="end">
+                  <v-btn @click="brightIdDialog = true" elevation="0" :color="verifications['brightidMeetsVerified']
+                    ? '#23B5D3'
+                    : 'rgba(81, 88, 246, 0.1)'
+                    " :class="[
+    'py-6',
+    'px-3',
+    verifications['brightidMeetsVerified']
+      ? 'white--text'
+      : 'primary--text',
+    'text-subtitle-1',
+    'rounded-sm',
+    'font-weight-medium',
+    'text-capitalize',
+    {
+      'disable-events':
+        verifications['brightidMeetsVerified'],
+    },
+  ]">
+                    {{
+                      verifications["brightidMeetsVerified"]
+                      ? `Verification passed!`
+                      : `Pass verification`
+                    }}
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-card>
+          </v-col>
+          <v-col md="4" cols="12"><v-card :color="verifications['gitcoinPassportVerified']
+                ? 'rgba(35, 181, 211, 0.3)'
+                : 'rgba(81, 88, 246, 0.1)'
+              " class="node_id_card px-5 py-4 rounded-lg full-height" elevation="0">
+              <div class="d-inline-flex align-center">
+                <h5 class="text-18 font-weight-medium">
+                  Gitcoin Passport
+                </h5>
+              </div>
+              <v-row class="mt-10">
+                <v-col>
+                  <b class="font-weight-regular text-body-2 sub-color">Tier(s) authorization:</b>
+                  <div class="mt-2">
+                    <v-icon color="#414141">mdi-circle-medium</v-icon>
+                    <span class="font-weight-regular"> Alice Starter </span>
+                  </div>
+                </v-col>
+                <v-col class="text-right" align-self="end">
+                  <v-btn @click="$router.push(`/gitcoin/${account}`)" elevation="0" :color="verifications['gitcoinPassportVerified']
+                    ? '#23B5D3'
+                    : 'rgba(81, 88, 246, 0.1)'
+                    " :class="[
+    'py-6',
+    'px-3',
+    verifications['gitcoinPassportVerified']
+      ? 'white--text'
+      : 'primary--text',
+    'text-subtitle-1',
+    'rounded-sm',
+    'font-weight-medium',
+    'text-capitalize',
+    {
+      'disable-events':
+        verifications['gitcoinPassportVerified'],
+    },
+  ]">
+                    {{
+                      verifications["gitcoinPassportVerified"]
+                      ? `Verification passed!`
+                      : `Pass verification`
+                    }}
                   </v-btn>
                 </v-col>
               </v-row>

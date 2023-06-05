@@ -5,6 +5,7 @@ import Verification from "@/views/Verification.vue";
 import WrongPage from "@/views/WrongPage.vue";
 import Presale from "@/views/Presale.vue";
 import DiscordRedirect from "@/views/DiscordRedirect.vue";
+import GitCoin from "@/views/GitCoin.vue"
 Vue.use(VueRouter);
 
 const routes = [
@@ -31,8 +32,16 @@ const routes = [
   },
   {
     path: "/presale/:staker",
-    name: "apiVerify",
+    name: "presale",
     component: Presale,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/gitcoin/:staker",
+    name: "gitCoin",
+    component: GitCoin,
     meta: {
       requiresAuth: true,
     },

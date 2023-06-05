@@ -8,6 +8,8 @@ import {
   verification as verificationStatus,
   sponsorBrightIdRequest,
   checkBrightIdConnection,
+  gitCoinMessage,
+  gitCoinVerification
 } from "@/utils/requestVerifications";
 import { useDashboardStore } from "./dashboardStore";
 
@@ -19,6 +21,10 @@ const ERRORCODE = {
   5: () => 'Your signature is not valid.',
   11: () => 'Something went wrong. Please try after a while. (error code: 11)',
   12: () => 'Something went wrong. Please try after a while. (error code: 12)',
+  13:() =>'Unable to fetch signing-message due to an internal issue. Please try again later.',
+  14:() =>'Unable to submit passport due to an internal issue. Please try again later.',
+  15:() =>`Unable to get score due to an internal issue. Please try again later.`,
+  16:() =>`The user's Gitcoin passport score is too low.`,
   'connection': ()=>'Something went wrong. Please try after a while. (connection problem)'
 }
 
@@ -29,12 +35,14 @@ export const useVerificationsStore = defineStore("verificationsStore", {
     presaleLoading: false,
     brightIdDialog: false,
     backToStakerDialog: false,
+    gitCoinDialog:false,
     verifications: {
       telegramVerified: false,
       discordVerified: false,
       presaleVerified: false,
       brightidMeetsVerified: false,
       brightidAuraVerified: false,
+      gitcoinPassportVerified: false,
     },
     discordResponse: {
       code: "",
@@ -50,10 +58,13 @@ export const useVerificationsStore = defineStore("verificationsStore", {
     telegramStep: 1,
     discordStep: 1,
     preslaeStep: 1,
+    gitcoinStep:1,
     presaleMessage: "",
     snackbarErorr: false,
     snackbarErorrMsg: "",
     brigthIdLoading: false,
+    gitCoinLoading: false,
+    gitCoinErrorMsg:"",
     discordMessage: "...Loading",
     errorMessage : ""
   }),
@@ -291,6 +302,41 @@ export const useVerificationsStore = defineStore("verificationsStore", {
       this.presaleMessage = ""
       this.brigthIdLoading = false
       this.brightIDMessage = ""
+    },
+    gitCoinVerify(staker) {
+      this.gitCoinErrorMsg = ""
+      this.gitCoinLoading = true
+      gitCoinMessage().then(res => {
+        const response = res.data
+        if (response.success) {
+          const signer = useDashboardStore().account;
+          singMessage(response.result.message, signer).then((signRes => {
+            gitCoinVerification(staker,signer,signRes ,response.result.nonce).then(gitCoinVerificationResponse => {
+              const resData = gitCoinVerificationResponse.data
+              if (resData.success) {
+                this.gitcoinStep = 3
+                this.verifications.gitcoinPassportVerified = true
+              } else {
+                this.gitCoinErrorMsg = ERRORCODE[resData.errorCode]('Gitcoin')
+              }
+            }).catch(error => {
+              console.log(error);
+             this.gitCoinErrorMsg = ERRORCODE['connection']('Gitcoin')
+            })
+          })).catch((error => {
+            console.log(error);
+             this.gitCoinErrorMsg = ERRORCODE['connection']('Gitcoin')
+
+          }))
+        } else {
+          this.gitCoinErrorMsg = ERRORCODE[response.errorCode]('Gitcoin')
+        }
+      }).catch(error => {
+        console.log(error);
+        this.gitCoinErrorMsg = ERRORCODE['connection']('Gitcoin')
+      }).finally(() => {
+        this.gitCoinLoading = false
+      })
     }
   },
 });

@@ -136,7 +136,7 @@ import { mapActions, mapState, mapWritableState } from "pinia";
 import BackToVerification from "@/components/BackToVerification.vue";
 import StakerAndSignerIsNotSameDialog from "@/components/StakerAndSignerIsNotSameDialog.vue";
 export default {
-  name: "apiVerify",
+  name: "presale",
   components: { BackToVerification, StakerAndSignerIsNotSameDialog },
   watch: {
 
