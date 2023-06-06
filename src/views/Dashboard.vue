@@ -718,7 +718,11 @@ export default {
     ...mapState(useVerificationsStore, {
       haveVerifications(state) {
         const verification = state.verifications
-        return (verification.brightidAuraVerified || verification.brightidMeetsVerified || verification.discordVerified || verification.presaleVerified || verification.telegramVerified)
+        let tempList = []
+        for (const element in verification) {
+          tempList.push(state.verifications[element])
+        }
+        return tempList.includes(true)
       }
     }),
     ...mapState(useDashboardStore, {

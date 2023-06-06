@@ -5,7 +5,7 @@ const verificationEndPoint = BASEURL + "/uniqueness";
 export const verification = async (staker) => {
   if (staker) {
     let res = await axios.get(
-      `${verificationEndPoint}/verifications/${staker}`
+      `${verificationEndPoint}/verifications/${staker}?df`
     );
     return res;
   }

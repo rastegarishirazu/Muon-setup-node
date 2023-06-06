@@ -378,6 +378,7 @@ export default {
           presaleVerified: "Muon Presale Participation",
           brightidMeetsVerified: "BrightID Meet Verification",
           brightidAuraVerified: "BrightID Aura Verification",
+          gitcoinPassportVerified: "Gitcoin Verification"
         };
         const verifications = store.verifications;
         let myList = [];
