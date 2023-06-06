@@ -178,7 +178,7 @@
                 </h5>
               </div>
               <v-row class="mt-2">
-                <v-col md="6" sm="12" cols="12">
+                <v-col md="6" sm="12" cols="12" class="pr-0">
                   <b class="font-weight-regular text-body-2 sub-color">Tier(s) authorization:</b>
                   <div class="mt-2 ">
                     <div>
