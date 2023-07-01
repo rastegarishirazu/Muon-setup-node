@@ -59,6 +59,7 @@ export const useDashboardStore = defineStore("dashboardStore", {
     nodeDetailsDialogModel: false,
     stakerAddress: "",
     isIPValid: true,
+    approvedAmount:0,
     ipCheckLoading: false,
     minMint: [
       (value) => !!value || "Required.",
@@ -329,7 +330,8 @@ export const useDashboardStore = defineStore("dashboardStore", {
     },
     checkApproved() {
       checkApproved(this.account, this.web3).then((res) => {
-        this.isApproved = res;
+        this.isApproved = res >= 1000;
+        this.approvedAmount = res
       });
     },
     async addChain() {

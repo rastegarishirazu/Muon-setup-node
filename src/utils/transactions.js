@@ -37,6 +37,8 @@ const checkApproved = async (account, web3) => {
   const value = await contract.methods
     .allowance(account, stakingContractAdress)
     .call();
+  return Number(myWeb3.utils.fromWei(value))
+  console.log(myWeb3.utils.fromWei(value));
   if (value >= 1000 * DECIMAL) {
     return true;
   }

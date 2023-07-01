@@ -39,7 +39,9 @@ const getNodeInfo = async (nodeId) => {
 
   while (tryed < 3 && !flag) {
     res = await helpFunction(
-      `${listOfNodes[tryed % listOfNodes.length]}/${nodeId}/status`
+      `${
+        listOfNodes[tryed % listOfNodes.length]
+      }/${nodeId}/status?rand=${Math.floor(Math.random() * 100000)}`
     );
     if (res === "timeOut" || res === false) {
       tryed++;
